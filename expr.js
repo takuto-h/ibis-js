@@ -30,6 +30,21 @@ ExprAbs.prototype = {
   }
 }
 
+function ExprApp(funcExpr, argExpr) {
+  this.funcExpr = funcExpr;
+  this.argExpr = argExpr;
+}
+ExprApp.prototype = {
+  eval: function (env) {
+    var func = this.funcExpr.eval();
+    var arg = this.argExpr.eval();
+    if (!func.call) {
+      throw "function required, but got: " + func;
+    }
+    return func.call(arg, env);
+  }
+}
+
 function ExprAdd(lhs, rhs) {
   this.lhs = lhs;
   this.rhs = rhs;
