@@ -7,6 +7,19 @@ ExprConst.prototype = {
   }
 }
 
+function ExprVar(varName) {
+  this.varName = varName;
+}
+ExprVar.prototype = {
+  eval: function (env) {
+    var value = env.get(this.varName);
+    if (!value) {
+      throw "undefined variable: " + this.varName;
+    }
+    return value;
+  }
+}
+
 function ExprAdd(lhs, rhs) {
   this.lhs = lhs;
   this.rhs = rhs;

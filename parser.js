@@ -70,7 +70,10 @@ Parser.prototype = (function () {
     var expr = null;
     switch (self.headToken) {
     case Token.INT:
-      expr = new ExprConst(parseInt(self));
+      expr = parseInt(self);
+      break;
+    case Token.IDENT:
+      expr = parseVar(self);
       break;
     default:
       throw unexpected(self);
@@ -78,7 +81,12 @@ Parser.prototype = (function () {
     return expr;
   }
   function parseInt(self) {
-    var expr = self.lexer.value;
+    var expr = new ExprConst(self.lexer.value);
+    lookAhead(self);
+    return expr;
+  }
+  function parseVar(self) {
+    var expr = new ExprVar(self.lexer.value);
     lookAhead(self);
     return expr;
   }
