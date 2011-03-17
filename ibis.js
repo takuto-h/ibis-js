@@ -2,6 +2,7 @@ catchEvent(window, "load", setup);
 
 function setup(event) {
   setupEvents(event);
+  document.getElementById("outputArea").value = "> ";
 }
 
 function setupEvents(event) {
@@ -14,7 +15,8 @@ function evalForm(event) {
   var inputArea = document.getElementById("inputArea");
   var outputArea = document.getElementById("outputArea");
   
-  outputArea.value = eval(inputArea.value);
+  var inputStr = inputArea.value;
+  outputArea.value += inputStr + "\n" + eval(inputStr) + "\n> ";
   inputArea.value = "";
   
   cancelEvent(theEvent);
