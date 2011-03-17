@@ -1,8 +1,9 @@
-function ValueInt(n) {
-  this.n = n;
-}
-
 function ValueClosure(varName, expr) {
   this.varName = varName;
   this.expr = expr;
+}
+ValueClosure.prototype = {
+  toString: function () {
+    return "#<closure>"
+  }
 }
