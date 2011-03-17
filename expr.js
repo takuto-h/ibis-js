@@ -2,7 +2,7 @@ function ExprConst(value) {
   this.value = value;
 }
 ExprConst.prototype = {
-  eval: function () {
+  eval: function (env) {
     return this.value;
   }
 }
@@ -12,7 +12,7 @@ function ExprAdd(lhs, rhs) {
   this.rhs = rhs;
 }
 ExprAdd.prototype = {
-  eval: function () {
+  eval: function (env) {
     return this.lhs.eval() + this.rhs.eval();
   }
 }
@@ -22,7 +22,7 @@ function ExprSub(lhs, rhs) {
   this.rhs = rhs;
 }
 ExprSub.prototype = {
-  eval: function () {
+  eval: function (env) {
     return this.lhs.eval() - this.rhs.eval();
   }
 }
@@ -32,7 +32,7 @@ function ExprMul(lhs, rhs) {
   this.rhs = rhs;
 }
 ExprMul.prototype = {
-  eval: function () {
+  eval: function (env) {
     return this.lhs.eval() * this.rhs.eval();
   }
 }
@@ -42,7 +42,7 @@ function ExprDiv(lhs, rhs) {
   this.rhs = rhs;
 }
 ExprDiv.prototype = {
-  eval: function () {
+  eval: function (env) {
     return this.lhs.eval() / this.rhs.eval();
   }
 }

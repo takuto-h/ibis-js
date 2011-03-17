@@ -1,3 +1,5 @@
+var env = new EnvGlobal();
+
 catchEvent(window, "load", setup);
 
 function setup(event) {
@@ -33,7 +35,7 @@ function eval(str) {
       if (!expr) {
         break;
       }
-      result += expr.eval() + " "
+      result += expr.eval(env) + " "
     }
   } catch (e) {
     alert(e);
