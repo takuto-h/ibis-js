@@ -32,6 +32,38 @@ Parser.prototype = (function () {
     return expr;
   }
   function parseExpr(self) {
+    var expr = parseTerm(self);
+    while (self.headToken.match(/[+\-]/)) {
+      switch (self.headToken) {
+      case "+":
+        lookAhead(self);
+        expr = expr + parseTerm(self);
+        break;
+      case "-":
+        lookAhead(self);
+        expr = expr - parseTerm(self);
+        break;
+      }
+    }
+    return expr;
+  }
+  function parseTerm(self) {
+    var expr = parseFactor(self);
+    while (self.headToken.match(/[*\/]/)) {
+      switch (self.headToken) {
+      case "*":
+        lookAhead(self);
+        expr = expr * parseFactor(self);
+        break;
+      case "/":
+        lookAhead(self);
+        expr = expr / parseFactor(self);
+        break;
+      }
+    }
+    return expr;
+  }
+  function parseFactor(self) {
     return parseAtom(self);
   }
   function parseAtom(self) {
