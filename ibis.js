@@ -27,12 +27,16 @@ function eval(str) {
   var stream = new Stream(str);
   var lexer = new Lexer(stream);
   var parser = new Parser(lexer);
-  while (true) {
-    var expr = parser.parse();
-    if (!expr) {
-      break;
+  try {
+    while (true) {
+      var expr = parser.parse();
+      if (!expr) {
+        break;
+      }
+      result += expr.eval() + " "
     }
-    result += expr.eval() + " "
+  } catch (e) {
+    alert(e);
   }
   return result;
 }
