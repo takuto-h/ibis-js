@@ -78,6 +78,9 @@ Parser.prototype = (function () {
     case "^":
       expr = parseAbs(self);
       break;
+    case "(":
+      expr = parseParen(self);
+      break;
     default:
       throw unexpected(self);
     }
@@ -99,6 +102,15 @@ Parser.prototype = (function () {
     lookAhead(self);
     var expr = parseExpr(self);
     return new ExprAbs(varName, expr);
+  }
+  function parseParen(self) {
+    lookAhead(self);
+    var expr = parseExpr(self);
+    if (self.headToken != ")") {
+      throw expected(self, ")");
+    }
+    lookAhead(self);
+    return expr;
   }
   function expected(self, expectedToken) {
     return "unexpected " + self.headToken + ", expected " + expectedToken;
