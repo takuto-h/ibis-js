@@ -15,7 +15,9 @@ Lexer.prototype = (function () {
       } else if (c.match(/[+\-*\/()]/)) {
         self.token = self.stream.read();
       } else if (c.match(/\d/)) {
-        lexInt(this);
+        lexInt(self);
+      } else if (c.match(/\w/)) {
+        lexIdent(self);
       } else {
         throw "unknown character: " + c;
       }
@@ -31,6 +33,16 @@ Lexer.prototype = (function () {
     }
     self.token = Token.INT;
     self.value = n
+  }
+  function lexIdent(self) {
+    var ident = self.stream.read();
+    var c = self.stream.peek();
+    while (c.match(/\w/)) {
+      ident += self.stream.read();
+      c = self.stream.peek();
+    }
+    self.token = Token.IDENT;
+    self.value = ident;
   }
   function skipWhiteSpace(self) {
     var c = self.stream.peek();
