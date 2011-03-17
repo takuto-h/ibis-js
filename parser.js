@@ -46,7 +46,7 @@ Parser.prototype = (function () {
     return expr;
   }
   function parseInt(self) {
-    var expr = self.value;
+    var expr = self.lexer.value;
     lookAhead(self);
     return expr;
   }
@@ -57,4 +57,4 @@ Parser.prototype = (function () {
     return "unexpected " + self.headToken
   }
   return publicMethods;
-}
+})()

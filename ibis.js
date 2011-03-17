@@ -26,8 +26,13 @@ function eval(str) {
   var result = "";
   var stream = new Stream(str);
   var lexer = new Lexer(stream);
-  while (lexer.advance()) {
-    result += lexer.token + " ";
+  var parser = new Parser(lexer);
+  while (true) {
+    var expr = parser.parse();
+    if (!expr) {
+      break;
+    }
+    result += expr + " "
   }
   return result;
 }
