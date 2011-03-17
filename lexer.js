@@ -11,22 +11,22 @@ Lexer.prototype = (function () {
       if (c == "") {
         return false;
       } else if (c.match(/\d/)) {
-        lexInt();
+        lexInt(this);
       } else {
         throw "unknown character: " + c;
       }
       return true;
     }
   }
-  function lexInt() {
-    var n = parseInt(this.stream.read());
-    var c = this.stream.peek();
+  function lexInt(self) {
+    var n = parseInt(self.stream.read());
+    var c = self.stream.peek();
     while (c.match(/\d/)) {
-      n = n * 10 + parseInt(this.stream.read());
-      c = this.stream.peek();
+      n = n * 10 + parseInt(self.stream.read());
+      c = self.stream.peek();
     }
-    this.token = Token.INT;
-    this.value = n
+    self.token = Token.INT;
+    self.value = n
   }
   return publicMethods;
 })()
