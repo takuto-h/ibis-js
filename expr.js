@@ -20,6 +20,16 @@ ExprVar.prototype = {
   }
 }
 
+function ExprAbs(varName, expr) {
+  this.varName = varName;
+  this.expr = expr;
+}
+ExprAbs.prototype = {
+  eval: function (env) {
+    return new ValueClosure(varName, expr);
+  }
+}
+
 function ExprAdd(lhs, rhs) {
   this.lhs = lhs;
   this.rhs = rhs;
