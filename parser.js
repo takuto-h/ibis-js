@@ -75,6 +75,9 @@ Parser.prototype = (function () {
     case Token.IDENT:
       expr = parseVar(self);
       break;
+    case "^":
+      expr = parseAbs(self);
+      break;
     default:
       throw unexpected(self);
     }
@@ -89,6 +92,13 @@ Parser.prototype = (function () {
     var expr = new ExprVar(self.lexer.value);
     lookAhead(self);
     return expr;
+  }
+  function parseAbs(self) {
+    lookAhead(self);
+    var varName = self.lexer.value;
+    lookAhead(self);
+    var expr = parseExpr(self);
+    return new ExprAbs(varName, expr);
   }
   function expected(self, expectedToken) {
     return "unexpected " + self.headToken + ", expected " + expectedToken;
