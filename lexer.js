@@ -7,7 +7,9 @@ function Lexer(stream) {
 Lexer.prototype = (function () {
   var publicMethods = {
     advance: function () {
-      var c = this.stream.peek();
+      var self = this;
+      skipWhiteSpace(self);
+      var c = self.stream.peek();
       if (c == "") {
         return false;
       } else if (c.match(/\d/)) {
@@ -27,6 +29,13 @@ Lexer.prototype = (function () {
     }
     self.token = Token.INT;
     self.value = n
+  }
+  function skipWhiteSpace(self) {
+    var c = self.stream.peek();
+    while (c.match(/\s/)) {
+      self.stream.read();
+      c = self.stream.peek();
+    }
   }
   return publicMethods;
 })()
