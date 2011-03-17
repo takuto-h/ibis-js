@@ -1,4 +1,4 @@
 var Token = {
-  EOF: "EOF"
+  EOF: "EOF",
   INT: "INT"
 }
