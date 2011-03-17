@@ -64,7 +64,16 @@ Parser.prototype = (function () {
     return expr;
   }
   function parseFactor(self) {
-    return parseAtom(self);
+    var expr = parseAtom(self);
+    while (self.headToken == "(") {
+      lookAhead(self);
+      expr = new ExprApp(expr, parseExpr(self));
+      if (self.headToken != ")") {
+        throw expected(self, ")");
+      }
+      lookAhead(self);
+    }
+    return expr;
   }
   function parseAtom(self) {
     var expr = null;

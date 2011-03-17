@@ -36,8 +36,8 @@ function ExprApp(funcExpr, argExpr) {
 }
 ExprApp.prototype = {
   eval: function (env) {
-    var func = this.funcExpr.eval();
-    var arg = this.argExpr.eval();
+    var func = this.funcExpr.eval(env);
+    var arg = this.argExpr.eval(env);
     if (!func.call) {
       throw "function required, but got: " + func;
     }
@@ -51,7 +51,7 @@ function ExprAdd(lhs, rhs) {
 }
 ExprAdd.prototype = {
   eval: function (env) {
-    return this.lhs.eval() + this.rhs.eval();
+    return this.lhs.eval(env) + this.rhs.eval(env);
   }
 }
 
@@ -61,7 +61,7 @@ function ExprSub(lhs, rhs) {
 }
 ExprSub.prototype = {
   eval: function (env) {
-    return this.lhs.eval() - this.rhs.eval();
+    return this.lhs.eval(env) - this.rhs.eval(env);
   }
 }
 
@@ -71,7 +71,7 @@ function ExprMul(lhs, rhs) {
 }
 ExprMul.prototype = {
   eval: function (env) {
-    return this.lhs.eval() * this.rhs.eval();
+    return this.lhs.eval(env) * this.rhs.eval(env);
   }
 }
 
@@ -81,6 +81,6 @@ function ExprDiv(lhs, rhs) {
 }
 ExprDiv.prototype = {
   eval: function (env) {
-    return this.lhs.eval() / this.rhs.eval();
+    return this.lhs.eval(env) / this.rhs.eval(env);
   }
 }
