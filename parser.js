@@ -37,11 +37,11 @@ Parser.prototype = (function () {
       switch (self.headToken) {
       case "+":
         lookAhead(self);
-        expr = expr + parseTerm(self);
+        expr = new ExprAdd(expr, parseTerm(self));
         break;
       case "-":
         lookAhead(self);
-        expr = expr - parseTerm(self);
+        expr = new ExprSub(expr, parseTerm(self));
         break;
       }
     }
@@ -53,11 +53,11 @@ Parser.prototype = (function () {
       switch (self.headToken) {
       case "*":
         lookAhead(self);
-        expr = expr * parseFactor(self);
+        expr = new ExprMul(expr, parseFactor(self));
         break;
       case "/":
         lookAhead(self);
-        expr = expr / parseFactor(self);
+        expr = new ExprDiv(expr, parseFactor(self));
         break;
       }
     }
@@ -70,7 +70,7 @@ Parser.prototype = (function () {
     var expr = null;
     switch (self.headToken) {
     case Token.INT:
-      expr = parseInt(self);
+      expr = new ExprConst(parseInt(self));
       break;
     default:
       throw unexpected(self);

@@ -32,7 +32,7 @@ function eval(str) {
     if (!expr) {
       break;
     }
-    result += expr + " "
+    result += expr.eval() + " "
   }
   return result;
 }
