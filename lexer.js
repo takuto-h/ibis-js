@@ -12,6 +12,8 @@ Lexer.prototype = (function () {
       var c = self.stream.peek();
       if (c == "") {
         return false;
+      } else if (c.match(/[\+\-*/\(\)]/)) {
+        self.token = self.stream.read();
       } else if (c.match(/\d/)) {
         lexInt(this);
       } else {
