@@ -84,7 +84,7 @@ Parser.prototype = (function () {
     case Token.IDENT:
       expr = parseVar(that);
       break;
-    case "^":
+    case "fun":
       expr = parseAbs(that);
       break;
     case "(":
@@ -108,6 +108,10 @@ Parser.prototype = (function () {
   function parseAbs(that) {
     lookAhead(that);
     var varName = that.lexer.value;
+    lookAhead(that);
+    if (that.headToken != "->") {
+      throw expected(that, "->");
+    }
     lookAhead(that);
     var expr = parseExpr(that);
     return new ExprAbs(varName, expr);

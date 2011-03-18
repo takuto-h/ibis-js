@@ -12,7 +12,7 @@ Lexer.prototype = (function () {
       var c = that.stream.peek();
       if (c == "") {
         return false;
-      } else if (c.match(/[+*\/()\^]/)) {
+      } else if (c.match(/[+*\/()]/)) {
         that.token = that.stream.read();
       } else if (c == "-") {
         that.stream.read();
