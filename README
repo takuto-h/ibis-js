@@ -2,7 +2,7 @@
 7
 > (1 + 2) * 3
 9
-> (fun n -> n * 2)(4)
+> (fun n -> n * 2) 4
 8
 > fun x -> x
 #<closure>

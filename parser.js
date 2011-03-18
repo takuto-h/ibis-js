@@ -64,18 +64,19 @@ Parser.prototype = (function () {
     return expr;
   }
   function parseFactor(that) {
-    var expr = parseAtom(that);
-    while (that.headToken == "(") {
-      lookAhead(that);
-      expr = new ExprApp(expr, parseExpr(that));
-      if (that.headToken != ")") {
-        throw expected(that, ")");
-      }
-      lookAhead(that);
+    return parseAtom(that);
+  }
+  function parseAtom(that) {
+    var expr = parseAtom2(that);
+    while (that.headToken == Token.INT ||
+           that.headToken == Token.IDENT ||
+           that.headToken == "fun" ||
+           that.headToken == "(") {
+      expr = new ExprApp(expr, parseAtom2(that));
     }
     return expr;
   }
-  function parseAtom(that) {
+  function parseAtom2(that) {
     var expr = null;
     switch (that.headToken) {
     case Token.INT:
