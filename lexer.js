@@ -12,8 +12,17 @@ Lexer.prototype = (function () {
       var c = that.stream.peek();
       if (c == "") {
         return false;
-      } else if (c.match(/[+\-*\/()\^]/)) {
+      } else if (c.match(/[+*\/()\^]/)) {
         that.token = that.stream.read();
+      } else if (c == "-") {
+        that.stream.read();
+        c = that.stream.peek();
+        if (c == ">") {
+          that.token = "->";
+          that.stream.read();
+        } else {
+          that.token = "-";
+        }
       } else if (c.match(/\d/)) {
         lexInt(that);
       } else if (c.match(/\w/)) {
