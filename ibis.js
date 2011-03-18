@@ -38,7 +38,7 @@ function eval(str) {
       }
       var type = expr.infer(typeEnv);
       var value = expr.eval(valueEnv);
-      result += value + " : " + type  + " "
+      result += "- : " + type + " = " + value;
     }
   } catch (e) {
     alert(e);
