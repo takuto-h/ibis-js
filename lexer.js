@@ -41,6 +41,10 @@ Lexer.prototype = (function () {
       ident += self.stream.read();
       c = self.stream.peek();
     }
+    if (Token.RESERVED[ident]) {
+      self.token = Token.RESERVED[ident];
+      return;
+    }
     self.token = Token.IDENT;
     self.value = ident;
   }
