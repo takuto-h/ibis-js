@@ -3,6 +3,7 @@ var Token = {
   INT: "INT",
   IDENT: "IDENT",
   RESERVED: {
-    let: "let"
+    let: "let",
+    fun: "fun"
   }
 }
