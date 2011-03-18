@@ -26,7 +26,7 @@ function ExprAbs(varName, expr) {
 }
 ExprAbs.prototype = {
   eval: function (env) {
-    return new ValueClosure(this.varName, this.expr);
+    return new ValueClosure(this.varName, this.expr, env);
   }
 }
 
