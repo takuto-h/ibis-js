@@ -6,126 +6,126 @@ function Parser(lexer) {
 Parser.prototype = (function () {
   var publicMethods = {
     parse: function () {
-      var self = this;
-      lookAhead(self);
-      if (self.headToken == Token.EOF) {
+      var that = this;
+      lookAhead(that);
+      if (that.headToken == Token.EOF) {
         return null;
       }
-      return parseStmt(self);
+      return parseStmt(that);
     }
   }
-  function lookAhead(self) {
-    if (self.lexer.advance()) {
-      self.headToken = self.lexer.token;
+  function lookAhead(that) {
+    if (that.lexer.advance()) {
+      that.headToken = that.lexer.token;
     } else {
-      self.headToken = Token.EOF;
+      that.headToken = Token.EOF;
     }
   }
-  function parseStmt(self) {
-    var expr = parseExpr(self);
-    switch (self.headToken) {
+  function parseStmt(that) {
+    var expr = parseExpr(that);
+    switch (that.headToken) {
     case Token.EOF:
       break;
     default:
-      throw expected(self, "EOF");
+      throw expected(that, "EOF");
     }
     return expr;
   }
-  function parseExpr(self) {
-    var expr = parseTerm(self);
-    while (self.headToken.match(/[+\-]/)) {
-      switch (self.headToken) {
+  function parseExpr(that) {
+    var expr = parseTerm(that);
+    while (that.headToken.match(/[+\-]/)) {
+      switch (that.headToken) {
       case "+":
-        lookAhead(self);
-        expr = new ExprAdd(expr, parseTerm(self));
+        lookAhead(that);
+        expr = new ExprAdd(expr, parseTerm(that));
         break;
       case "-":
-        lookAhead(self);
-        expr = new ExprSub(expr, parseTerm(self));
+        lookAhead(that);
+        expr = new ExprSub(expr, parseTerm(that));
         break;
       }
     }
     return expr;
   }
-  function parseTerm(self) {
-    var expr = parseFactor(self);
-    while (self.headToken.match(/[*\/]/)) {
-      switch (self.headToken) {
+  function parseTerm(that) {
+    var expr = parseFactor(that);
+    while (that.headToken.match(/[*\/]/)) {
+      switch (that.headToken) {
       case "*":
-        lookAhead(self);
-        expr = new ExprMul(expr, parseFactor(self));
+        lookAhead(that);
+        expr = new ExprMul(expr, parseFactor(that));
         break;
       case "/":
-        lookAhead(self);
-        expr = new ExprDiv(expr, parseFactor(self));
+        lookAhead(that);
+        expr = new ExprDiv(expr, parseFactor(that));
         break;
       }
     }
     return expr;
   }
-  function parseFactor(self) {
-    var expr = parseAtom(self);
-    while (self.headToken == "(") {
-      lookAhead(self);
-      expr = new ExprApp(expr, parseExpr(self));
-      if (self.headToken != ")") {
-        throw expected(self, ")");
+  function parseFactor(that) {
+    var expr = parseAtom(that);
+    while (that.headToken == "(") {
+      lookAhead(that);
+      expr = new ExprApp(expr, parseExpr(that));
+      if (that.headToken != ")") {
+        throw expected(that, ")");
       }
-      lookAhead(self);
+      lookAhead(that);
     }
     return expr;
   }
-  function parseAtom(self) {
+  function parseAtom(that) {
     var expr = null;
-    switch (self.headToken) {
+    switch (that.headToken) {
     case Token.INT:
-      expr = parseInt(self);
+      expr = parseInt(that);
       break;
     case Token.IDENT:
-      expr = parseVar(self);
+      expr = parseVar(that);
       break;
     case "^":
-      expr = parseAbs(self);
+      expr = parseAbs(that);
       break;
     case "(":
-      expr = parseParen(self);
+      expr = parseParen(that);
       break;
     default:
-      throw unexpected(self);
+      throw unexpected(that);
     }
     return expr;
   }
-  function parseInt(self) {
-    var expr = new ExprConst(self.lexer.value);
-    lookAhead(self);
+  function parseInt(that) {
+    var expr = new ExprConst(that.lexer.value);
+    lookAhead(that);
     return expr;
   }
-  function parseVar(self) {
-    var expr = new ExprVar(self.lexer.value);
-    lookAhead(self);
+  function parseVar(that) {
+    var expr = new ExprVar(that.lexer.value);
+    lookAhead(that);
     return expr;
   }
-  function parseAbs(self) {
-    lookAhead(self);
-    var varName = self.lexer.value;
-    lookAhead(self);
-    var expr = parseExpr(self);
+  function parseAbs(that) {
+    lookAhead(that);
+    var varName = that.lexer.value;
+    lookAhead(that);
+    var expr = parseExpr(that);
     return new ExprAbs(varName, expr);
   }
-  function parseParen(self) {
-    lookAhead(self);
-    var expr = parseExpr(self);
-    if (self.headToken != ")") {
-      throw expected(self, ")");
+  function parseParen(that) {
+    lookAhead(that);
+    var expr = parseExpr(that);
+    if (that.headToken != ")") {
+      throw expected(that, ")");
     }
-    lookAhead(self);
+    lookAhead(that);
     return expr;
   }
-  function expected(self, expectedToken) {
-    return "unexpected " + self.headToken + ", expected " + expectedToken;
+  function expected(that, expectedToken) {
+    return "unexpected " + that.headToken + ", expected " + expectedToken;
   }
-  function unexpected(self) {
-    return "unexpected " + self.headToken
+  function unexpected(that) {
+    return "unexpected " + that.headToken
   }
   return publicMethods;
 })()

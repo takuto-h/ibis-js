@@ -7,52 +7,52 @@ function Lexer(stream) {
 Lexer.prototype = (function () {
   var publicMethods = {
     advance: function () {
-      var self = this;
-      skipWhiteSpace(self);
-      var c = self.stream.peek();
+      var that = this;
+      skipWhiteSpace(that);
+      var c = that.stream.peek();
       if (c == "") {
         return false;
       } else if (c.match(/[+\-*\/()\^]/)) {
-        self.token = self.stream.read();
+        that.token = that.stream.read();
       } else if (c.match(/\d/)) {
-        lexInt(self);
+        lexInt(that);
       } else if (c.match(/\w/)) {
-        lexIdent(self);
+        lexIdent(that);
       } else {
         throw "unknown character: " + c;
       }
       return true;
     }
   }
-  function lexInt(self) {
-    var n = parseInt(self.stream.read());
-    var c = self.stream.peek();
+  function lexInt(that) {
+    var n = parseInt(that.stream.read());
+    var c = that.stream.peek();
     while (c.match(/\d/)) {
-      n = n * 10 + parseInt(self.stream.read());
-      c = self.stream.peek();
+      n = n * 10 + parseInt(that.stream.read());
+      c = that.stream.peek();
     }
-    self.token = Token.INT;
-    self.value = n
+    that.token = Token.INT;
+    that.value = n
   }
-  function lexIdent(self) {
-    var ident = self.stream.read();
-    var c = self.stream.peek();
+  function lexIdent(that) {
+    var ident = that.stream.read();
+    var c = that.stream.peek();
     while (c.match(/\w/)) {
-      ident += self.stream.read();
-      c = self.stream.peek();
+      ident += that.stream.read();
+      c = that.stream.peek();
     }
     if (Token.RESERVED[ident]) {
-      self.token = Token.RESERVED[ident];
+      that.token = Token.RESERVED[ident];
       return;
     }
-    self.token = Token.IDENT;
-    self.value = ident;
+    that.token = Token.IDENT;
+    that.value = ident;
   }
-  function skipWhiteSpace(self) {
-    var c = self.stream.peek();
+  function skipWhiteSpace(that) {
+    var c = that.stream.peek();
     while (c.match(/\s/)) {
-      self.stream.read();
-      c = self.stream.peek();
+      that.stream.read();
+      c = that.stream.peek();
     }
   }
   return publicMethods;
