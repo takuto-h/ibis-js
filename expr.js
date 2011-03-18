@@ -4,6 +4,9 @@ function ExprConst(value) {
 ExprConst.prototype = {
   eval: function (env) {
     return this.value;
+  },
+  infer: function (env) {
+    return TypeInt;
   }
 }
 
@@ -17,6 +20,13 @@ ExprVar.prototype = {
       throw "undefined variable: " + this.varName;
     }
     return value;
+  },
+  infer: function (env) {
+    var type = env.get(this.varName);
+    if (!type) {
+      throw "undefined variable: " + this.varName;
+    }
+    return type;
   }
 }
 
