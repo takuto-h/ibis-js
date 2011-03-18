@@ -10,6 +10,9 @@ var TypeInt = {
     if (otherType != this) {
        throw "int required, but got: " + otherType;
     }
+  },
+  unwrapTypeVar: function () {
+    return this;
   }
 }
 
@@ -31,6 +34,12 @@ TypeFun.prototype = {
     }
     this.argType.unify(otherType.argType);
     this.retValType.unify(otherType.retValType);
+  },
+  unwrapTypeVar: function () {
+    return new TypeFun(
+      this.argType.unwrapTypeVar(),
+      this.retValType.unwrapTypeVar()
+    );
   }
 }
 
@@ -38,11 +47,20 @@ function TypeVar(value) {
   this.value = value;
 }
 TypeVar.prototype = {
+  toString: function () {
+    return "#<tvar " + this.value + ">";
+  },
   unify: function (otherType) {
     if (this.value) {
       this.value.unify(otherType);
       return;
     }
     this.value = otherType;
+  },
+  unwrapTypeVar: function () {
+    if (!this.value) {
+      throw "polymorphic expression appeared";
+    }
+    return this.value.unwrapTypeVar();
   }
 }

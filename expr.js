@@ -43,10 +43,9 @@ ExprAbs.prototype = {
     var newEnv = new EnvLocal(env);
     newEnv.add(this.varName, argType);
     var retValType = this.expr.infer(newEnv);
-    if (!argType.value) {
-      throw "polymorphic expression appeared";
-    }
-    return new TypeFun(argType.value, retValType);
+    argType = argType.unwrapTypeVar();
+    retValType = retValType.unwrapTypeVar();
+    return new TypeFun(argType, retValType);
   }
 }
 
@@ -66,6 +65,11 @@ ExprApp.prototype = {
   infer: function (env) {
     var funcType = this.funcExpr.infer(env);
     var argType = this.argExpr.infer(env);
+    if (funcType instanceof TypeVar) {
+      var retValType = new TypeVar(null);
+      funcType.value = new TypeFun(argType, retValType);
+      return retValType;
+    }
     if (!(funcType instanceof TypeFun)) {
       throw "function required, but got: " + funcType;
     }
