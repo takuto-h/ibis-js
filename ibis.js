@@ -1,4 +1,5 @@
-var env = new EnvGlobal();
+var valueEnv = new EnvGlobal();
+var typeEnv = new EnvGlobal();
 
 catchEvent(window, "load", setup);
 
@@ -35,7 +36,9 @@ function eval(str) {
       if (!expr) {
         break;
       }
-      result += expr.eval(env) + " "
+      var type = expr.infer(typeEnv);
+      var value = expr.eval(valueEnv);
+      result += value + " : " + type  + " "
     }
   } catch (e) {
     alert(e);

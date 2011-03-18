@@ -1,8 +1,8 @@
 > 1 + 2 * 3
-7
+7 : int
 > (1 + 2) * 3
-9
+9 : int
 > (fun n -> n * 2) 4
-8
-> fun x -> x
-#<closure>
+8 : int
+> fun n -> fun m -> n + m
+#<closure> : (int -> (int -> int))

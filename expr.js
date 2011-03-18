@@ -37,6 +37,16 @@ function ExprAbs(varName, expr) {
 ExprAbs.prototype = {
   eval: function (env) {
     return new ValueClosure(this.varName, this.expr, env);
+  },
+  infer: function (env) {
+    var argType = new TypeVar(null);
+    var newEnv = new EnvLocal(env);
+    newEnv.add(this.varName, argType);
+    var retValType = this.expr.infer(newEnv);
+    if (!argType.value) {
+      throw "polymorphic expression appeared";
+    }
+    return new TypeFun(argType.value, retValType);
   }
 }
 
@@ -52,6 +62,15 @@ ExprApp.prototype = {
       throw "function required, but got: " + func;
     }
     return func.call(arg, env);
+  },
+  infer: function (env) {
+    var funcType = this.funcExpr.infer(env);
+    var argType = this.argExpr.infer(env);
+    if (!(funcType instanceof TypeFun)) {
+      throw "function required, but got: " + funcType;
+    }
+    funcType.argType.unify(argType);
+    return funcType.retValType;
   }
 }
 
@@ -62,6 +81,11 @@ function ExprAdd(lhs, rhs) {
 ExprAdd.prototype = {
   eval: function (env) {
     return this.lhs.eval(env) + this.rhs.eval(env);
+  },
+  infer: function (env) {
+    this.lhs.infer(env).unify(TypeInt);
+    this.rhs.infer(env).unify(TypeInt);
+    return TypeInt;
   }
 }
 
@@ -72,6 +96,11 @@ function ExprSub(lhs, rhs) {
 ExprSub.prototype = {
   eval: function (env) {
     return this.lhs.eval(env) - this.rhs.eval(env);
+  },
+  infer: function (env) {
+    this.lhs.infer(env).unify(TypeInt);
+    this.rhs.infer(env).unify(TypeInt);
+    return TypeInt;
   }
 }
 
@@ -82,6 +111,11 @@ function ExprMul(lhs, rhs) {
 ExprMul.prototype = {
   eval: function (env) {
     return this.lhs.eval(env) * this.rhs.eval(env);
+  },
+  infer: function (env) {
+    this.lhs.infer(env).unify(TypeInt);
+    this.rhs.infer(env).unify(TypeInt);
+    return TypeInt;
   }
 }
 
@@ -92,5 +126,10 @@ function ExprDiv(lhs, rhs) {
 ExprDiv.prototype = {
   eval: function (env) {
     return this.lhs.eval(env) / this.rhs.eval(env);
+  },
+  infer: function (env) {
+    this.lhs.infer(env).unify(TypeInt);
+    this.rhs.infer(env).unify(TypeInt);
+    return TypeInt;
   }
 }
