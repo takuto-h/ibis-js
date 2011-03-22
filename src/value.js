@@ -1,10 +1,22 @@
 Ibis.Value = (function () {
   var exports = function () {
     return {
+      createInt: createInt,
       createClosure: createClosure,
       createSubr: createSubr
     };
   };
+  
+  function Int(intValue) {
+    this.tag = "Int";
+    this.intValue = intValue;
+  }
+  Int.prototype.toString = function () {
+    return this.intValue.toString();
+  }
+  function createInt(intValue) {
+    return new Int(intValue);
+  }
   
   function Closure(env, varName, bodyExpr) {
     this.tag = "Closure";

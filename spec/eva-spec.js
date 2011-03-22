@@ -5,18 +5,18 @@ describe("Eva", function() {
   var Env = Ibis.Env;
   
   var env = Env.createGlobal({
-    "answer": 42,
+    "answer": Value.createInt(42),
     "double": Value.createSubr(function (n) {
-      return n * 2;
+      return Value.createInt(n.intValue * 2);
     }),
     "+": Value.createSubr(function (lhs) {
       return Value.createSubr(function (rhs) {
-        return lhs + rhs;
+        return Value.createInt(lhs.intValue + rhs.intValue);
       });
     }),
     "*": Value.createSubr(function (lhs) {
       return Value.createSubr(function (rhs) {
-        return lhs * rhs;
+        return Value.createInt(lhs.intValue * rhs.intValue);
       });
     })
   });

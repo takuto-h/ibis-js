@@ -1,6 +1,7 @@
 Ibis.Parser = (function () {
   var Lexer = Ibis.Lexer;
   var Expr = Ibis.Expr;
+  var Value = Ibis.Value;
   
   var exports = function () {
     return {
@@ -104,7 +105,7 @@ Ibis.Parser = (function () {
   }
   
   function parseInt(parser) {
-    var expr = Expr.createConst(Lexer.value(parser.lexer));
+    var expr = Expr.createConst(Value.createInt(Lexer.value(parser.lexer)));
     lookAhead(parser);
     return expr;
   }

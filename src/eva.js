@@ -29,15 +29,16 @@ Ibis.Eva = (function () {
   }
   
   function apply(fun, arg) {
-    if (fun.tag == "Closure") {
+    switch (fun.tag) {
+    case "Closure":
       var newEnv = Env.createLocal({}, fun.env);
       Env.add(newEnv, fun.varName, arg);
       return eval(newEnv, fun.bodyExpr);
-    }
-    if (fun.tag == "Subr") {
+    case "Subr":
       return fun.subrValue(arg);
+    /*default:
+      throw new IbisError("function required, but got: " + fun);*/
     }
-    //throw new IbisError("function required, but got: " + fun);
   }
   
   return exports();
