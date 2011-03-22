@@ -42,14 +42,39 @@ Ibis.Parser = (function () {
   }
   
   function parseExpr(parser) {
-    return parsePrimExpr(parser);
+    return parseSimpleExpr(parser);
+  }
+  
+  function parseSimpleExpr(parser) {
+    return parseAddExpr(parser);
+  }
+  
+  function parseAddExpr(parser) {
+    var expr = parseMulExpr(parser);
+    while (parser.headToken.match(/[+\-]/)) {
+      var op = parser.headToken;
+      lookAhead(parser);
+      expr = createBinExpr(op, expr, parseMulExpr(parser));
+    }
+    return expr;
+  }
+  
+  function parseMulExpr(parser) {
+    var expr = parsePrimExpr(parser);
+    while (parser.headToken.match(/[*\/]/)) {
+      var op = parser.headToken;
+      lookAhead(parser);
+      expr = createBinExpr(op, expr, parsePrimExpr(parser));
+    }
+    return expr;
   }
   
   function parsePrimExpr(parser) {
     var expr = parseAtom(parser);
     while (parser.headToken == "INT" ||
            parser.headToken == "IDENT" ||
-           parser.headToken == "fun") {
+           parser.headToken == "fun" ||
+           parser.headToken == "(") {
       expr = Expr.createApp(expr, parseAtom(parser));
     }
     return expr;
@@ -66,6 +91,9 @@ Ibis.Parser = (function () {
       break;
     case "fun":
       expr = parseAbs(parser);
+      break;
+    case "(":
+      expr = parseParen(parser);
       break;
     default:
       throw unexpected(parser);
@@ -98,6 +126,20 @@ Ibis.Parser = (function () {
     lookAhead(parser);
     var bodyExpr = parseExpr(parser);
     return Expr.createAbs(varName, bodyExpr);
+  }
+  
+  function parseParen(parser) {
+    lookAhead(parser);
+    var expr = parseExpr(parser);
+    if (parser.headToken != ")") {
+      throw expected(parser, ")");
+    }
+    lookAhead(parser);
+    return expr;
+  }
+  
+  function createBinExpr(op, lhs, rhs) {
+    return Expr.createApp(Expr.createApp(Expr.createVar(op), lhs), rhs);
   }
   
   function expected(parser, expectedToken) {

@@ -12,6 +12,19 @@ describe("Parser", function() {
   
   it("can parse primary expressions", function() {
     var parser = Parser.ofString("f x y");
-    expect(Parser.parse(parser).toString()).toEqual("(App (App (Var f) (Var x)) (Var y))");
+    expect(Parser.parse(parser).toString()).toEqual(
+      "(App (App (Var f) (Var x)) (Var y))"
+    );
+  });
+  
+  it("can parse binary expressions", function() {
+    var parser = Parser.ofString("1 + 2 * 3");
+    expect(Parser.parse(parser).toString()).toEqual(
+      "(App (App (Var +) (Const 1)) (App (App (Var *) (Const 2)) (Const 3)))"
+    );
+    var parser = Parser.ofString("(1 + 2) * 3");
+    expect(Parser.parse(parser).toString()).toEqual(
+      "(App (App (Var *) (App (App (Var +) (Const 1)) (Const 2))) (Const 3))"
+    );
   });
 });
