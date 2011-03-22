@@ -9,4 +9,9 @@ describe("Parser", function() {
     var parser = Parser.ofString("fun x -> x");
     expect(Parser.parse(parser).toString()).toEqual("(Abs x (Var x))");
   });
+  
+  it("can parse primary expressions", function() {
+    var parser = Parser.ofString("f x y");
+    expect(Parser.parse(parser).toString()).toEqual("(App (App (Var f) (Var x)) (Var y))");
+  });
 });

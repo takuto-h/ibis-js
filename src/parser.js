@@ -42,7 +42,17 @@ Ibis.Parser = (function () {
   }
   
   function parseExpr(parser) {
-    return parseAtom(parser);
+    return parsePrimExpr(parser);
+  }
+  
+  function parsePrimExpr(parser) {
+    var expr = parseAtom(parser);
+    while (parser.headToken == "INT" ||
+           parser.headToken == "IDENT" ||
+           parser.headToken == "fun") {
+      expr = Expr.createApp(expr, parseAtom(parser));
+    }
+    return expr;
   }
   
   function parseAtom(parser) {
@@ -88,6 +98,14 @@ Ibis.Parser = (function () {
     lookAhead(parser);
     var bodyExpr = parseExpr(parser);
     return Expr.createAbs(varName, bodyExpr);
+  }
+  
+  function expected(parser, expectedToken) {
+    return "unexpected " + parser.headToken + ", expected " + expectedToken;
+  }
+  
+  function unexpected(parser) {
+    return "unexpected " + parser.headToken
   }
   
   return exports;

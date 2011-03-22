@@ -2,7 +2,8 @@ Ibis.Expr = (function () {
   var exports = {
     createConst: createConst,
     createVar: createVar,
-    createAbs: createAbs
+    createAbs: createAbs,
+    createApp: createApp
   };
   
   function Const(value) {
@@ -34,6 +35,17 @@ Ibis.Expr = (function () {
   }
   function createAbs(varName, bodyExpr) {
     return new Abs(varName, bodyExpr);
+  }
+  
+  function App(funExpr, argExpr) {
+    this.funExpr = funExpr;
+    this.argExpr = argExpr;
+  }
+  App.prototype.toString = function () {
+    return "(App " + this.funExpr + " " + this.argExpr + ")";
+  }
+  function createApp(funExpr, argExpr) {
+    return new App(funExpr, argExpr);
   }
   
   return exports;
