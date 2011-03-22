@@ -49,6 +49,8 @@ Ibis.Lexer = (function () {
       }
     } else if (c.match(/\d/)) {
       lexInt(lexer);
+    } else if (c.match(/\w/)) {
+      lexIdent(lexer);
     } else {
       throw "unknown character: " + c;
     }
@@ -63,6 +65,17 @@ Ibis.Lexer = (function () {
     }
     lexer.token = "INT";
     lexer.value = n;
+  }
+  
+  function lexIdent(lexer) {
+    var ident = Stream.next(lexer.stream);
+    var c = Stream.peek(lexer.stream);
+    while (c.match(/\w/)) {
+      ident += Stream.next(lexer.stream);
+      c = Stream.peek(lexer.stream);
+    }
+    lexer.token = "IDENT";
+    lexer.value = ident;
   }
   
   function skipWhiteSpace(lexer) {

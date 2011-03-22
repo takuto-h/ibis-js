@@ -30,4 +30,15 @@ describe("Lexer", function() {
     expect(Lexer.value(lexer)).toEqual(456);
     expect(Lexer.advance(lexer)).toBeFalsy();
   });
+  
+  it("can lex identifiers", function() {
+    var lexer = Lexer.ofString("abc efg");
+    expect(Lexer.advance(lexer)).toBeTruthy();
+    expect(Lexer.token(lexer)).toEqual("IDENT");
+    expect(Lexer.value(lexer)).toEqual("abc");
+    expect(Lexer.advance(lexer)).toBeTruthy();
+    expect(Lexer.token(lexer)).toEqual("IDENT");
+    expect(Lexer.value(lexer)).toEqual("efg");
+    expect(Lexer.advance(lexer)).toBeFalsy();
+  });
 });
