@@ -8,6 +8,11 @@ Ibis.Lexer = (function () {
     value: value
   }
   
+  var RESERVED = {
+    "fun": "fun",
+    "let": "let"
+  }
+  
   function ofString(string) {
     return {
       stream: Stream.ofString(string),
@@ -73,6 +78,10 @@ Ibis.Lexer = (function () {
     while (c.match(/\w/)) {
       ident += Stream.next(lexer.stream);
       c = Stream.peek(lexer.stream);
+    }
+    if (RESERVED[ident]) {
+      lexer.token = RESERVED[ident];
+      return;
     }
     lexer.token = "IDENT";
     lexer.value = ident;

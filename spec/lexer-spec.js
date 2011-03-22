@@ -41,4 +41,13 @@ describe("Lexer", function() {
     expect(Lexer.value(lexer)).toEqual("efg");
     expect(Lexer.advance(lexer)).toBeFalsy();
   });
+  
+  it("can lex reserved words", function() {
+    var lexer = Lexer.ofString("fun let");
+    expect(Lexer.advance(lexer)).toBeTruthy();
+    expect(Lexer.token(lexer)).toEqual("fun");
+    expect(Lexer.advance(lexer)).toBeTruthy();
+    expect(Lexer.token(lexer)).toEqual("let");
+    expect(Lexer.advance(lexer)).toBeFalsy();
+  });
 });
