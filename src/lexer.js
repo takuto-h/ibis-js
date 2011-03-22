@@ -47,9 +47,22 @@ Ibis.Lexer = (function () {
       } else {
         lexer.token = "-";
       }
+    } else if (c.match(/\d/)) {
+      lexInt(lexer);
     } else {
       throw "unknown character: " + c;
     }
+  }
+  
+  function lexInt(lexer) {
+    var n = parseInt(Stream.next(lexer.stream));
+    var c = Stream.peek(lexer.stream);
+    while (c.match(/\d/)) {
+      n = n * 10 + parseInt(Stream.next(lexer.stream));
+      c = Stream.peek(lexer.stream);
+    }
+    lexer.token = "INT";
+    lexer.value = n;
   }
   
   function skipWhiteSpace(lexer) {
