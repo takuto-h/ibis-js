@@ -36,7 +36,7 @@ Ibis.Parser = (function () {
     case "EOF":
       break;
     default:
-      throw expected(parser, "EOF");
+      throw new IbisError(expected(parser, "EOF"));
     }
     return expr;
   }
@@ -96,7 +96,7 @@ Ibis.Parser = (function () {
       expr = parseParen(parser);
       break;
     default:
-      throw unexpected(parser);
+      throw new IbisError(unexpected(parser));
     }
     return expr;
   }
@@ -116,12 +116,12 @@ Ibis.Parser = (function () {
   function parseAbs(parser) {
     lookAhead(parser);
     if (parser.headToken != "IDENT") {
-      throw expected(parser, "IDENT");
+      throw new IbisError(expected(parser, "IDENT"));
     }
     var varName = Lexer.value(parser.lexer);
     lookAhead(parser);
     if (parser.headToken != "->") {
-      throw expected(parser, "->");
+      throw new IbisError(expected(parser, "->"));
     }
     lookAhead(parser);
     var bodyExpr = parseExpr(parser);
@@ -132,7 +132,7 @@ Ibis.Parser = (function () {
     lookAhead(parser);
     var expr = parseExpr(parser);
     if (parser.headToken != ")") {
-      throw expected(parser, ")");
+      throw new IbisError(expected(parser, ")"));
     }
     lookAhead(parser);
     return expr;

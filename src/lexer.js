@@ -1,5 +1,6 @@
 Ibis.Lexer = (function () {
   var Stream = Ibis.Stream;
+  var IbisError = Ibis.IbisError;
   
   var exports = {
     ofString: ofString,
@@ -57,7 +58,7 @@ Ibis.Lexer = (function () {
     } else if (c.match(/\w/)) {
       lexIdent(lexer);
     } else {
-      throw "unknown character: " + c;
+      throw new IbisError("unknown character: " + c);
     }
   }
   
