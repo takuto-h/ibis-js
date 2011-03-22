@@ -17,7 +17,15 @@
     var inputForm = document.getElementById("inputForm");
     var outputArea = document.getElementById("outputArea");
     Compat.catchEvent(inputForm, "submit", interpretForm);
+    Compat.catchEvent(inputForm, "submit", scrollToBottom);
     outputArea.value = "> ";
+  }
+  
+  function scrollToBottom(event) {
+    var outputArea = document.getElementById("outputArea");
+    setTimeout(function () {  // for IE8
+      outputArea.scrollTop = outputArea.scrollHeight - outputArea.clientHeight;
+    }, 0);
   }
   
   function interpretForm(event) {
