@@ -5,12 +5,15 @@ Ibis.Inferer = (function () {
   
   var exports = function () {
     return {
-      infer: inferExpr
+      infer: polyInfer
     };
   };
   
-  function inferExpr(env, expr) {
-    return unwrapVar(infer(env, expr));
+  function polyInfer(env, expr) {
+    var freeVars = [];
+    var inferredType = infer(env, expr);
+    var unwrappedType = unwrapVar(inferredType, freeVars);
+    return Type.createTypeSchema(freeVars, unwrappedType);
   }
   
   function infer(env, expr) {
@@ -18,15 +21,15 @@ Ibis.Inferer = (function () {
     case "Const":
       return Type.Int;
     case "Var":
-      var type = Env.find(env, expr.varName);
-      if (!type) {
+      var typeSchema = Env.find(env, expr.varName);
+      if (!typeSchema) {
         throw new IbisError("undefined variable: " + expr.varName);
       }
-      return type;
+      return createAlphaEquivalent(typeSchema).bodyType;
     case "Abs":
       var paramType = Type.createVar(null);
       var newEnv = Env.createLocal({}, env);
-      Env.add(newEnv, expr.varName, paramType);
+      Env.add(newEnv, expr.varName, Type.createTypeSchema([], paramType));
       var retType = infer(newEnv, expr.bodyExpr);
       return Type.createFun(paramType, retType);
     case "App":
@@ -36,9 +39,12 @@ Ibis.Inferer = (function () {
       unify(funType, Type.createFun(argType, retType));
       return retType;
     case "Let":
-      var valueType = infer(env, expr.valueExpr);
-      Env.add(env, expr.varName, valueType);
-      return valueType;
+      var inferredType = infer(env, expr.valueExpr);
+      var freeVars = [];
+      var unwrappedType = unwrapVar(inferredType, freeVars);
+      var typeSchema = Type.createTypeSchema(freeVars, unwrappedType);
+      Env.add(env, expr.varName, typeSchema);
+      return createAlphaEquivalent(typeSchema).bodyType;
     }
   }
   
@@ -89,18 +95,40 @@ Ibis.Inferer = (function () {
     }
   }
   
-  function unwrapVar(type) {
+  function unwrapVar(type, freeVars) {
     switch (type.tag) {
     case "Int":
       return type;
     case "Fun":
-      return Type.createFun(unwrapVar(type.paramType), unwrapVar(type.retType));
+      return Type.createFun(
+        unwrapVar(type.paramType, freeVars),
+        unwrapVar(type.retType, freeVars)
+      );
     case "Var":
       if (!type.value) {
-        throw new IbisError("polymorphic expression appeared");
+        for (var i = 0; i < freeVars.length; i++) {
+          if (freeVars[i] == type) {
+            return type;
+          }
+        }
+        freeVars.push(type);
+        return type;
       }
-      return unwrapVar(type.value);
+      return unwrapVar(type.value, freeVars);
     }
+  }
+  
+  function createAlphaEquivalent(typeSchema) {
+    var map = {};
+    var oldTypeVars = typeSchema.typeVars;
+    var newTypeVars = []
+    for (var i = 0; i < oldTypeVars.length; i++) {
+      var freshVar = Type.createVar(null);
+      map[oldTypeVars[i]] = freshVar;
+      newTypeVars.push(freshVar);
+    }
+    var newBodyType = Type.subst(typeSchema.bodyType, map);
+    return Type.createTypeSchema(newTypeVars, newBodyType);
   }
   
   return exports();

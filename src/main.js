@@ -65,7 +65,9 @@
   }
   
   function binOpType(lhs, rhs, ret) {
-    return Type.createFun(lhs, Type.createFun(rhs, ret));
+    return Type.createTypeSchema(
+      [], Type.createFun(lhs, Type.createFun(rhs, ret))
+    );
   }
   
   Env.add(typeEnv, "+", binOpType(Type.Int, Type.Int, Type.Int));

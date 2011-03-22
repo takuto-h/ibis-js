@@ -3,7 +3,9 @@ Ibis.Type = (function () {
     return {
       Int: Int,
       createFun: createFun,
-      createVar: createVar
+      createVar: createVar,
+      subst: subst,
+      createTypeSchema: createTypeSchema
     };
   };
   
@@ -37,6 +39,45 @@ Ibis.Type = (function () {
   }
   function createVar(value) {
     return new Var(currentId++, value);
+  }
+  
+  function subst(type, map) {
+    switch (type.tag) {
+    case "Int":
+      return type;
+    case "Fun":
+      return createFun(subst(type.paramType, map), subst(type.retType, map));
+    case "Var":
+      if (map[type]) {
+        return map[type];
+      }
+      if (!type.value) {
+        return type;
+      }
+      return subst(type.value, map);
+    }
+  }
+  
+  function TypeSchema(typeVars, bodyType) {
+    this.tag = "TypeSchema";
+    this.typeVars = typeVars;
+    this.bodyType = bodyType;
+  }
+  TypeSchema.prototype.toString = function () {
+    if (this.typeVars.length == 0) {
+      return this.bodyType.toString();
+    }
+    var map = {};
+    var typeVars = this.typeVars;
+    var charCode = "a".charCodeAt(0);
+    for (var i = 0; i < typeVars.length; i++) {
+      var varName = "'" + String.fromCharCode(charCode++);
+      map[typeVars[i]] = varName;
+    }
+    return subst(this.bodyType, map).toString();
+  }
+  function createTypeSchema(typeVars, bodyType) {
+    return new TypeSchema(typeVars, bodyType);
   }
   
   return exports();

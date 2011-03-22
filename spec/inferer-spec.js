@@ -5,10 +5,18 @@ describe("Inferer", function() {
   var Env = Ibis.Env;
   
   var env = Env.createGlobal({
-    "answer": Type.Int,
-    "double": Type.createFun(Type.Int, Type.Int),
-    "+": Type.createFun(Type.Int, Type.createFun(Type.Int, Type.Int)),
-    "*": Type.createFun(Type.Int, Type.createFun(Type.Int, Type.Int))
+    "answer": Type.createTypeSchema(
+      [], Type.Int
+    ),
+    "double": Type.createTypeSchema(
+      [], Type.createFun(Type.Int, Type.Int)
+    ),
+    "+": Type.createTypeSchema(
+      [], Type.createFun(Type.Int, Type.createFun(Type.Int, Type.Int))
+    ),
+    "*": Type.createTypeSchema(
+      [], Type.createFun(Type.Int, Type.createFun(Type.Int, Type.Int))
+    )
   });
   
   it("can infer types of constants", function() {
@@ -34,6 +42,15 @@ describe("Inferer", function() {
   it("can infer types of let expressions", function() {
     expect(inferFromString("let x = 1")).toEqual("int");
     expect(inferFromString("x")).toEqual("int");
+  });
+  
+  it("can infer polymorphic types", function() {
+    expect(inferFromString("fun x -> x")).toEqual("('a -> 'a)");
+    expect(inferFromString("fun x -> fun y -> x")).toEqual("('a -> ('b -> 'a))");
+    expect(inferFromString("let id = fun x -> x")).toEqual("('a -> 'a)");
+    expect(inferFromString("id 1")).toEqual("int");
+    expect(inferFromString("id id")).toEqual("('a -> 'a)");
+    expect(inferFromString("let const = fun x -> fun y -> x")).toEqual("('a -> ('b -> 'a))");
   });
   
   function inferFromString(string) {
