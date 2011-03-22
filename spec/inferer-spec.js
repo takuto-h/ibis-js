@@ -31,6 +31,11 @@ describe("Inferer", function() {
     expect(inferFromString("(1 + 2) * 3")).toEqual("int");
   });
   
+  it("can infer types of let expressions", function() {
+    expect(inferFromString("let x = 1")).toEqual("int");
+    expect(inferFromString("x")).toEqual("int");
+  });
+  
   function inferFromString(string) {
     var parser = Parser.ofString(string);
     var expr = Parser.parse(parser);

@@ -35,6 +35,10 @@ Ibis.Inferer = (function () {
       var retType = Type.createVar(null);
       unify(funType, Type.createFun(argType, retType));
       return retType;
+    case "Let":
+      var valueType = infer(env, expr.valueExpr);
+      Env.add(env, expr.varName, valueType);
+      return valueType;
     }
   }
   
