@@ -1,9 +1,11 @@
 Ibis.Expr = (function () {
-  var exports = {
-    createConst: createConst,
-    createVar: createVar,
-    createAbs: createAbs,
-    createApp: createApp
+  var exports = function () {
+    return {
+      createConst: createConst,
+      createVar: createVar,
+      createAbs: createAbs,
+      createApp: createApp
+    };
   };
   
   function Const(value) {
@@ -52,5 +54,5 @@ Ibis.Expr = (function () {
     return new App(funExpr, argExpr);
   }
   
-  return exports;
+  return exports();
 })();

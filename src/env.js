@@ -1,9 +1,11 @@
 Ibis.Env = (function () {
-  var exports = {
-    createGlobal: createGlobal,
-    createLocal: createLocal,
-    find: find,
-    add: add
+  var exports = function () {
+    return {
+      createGlobal: createGlobal,
+      createLocal: createLocal,
+      find: find,
+      add: add
+    };
   };
   
   function createGlobal(vars) {
@@ -35,5 +37,5 @@ Ibis.Env = (function () {
     env.vars[varName] = value;
   }
   
-  return exports;
+  return exports();
 })();

@@ -3,8 +3,10 @@ Ibis.Inferer = (function () {
   var Env = Ibis.Env;
   var IbisError = Ibis.IbisError;
   
-  var exports = {
-    infer: inferExpr
+  var exports = function () {
+    return {
+      infer: inferExpr
+    };
   };
   
   function inferExpr(env, expr) {
@@ -97,5 +99,5 @@ Ibis.Inferer = (function () {
     }
   }
   
-  return exports;
+  return exports();
 })();

@@ -1,6 +1,8 @@
 var Ibis = (function () {
-  var exports = {
-    IbisError: IbisError
+  var exports = function () {
+    return {
+      IbisError: IbisError
+    };
   };
   
   function IbisError(message) {
@@ -10,5 +12,5 @@ var Ibis = (function () {
   IbisError.prototype.constructor = IbisError;
   IbisError.prototype.name = "IbisError";
   
-  return exports;
+  return exports();
 })();

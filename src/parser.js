@@ -2,9 +2,11 @@ Ibis.Parser = (function () {
   var Lexer = Ibis.Lexer;
   var Expr = Ibis.Expr;
   
-  var exports = {
-    ofString: ofString,
-    parse: parse
+  var exports = function () {
+    return {
+      ofString: ofString,
+      parse: parse
+    };
   };
   
   function ofString(string) {
@@ -150,5 +152,5 @@ Ibis.Parser = (function () {
     return "unexpected " + parser.headToken
   }
   
-  return exports;
+  return exports();
 })();

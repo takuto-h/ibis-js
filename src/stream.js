@@ -1,9 +1,11 @@
 Ibis.Stream = (function () {
-  var exports = {
-    ofString: ofString,
-    peek: peek,
-    next: next,
-    junk: junk
+  var exports = function () {
+    return {
+      ofString: ofString,
+      peek: peek,
+      next: next,
+      junk: junk
+    };
   };
   
   function ofString(rawString) {
@@ -25,5 +27,5 @@ Ibis.Stream = (function () {
     stream.index++;
   }
   
-  return exports;
+  return exports();
 })();

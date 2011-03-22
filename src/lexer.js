@@ -2,11 +2,13 @@ Ibis.Lexer = (function () {
   var Stream = Ibis.Stream;
   var IbisError = Ibis.IbisError;
   
-  var exports = {
-    ofString: ofString,
-    advance: advance,
-    token: token,
-    value: value
+  var exports = function () {
+    return {
+      ofString: ofString,
+      advance: advance,
+      token: token,
+      value: value
+    };
   }
   
   var RESERVED = {
@@ -96,5 +98,5 @@ Ibis.Lexer = (function () {
     }
   }
   
-  return exports;
+  return exports();
 })();
