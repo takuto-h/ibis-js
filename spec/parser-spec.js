@@ -8,6 +8,8 @@ describe("Parser", function() {
     expect(Parser.parse(parser).toString()).toEqual("(Var abc)");
     var parser = Parser.ofString("fun x -> x");
     expect(Parser.parse(parser).toString()).toEqual("(Abs x (Var x))");
+    var parser = Parser.ofString("let x = 1");
+    expect(Parser.parse(parser).toString()).toEqual("(Let x (Const 1))");
   });
   
   it("can parse primary expressions", function() {

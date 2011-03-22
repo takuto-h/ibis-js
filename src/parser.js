@@ -2,6 +2,7 @@ Ibis.Parser = (function () {
   var Lexer = Ibis.Lexer;
   var Expr = Ibis.Expr;
   var Value = Ibis.Value;
+  var IbisError = Ibis.IbisError;
   
   var exports = function () {
     return {
@@ -77,6 +78,7 @@ Ibis.Parser = (function () {
     while (parser.headToken == "INT" ||
            parser.headToken == "IDENT" ||
            parser.headToken == "fun" ||
+           parser.headToken == "let" ||
            parser.headToken == "(") {
       expr = Expr.createApp(expr, parseAtom(parser));
     }
@@ -94,6 +96,9 @@ Ibis.Parser = (function () {
       break;
     case "fun":
       expr = parseAbs(parser);
+      break;
+    case "let":
+      expr = parseLet(parser);
       break;
     case "(":
       expr = parseParen(parser);
@@ -129,6 +134,21 @@ Ibis.Parser = (function () {
     lookAhead(parser);
     var bodyExpr = parseExpr(parser);
     return Expr.createAbs(varName, bodyExpr);
+  }
+  
+  function parseLet(parser) {
+    lookAhead(parser);
+    if (parser.headToken != "IDENT") {
+      throw new IbisError(expected(parser, "IDENT"));
+    }
+    var varName = Lexer.value(parser.lexer);
+    lookAhead(parser);
+    if (parser.headToken != "=") {
+      throw new IbisError(expected(parser, "="));
+    }
+    lookAhead(parser);
+    var valueExpr = parseExpr(parser);
+    return Expr.createLet(varName, valueExpr);
   }
   
   function parseParen(parser) {

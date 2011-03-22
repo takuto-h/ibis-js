@@ -4,7 +4,8 @@ Ibis.Expr = (function () {
       createConst: createConst,
       createVar: createVar,
       createAbs: createAbs,
-      createApp: createApp
+      createApp: createApp,
+      createLet: createLet
     };
   };
   
@@ -52,6 +53,18 @@ Ibis.Expr = (function () {
   }
   function createApp(funExpr, argExpr) {
     return new App(funExpr, argExpr);
+  }
+  
+  function Let(varName, valueExpr) {
+    this.tag = "Let";
+    this.varName = varName;
+    this.valueExpr = valueExpr;
+  }
+  Let.prototype.toString = function () {
+    return "(Let " + this.varName + " " + this.valueExpr + ")";
+  }
+  function createLet(varName, valueExpr) {
+    return new Let(varName, valueExpr);
   }
   
   return exports();
