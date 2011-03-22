@@ -41,6 +41,11 @@ describe("Eva", function() {
     expect(evalFromString("(1 + 2) * 3")).toEqual("9");
   });
   
+  it("can evaluate let expressions", function() {
+    expect(evalFromString("let x = 1")).toEqual("1");
+    expect(evalFromString("x")).toEqual("1");
+  });
+  
   function evalFromString(string) {
     var parser = Parser.ofString(string);
     var expr = Parser.parse(parser);
