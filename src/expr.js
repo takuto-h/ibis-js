@@ -7,6 +7,7 @@ Ibis.Expr = (function () {
   };
   
   function Const(value) {
+    this.tag = "Const";
     this.value = value;
   }
   Const.prototype.toString = function () {
@@ -17,6 +18,7 @@ Ibis.Expr = (function () {
   }
   
   function Var(varName) {
+    this.tag = "Var";
     this.varName = varName;
   }
   Var.prototype.toString = function () {
@@ -27,6 +29,7 @@ Ibis.Expr = (function () {
   }
   
   function Abs(varName, bodyExpr) {
+    this.tag = "Abs";
     this.varName = varName;
     this.bodyExpr = bodyExpr;
   }
@@ -38,6 +41,7 @@ Ibis.Expr = (function () {
   }
   
   function App(funExpr, argExpr) {
+    this.tag = "App";
     this.funExpr = funExpr;
     this.argExpr = argExpr;
   }
