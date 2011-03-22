@@ -1,8 +1,1 @@
-> 1 + 2 * 3
-- : int = 7
-> (1 + 2) * 3
-- : int = 9
-> (fun n -> n * 2) 4
-- : int = 8
-> fun n -> fun m -> n + m
-- : (int -> (int -> int)) = #<closure>
+See spec/*.js
