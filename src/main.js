@@ -3,7 +3,10 @@
   var Parser = Ibis.Parser;
   var Inferer = Ibis.Inferer;
   var Eva = Ibis.Eva;
+  var Type = Ibis.Type;
+  var Value = Ibis.Value;
   var Compat = Ibis.Compat;
+  var IbisError = Ibis.IbisError;
   
   var valueEnv = Env.createGlobal({});
   var typeEnv = Env.createGlobal({});
@@ -52,4 +55,36 @@
     }
     return result;
   }
+  
+  function binOpType(lhs, rhs, ret) {
+    return Type.createFun(lhs, Type.createFun(rhs, ret));
+  }
+  
+  Env.add(typeEnv, "+", binOpType(Type.Int, Type.Int, Type.Int));
+  Env.add(valueEnv, "+", Value.createSubr(function (lhs) {
+    return Value.createSubr(function (rhs) {
+      return Value.createInt(lhs.intValue + rhs.intValue);
+    });
+  }));
+  
+  Env.add(typeEnv, "-", binOpType(Type.Int, Type.Int, Type.Int));
+  Env.add(valueEnv, "-", Value.createSubr(function (lhs) {
+    return Value.createSubr(function (rhs) {
+      return Value.createInt(lhs.intValue - rhs.intValue);
+    });
+  }));
+  
+  Env.add(typeEnv, "*", binOpType(Type.Int, Type.Int, Type.Int));
+  Env.add(valueEnv, "*", Value.createSubr(function (lhs) {
+    return Value.createSubr(function (rhs) {
+      return Value.createInt(lhs.intValue * rhs.intValue);
+    });
+  }));
+  
+  Env.add(typeEnv, "/", binOpType(Type.Int, Type.Int, Type.Int));
+  Env.add(valueEnv, "/", Value.createSubr(function (lhs) {
+    return Value.createSubr(function (rhs) {
+      return Value.createInt(lhs.intValue / rhs.intValue);
+    });
+  }));
 })();
