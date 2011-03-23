@@ -35,12 +35,25 @@ Ibis.Parser = (function () {
   }
   
   function parseStmt(parser) {
-    var expr = parseExpr(parser);
+    var expr = parseDef(parser);
     switch (parser.headToken) {
     case "EOF":
       break;
     default:
       throw new IbisError(expected(parser, "EOF"));
+    }
+    return expr;
+  }
+  
+  function parseDef(parser) {
+    var expr = null;
+    switch (parser.headToken) {
+    case "let":
+      expr = parseLet(parser);
+      break;
+    default:
+      expr = parseExpr(parser);
+      break;
     }
     return expr;
   }
@@ -74,11 +87,27 @@ Ibis.Parser = (function () {
   }
   
   function parseMulExpr(parser) {
-    var expr = parsePrimExpr(parser);
+    var expr = parseSimpleExpr(parser);
     while (parser.headToken.match(/[*\/]/)) {
       var op = parser.headToken;
       lookAhead(parser);
-      expr = createBinExpr(op, expr, parsePrimExpr(parser));
+      expr = createBinExpr(op, expr, parseSimpleExpr(parser));
+    }
+    return expr;
+  }
+  
+  function parseSimpleExpr(parser) {
+    var expr = null;
+    switch (parser.headToken) {
+    case "fun":
+      expr = parseAbs(parser);
+      break;
+    case "if":
+      expr = parseIf(parser);
+      break;
+    default:
+      expr = parsePrimExpr(parser);
+      break;
     }
     return expr;
   }
@@ -87,11 +116,8 @@ Ibis.Parser = (function () {
     var expr = parseAtom(parser);
     while (parser.headToken == "INT" ||
            parser.headToken == "IDENT" ||
-           parser.headToken == "fun" ||
-           parser.headToken == "let" ||
            parser.headToken == "true" ||
            parser.headToken == "false" ||
-           parser.headToken == "if" ||
            parser.headToken == "(") {
       expr = Expr.createApp(expr, parseAtom(parser));
     }
@@ -107,20 +133,11 @@ Ibis.Parser = (function () {
     case "IDENT":
       expr = parseIdent(parser);
       break;
-    case "fun":
-      expr = parseAbs(parser);
-      break;
-    case "let":
-      expr = parseLet(parser);
-      break;
     case "true":
       expr = parseTrue(parser);
       break;
     case "false":
       expr = parseFalse(parser);
-      break;
-    case "if":
-      expr = parseIf(parser);
       break;
     case "(":
       expr = parseParen(parser);
