@@ -138,6 +138,9 @@ Ibis.Parser = (function () {
   
   function parseLet(parser) {
     lookAhead(parser);
+    if (parser.headToken == "rec") {
+      return parseLetRec(parser);
+    }
     if (parser.headToken != "IDENT") {
       throw new IbisError(expected(parser, "IDENT"));
     }
@@ -149,6 +152,24 @@ Ibis.Parser = (function () {
     lookAhead(parser);
     var valueExpr = parseExpr(parser);
     return Expr.createLet(varName, valueExpr);
+  }
+  
+  function parseLetRec(parser) {
+    lookAhead(parser);
+    if (parser.headToken != "IDENT") {
+      throw new IbisError(expected(parser, "IDENT"));
+    }
+    var varName = Lexer.value(parser.lexer);
+    lookAhead(parser);
+    if (parser.headToken != "=") {
+      throw new IbisError(expected(parser, "="));
+    }
+    lookAhead(parser);
+    if (parser.headToken != "fun") {
+      throw new IbisError(expected(parser, "fun"));
+    }
+    var valueExpr = parseAbs(parser);
+    return Expr.createLetRec(varName, valueExpr);
   }
   
   function parseParen(parser) {

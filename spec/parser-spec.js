@@ -21,6 +21,13 @@ describe("Parser", function() {
     expect(Parser.parse(parser).toString()).toEqual("(Let x (Const 1))");
   });
   
+  it("can parse let-rec expressions", function() {
+    var parser = Parser.ofString("let rec f = fun x -> f x");
+    expect(Parser.parse(parser).toString()).toEqual(
+      "(LetRec f (Abs x (App (Var f) (Var x))))"
+    );
+  });
+  
   it("can parse function applications", function() {
     var parser = Parser.ofString("f x y");
     expect(Parser.parse(parser).toString()).toEqual(

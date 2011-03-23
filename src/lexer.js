@@ -13,7 +13,8 @@ Ibis.Lexer = (function () {
   
   var RESERVED = {
     "fun": "fun",
-    "let": "let"
+    "let": "let",
+    "rec": "rec"
   }
   
   function ofString(string) {
