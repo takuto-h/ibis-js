@@ -5,7 +5,8 @@ Ibis.Value = (function () {
       False: False,
       createInt: createInt,
       createClosure: createClosure,
-      createSubr: createSubr
+      createSubr: createSubr,
+      createTuple: createTuple
     };
   };
   
@@ -56,6 +57,17 @@ Ibis.Value = (function () {
   }
   function createSubr(subrValue) {
     return new Subr(subrValue);
+  }
+  
+  function Tuple(valueArray) {
+    this.tag = "Tuple";
+    this.valueArray = valueArray;
+  }
+  Tuple.prototype.toString = function () {
+    return "(" + this.valueArray.join(", ") + ")";
+  }
+  function createTuple(valueArray) {
+    return new Tuple(valueArray);
   }
   
   return exports();

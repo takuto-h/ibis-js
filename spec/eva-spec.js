@@ -72,6 +72,11 @@ describe("Eva", function() {
     expect(evalFromString("if false then 1 else 0")).toEqual("0");
   });
   
+  it("can evaluate tuples", function() {
+    expect(evalFromString("(1, true)")).toEqual("(1, true)");
+    expect(evalFromString("(x, false, 3)")).toEqual("(1, false, 3)");
+  });
+  
   it("can calculate factorials", function () {
     var fac = "let rec fac = fun n -> if n = 0 then 1 else n * fac (n - 1)";
     expect(evalFromString(fac)).toEqual("<closure>");
