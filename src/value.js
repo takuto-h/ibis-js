@@ -1,11 +1,27 @@
 Ibis.Value = (function () {
   var exports = function () {
     return {
+      True: True,
+      False: False,
       createInt: createInt,
       createClosure: createClosure,
       createSubr: createSubr
     };
   };
+  
+  var True = {
+    tag: "True",
+    toString: function () {
+      return "true";
+    }
+  };
+  
+  var False = {
+    tag: "False",
+    toString: function () {
+      return "false";
+    }
+  }
   
   function Int(intValue) {
     this.tag = "Int";

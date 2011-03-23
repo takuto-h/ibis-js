@@ -14,7 +14,12 @@ Ibis.Lexer = (function () {
   var RESERVED = {
     "fun": "fun",
     "let": "let",
-    "rec": "rec"
+    "rec": "rec",
+    "if": "if",
+    "then": "then",
+    "else": "else",
+    "true": "true",
+    "false": "false"
   }
   
   function ofString(string) {

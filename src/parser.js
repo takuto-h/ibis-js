@@ -100,6 +100,12 @@ Ibis.Parser = (function () {
     case "let":
       expr = parseLet(parser);
       break;
+    case "true":
+      expr = parseTrue(parser);
+      break;
+    case "false":
+      expr = parseFalse(parser);
+      break;
     case "(":
       expr = parseParen(parser);
       break;
@@ -170,6 +176,18 @@ Ibis.Parser = (function () {
     }
     var valueExpr = parseAbs(parser);
     return Expr.createLetRec(varName, valueExpr);
+  }
+  
+  function parseTrue(parser) {
+    var expr = Expr.createConst(Value.True);
+    lookAhead(parser);
+    return expr;
+  }
+  
+  function parseFalse(parser) {
+    var expr = Expr.createConst(Value.False);
+    lookAhead(parser);
+    return expr;
   }
   
   function parseParen(parser) {

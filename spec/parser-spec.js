@@ -28,6 +28,13 @@ describe("Parser", function() {
     );
   });
   
+  it("can parse booleans", function() {
+    var parser = Parser.ofString("true");
+    expect(Parser.parse(parser).toString()).toEqual("(Const true)");
+    var parser = Parser.ofString("false");
+    expect(Parser.parse(parser).toString()).toEqual("(Const false)");
+  });
+  
   it("can parse function applications", function() {
     var parser = Parser.ofString("f x y");
     expect(Parser.parse(parser).toString()).toEqual(

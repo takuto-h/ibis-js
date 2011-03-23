@@ -45,13 +45,19 @@ describe("Lexer", function() {
   });
   
   it("can lex reserved words", function() {
-    var lexer = Lexer.ofString("fun let rec");
+    var lexer = Lexer.ofString("fun let rec if then else");
     expect(Lexer.advance(lexer)).toBeTruthy();
     expect(Lexer.token(lexer)).toEqual("fun");
     expect(Lexer.advance(lexer)).toBeTruthy();
     expect(Lexer.token(lexer)).toEqual("let");
     expect(Lexer.advance(lexer)).toBeTruthy();
     expect(Lexer.token(lexer)).toEqual("rec");
+    expect(Lexer.advance(lexer)).toBeTruthy();
+    expect(Lexer.token(lexer)).toEqual("if");
+    expect(Lexer.advance(lexer)).toBeTruthy();
+    expect(Lexer.token(lexer)).toEqual("then");
+    expect(Lexer.advance(lexer)).toBeTruthy();
+    expect(Lexer.token(lexer)).toEqual("else");
     expect(Lexer.advance(lexer)).toBeFalsy();
   });
 });
