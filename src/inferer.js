@@ -70,7 +70,7 @@ Ibis.Inferer = (function () {
         throw new IbisError(varNames.length + "-tuple required, but got: " + inferredType);
       }
       var newTypeArray = [];
-      for (var i = 0; i < varNames.length; i++) {
+      for (var i in varNames) {
         var typeSchema = createPolyType(inferredTypeArray[i]);
         Env.add(env, varNames[i], typeSchema);
         newTypeArray.push(createAlphaEquivalent(typeSchema).bodyType);
@@ -85,7 +85,7 @@ Ibis.Inferer = (function () {
     case "Tuple":
       var exprArray = expr.exprArray;
       var typeArray = [];
-      for (var i = 0; i < exprArray.length; i++) {
+      for (var i in exprArray) {
         typeArray.push(infer(env, exprArray[i]));
       }
       return Type.createTuple(typeArray);
@@ -123,7 +123,7 @@ Ibis.Inferer = (function () {
       if (typeArray1.length != typeArray2.length) {
         throw new IbisError("unification error: " + type1 + " and " + type2);
       }
-      for (var i = 0; i < typeArray1.length; i++) {
+      for (var i in typeArray1) {
         unify(typeArray1[i], typeArray2[i]);
       }
     } else {
@@ -167,7 +167,7 @@ Ibis.Inferer = (function () {
       return type.collect(function (elem) { return unwrapVar(elem, freeVars) });
     case "Var":
       if (!type.value) {
-        for (var i = 0; i < freeVars.length; i++) {
+        for (var i in freeVars) {
           if (freeVars[i] == type) {
             return type;
           }
@@ -183,7 +183,7 @@ Ibis.Inferer = (function () {
     var map = {};
     var oldTypeVars = typeSchema.typeVars;
     var newTypeVars = []
-    for (var i = 0; i < oldTypeVars.length; i++) {
+    for (var i in oldTypeVars) {
       var freshVar = Type.createVar(null);
       map[oldTypeVars[i]] = freshVar;
       newTypeVars.push(freshVar);
