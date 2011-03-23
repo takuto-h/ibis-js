@@ -44,6 +44,11 @@ describe("Inferer", function() {
     expect(inferFromString("x")).toEqual("int");
   });
   
+  it("can infer types of let-rec expressions", function() {
+    expect(inferFromString("let rec f = fun x -> f x")).toEqual("('a -> 'b)");
+    expect(inferFromString("f")).toEqual("('a -> 'b)");
+  });
+  
   it("can infer polymorphic types", function() {
     expect(inferFromString("fun x -> x")).toEqual("('a -> 'a)");
     expect(inferFromString("fun x -> fun y -> x")).toEqual("('a -> ('b -> 'a))");

@@ -45,6 +45,16 @@ Ibis.Inferer = (function () {
       var typeSchema = Type.createTypeSchema(freeVars, unwrappedType);
       Env.add(env, expr.varName, typeSchema);
       return createAlphaEquivalent(typeSchema).bodyType;
+    case "LetRec":
+      var varType = Type.createVar(null);
+      var newEnv = Env.createLocal({}, env);
+      Env.add(newEnv, expr.varName, Type.createTypeSchema([], varType));
+      var inferredType = infer(newEnv, expr.valueExpr);
+      var freeVars = [];
+      var unwrappedType = unwrapVar(inferredType, freeVars);
+      var typeSchema = Type.createTypeSchema(freeVars, unwrappedType);
+      Env.add(env, expr.varName, typeSchema);
+      return createAlphaEquivalent(typeSchema).bodyType;
     }
   }
   
