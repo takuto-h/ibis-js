@@ -64,6 +64,11 @@ describe("Parser", function() {
     );
   });
   
+  it("can parse units", function() {
+    var parser = Parser.ofString("()");
+    expect(Parser.parse(parser).toString()).toEqual("(Const ())");
+  });
+  
   it("can parse function applications", function() {
     var parser = Parser.ofString("f x y");
     expect(Parser.parse(parser).toString()).toEqual(

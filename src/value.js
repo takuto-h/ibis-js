@@ -1,6 +1,7 @@
 Ibis.Value = (function () {
   var exports = function () {
     return {
+      Unit: Unit,
       True: True,
       False: False,
       createInt: createInt,
@@ -8,6 +9,13 @@ Ibis.Value = (function () {
       createSubr: createSubr,
       createTuple: createTuple
     };
+  };
+  
+  var Unit = {
+    tag: "Unit",
+    toString: function () {
+      return "()";
+    }
   };
   
   var True = {

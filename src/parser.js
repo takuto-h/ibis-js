@@ -250,6 +250,9 @@ Ibis.Parser = (function () {
   
   function parseParen(parser) {
     lookAhead(parser);
+    if (parser.headToken == ")") {
+      return parseUnit(parser);
+    }
     var expr = parseExpr(parser);
     if (parser.headToken == ",") {
       return parseTuple(parser, [expr]);
@@ -257,6 +260,12 @@ Ibis.Parser = (function () {
     if (parser.headToken != ")") {
       throw new IbisError(expected(parser, ")"));
     }
+    lookAhead(parser);
+    return expr;
+  }
+  
+  function parseUnit(parser) {
+    var expr = Expr.createConst(Value.Unit);
     lookAhead(parser);
     return expr;
   }
