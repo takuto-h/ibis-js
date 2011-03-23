@@ -61,6 +61,12 @@ Ibis.Inferer = (function () {
       var typeSchema = Type.createTypeSchema(freeVars, unwrappedType);
       Env.add(env, expr.varName, typeSchema);
       return createAlphaEquivalent(typeSchema).bodyType;
+    case "If":
+      unify(infer(env, expr.condExpr), Type.Bool);
+      var thenType = infer(env, expr.thenExpr);
+      var elseType = infer(env, expr.elseExpr);
+      unify(thenType, elseType);
+      return thenType;
     }
   }
   

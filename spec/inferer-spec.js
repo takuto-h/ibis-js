@@ -60,6 +60,11 @@ describe("Inferer", function() {
     expect(inferFromString("let const = fun x -> fun y -> x")).toEqual("('a -> ('b -> 'a))");
   });
   
+  it("can infer types of if expressions", function() {
+    expect(inferFromString("if true then 1 else 0")).toEqual("int");
+    expect(inferFromString("if false then 1 else 0")).toEqual("int");
+  });
+  
   function inferFromString(string) {
     var parser = Parser.ofString(string);
     var expr = Parser.parse(parser);
