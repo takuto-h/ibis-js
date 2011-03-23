@@ -2,7 +2,7 @@ describe("Lexer", function() {
   var Lexer = Ibis.Lexer;
   
   it("can lex symbols", function() {
-    var lexer = Lexer.ofString("+ - * / ( ) -> = ,");
+    var lexer = Lexer.ofString("+ - * / ( ) -> = , |");
     expect(Lexer.advance(lexer)).toBeTruthy();
     expect(Lexer.token(lexer)).toEqual("+");
     expect(Lexer.advance(lexer)).toBeTruthy();
@@ -21,6 +21,8 @@ describe("Lexer", function() {
     expect(Lexer.token(lexer)).toEqual("=");
     expect(Lexer.advance(lexer)).toBeTruthy();
     expect(Lexer.token(lexer)).toEqual(",");
+    expect(Lexer.advance(lexer)).toBeTruthy();
+    expect(Lexer.token(lexer)).toEqual("|");
     expect(Lexer.advance(lexer)).toBeFalsy();
   });
   
@@ -47,7 +49,7 @@ describe("Lexer", function() {
   });
   
   it("can lex reserved words", function() {
-    var lexer = Lexer.ofString("fun let rec if then else");
+    var lexer = Lexer.ofString("fun let rec if then else type of case");
     expect(Lexer.advance(lexer)).toBeTruthy();
     expect(Lexer.token(lexer)).toEqual("fun");
     expect(Lexer.advance(lexer)).toBeTruthy();
@@ -60,6 +62,12 @@ describe("Lexer", function() {
     expect(Lexer.token(lexer)).toEqual("then");
     expect(Lexer.advance(lexer)).toBeTruthy();
     expect(Lexer.token(lexer)).toEqual("else");
+    expect(Lexer.advance(lexer)).toBeTruthy();
+    expect(Lexer.token(lexer)).toEqual("type");
+    expect(Lexer.advance(lexer)).toBeTruthy();
+    expect(Lexer.token(lexer)).toEqual("of");
+    expect(Lexer.advance(lexer)).toBeTruthy();
+    expect(Lexer.token(lexer)).toEqual("case");
     expect(Lexer.advance(lexer)).toBeFalsy();
   });
 });

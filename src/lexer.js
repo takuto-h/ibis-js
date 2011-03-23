@@ -19,7 +19,10 @@ Ibis.Lexer = (function () {
     "then": "then",
     "else": "else",
     "true": "true",
-    "false": "false"
+    "false": "false",
+    "type": "type",
+    "of": "of",
+    "case": "case"
   }
   
   function ofString(string) {
@@ -50,7 +53,7 @@ Ibis.Lexer = (function () {
   
   function lexToken(lexer) {
     var c = Stream.peek(lexer.stream);
-    if (c.match(/[+*\/()=,]/)) {
+    if (c.match(/[+*\/()=,|]/)) {
       lexer.token = Stream.next(lexer.stream);
     } else if (c == "-") {
       Stream.junk(lexer.stream);
