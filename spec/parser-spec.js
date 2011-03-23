@@ -35,6 +35,17 @@ describe("Parser", function() {
     expect(Parser.parse(parser).toString()).toEqual("(Const false)");
   });
   
+  it("can parse if expressions", function() {
+    var parser = Parser.ofString("if true then 1 else 0");
+    expect(Parser.parse(parser).toString()).toEqual(
+      "(If (Const true) (Const 1) (Const 0))"
+    );
+    var parser = Parser.ofString("if false then 1 else 0");
+    expect(Parser.parse(parser).toString()).toEqual(
+      "(If (Const false) (Const 1) (Const 0))"
+    );
+  });
+  
   it("can parse function applications", function() {
     var parser = Parser.ofString("f x y");
     expect(Parser.parse(parser).toString()).toEqual(

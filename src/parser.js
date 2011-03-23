@@ -106,6 +106,9 @@ Ibis.Parser = (function () {
     case "false":
       expr = parseFalse(parser);
       break;
+    case "if":
+      expr = parseIf(parser);
+      break;
     case "(":
       expr = parseParen(parser);
       break;
@@ -188,6 +191,22 @@ Ibis.Parser = (function () {
     var expr = Expr.createConst(Value.False);
     lookAhead(parser);
     return expr;
+  }
+  
+  function parseIf(parser) {
+    lookAhead(parser);
+    var condExpr = parseExpr(parser);
+    if (parser.headToken != "then") {
+      throw new IbisError(expected(parser, "then"));
+    }
+    lookAhead(parser);
+    var thenExpr = parseExpr(parser);
+    if (parser.headToken != "else") {
+      throw new IbisError(expected(parser, "else"));
+    }
+    lookAhead(parser);
+    var elseExpr = parseExpr(parser);
+    return Expr.createIf(condExpr, thenExpr, elseExpr);
   }
   
   function parseParen(parser) {

@@ -6,7 +6,8 @@ Ibis.Expr = (function () {
       createAbs: createAbs,
       createApp: createApp,
       createLet: createLet,
-      createLetRec: createLetRec
+      createLetRec: createLetRec,
+      createIf: createIf
     };
   };
   
@@ -78,6 +79,19 @@ Ibis.Expr = (function () {
   }
   function createLetRec(varName, valueExpr) {
     return new LetRec(varName, valueExpr);
+  }
+  
+  function If(condExpr, thenExpr, elseExpr) {
+    this.tag = "If";
+    this.condExpr = condExpr;
+    this.thenExpr = thenExpr;
+    this.elseExpr = elseExpr;
+  }
+  If.prototype.toString = function () {
+    return "(If " + this.condExpr + " " + this.thenExpr + " " + this.elseExpr + ")";
+  }
+  function createIf(condExpr, thenExpr, elseExpr) {
+    return new If(condExpr, thenExpr, elseExpr);
   }
   
   return exports();
