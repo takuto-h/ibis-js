@@ -5,6 +5,7 @@ Ibis.Type = (function () {
       Bool: Bool,
       createFun: createFun,
       createVar: createVar,
+      createTuple: createTuple,
       subst: subst,
       createTypeSchema: createTypeSchema
     };
@@ -49,6 +50,34 @@ Ibis.Type = (function () {
     return new Var(currentId++, value);
   }
   
+  function Tuple(typeArray) {
+    this.tag = "Tuple";
+    this.typeArray = typeArray;
+  }
+  Tuple.prototype.toString = function () {
+    return "(" + this.typeArray.join(" * ") + ")";
+  }
+  Tuple.prototype.collect = function (func) {
+    var oldTypeArray = this.typeArray;
+    var newTypeArray = [];
+    for (var i = 0; i < oldTypeArray.length; i++) {
+      newTypeArray.push(func(oldTypeArray[i]));
+    }
+    return createTuple(newTypeArray);
+  }
+  Tuple.prototype.any = function (pred) {
+    var typeArray = this.typeArray;
+    for (var i = 0; i < typeArray.length; i++) {
+      if (pred(typeArray[i])) {
+        return true;
+      }
+    }
+    return false;
+  }
+  function createTuple(typeArray) {
+    return new Tuple(typeArray);
+  }
+  
   function subst(type, map) {
     switch (type.tag) {
     case "Int":
@@ -56,6 +85,8 @@ Ibis.Type = (function () {
       return type;
     case "Fun":
       return createFun(subst(type.paramType, map), subst(type.retType, map));
+    case "Tuple":
+      return type.collect(function (elem) { return subst(elem, map) });
     case "Var":
       if (map[type]) {
         return map[type];

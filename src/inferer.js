@@ -67,6 +67,13 @@ Ibis.Inferer = (function () {
       var elseType = infer(env, expr.elseExpr);
       unify(thenType, elseType);
       return thenType;
+    case "Tuple":
+      var exprArray = expr.exprArray;
+      var typeArray = [];
+      for (var i = 0; i < exprArray.length; i++) {
+        typeArray.push(infer(env, exprArray[i]));
+      }
+      return Type.createTuple(typeArray);
     }
   }
   
@@ -95,6 +102,15 @@ Ibis.Inferer = (function () {
     } else if (type1.tag == "Fun" && type2.tag == "Fun") {
       unify(type1.paramType, type2.paramType);
       unify(type1.retType, type2.retType);
+    } else if (type1.tag == "Tuple" && type2.tag == "Tuple") {
+      var typeArray1 = type1.typeArray;
+      var typeArray2 = type2.typeArray;
+      if (typeArray1.length != typeArray2.length) {
+        throw new IbisError("unification error: " + type1 + " and " + type2);
+      }
+      for (var i = 0; i < typeArray1.length; i++) {
+        unify(typeArray1[i], typeArray2[i]);
+      }
     } else {
       throw new IbisError("unification error: " + type1 + " and " + type2);
     }
@@ -107,6 +123,8 @@ Ibis.Inferer = (function () {
       return false;
     case "Fun":
       return occurIn(type.paramType, typeVar) || occurIn(type.retType, typeVar);
+    case "Tuple":
+      return type.any(function (elem) { return occurIn(elem, typeVar) });
     case "Var":
       if (type == typeVar) {
         return true;
@@ -128,6 +146,8 @@ Ibis.Inferer = (function () {
         unwrapVar(type.paramType, freeVars),
         unwrapVar(type.retType, freeVars)
       );
+    case "Tuple":
+      return type.collect(function (elem) { return unwrapVar(elem, freeVars) });
     case "Var":
       if (!type.value) {
         for (var i = 0; i < freeVars.length; i++) {

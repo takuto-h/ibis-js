@@ -65,6 +65,11 @@ describe("Inferer", function() {
     expect(inferFromString("if false then 1 else 0")).toEqual("int");
   });
   
+  it("can infer types of tuples", function() {
+    expect(inferFromString("(1, true)")).toEqual("(int * bool)");
+    expect(inferFromString("(x, false, 3)")).toEqual("(int * bool * int)");
+  });
+  
   function inferFromString(string) {
     var parser = Parser.ofString(string);
     var expr = Parser.parse(parser);
