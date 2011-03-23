@@ -30,6 +30,14 @@ Ibis.Eva = (function () {
       var value = eval(env, expr.valueExpr);
       Env.add(env, expr.varName, value);
       return value;
+    case "LetTuple":
+      var value = eval(env, expr.valueExpr);
+      var varNames = expr.varNames;
+      var valueArray = value.valueArray;
+      for (var i = 0; i < varNames.length; i++) {
+         Env.add(env, varNames[i], valueArray[i]);
+      }
+      return value;
     case "If":
       var cond = eval(env, expr.condExpr);
       if (cond == Value.True) {

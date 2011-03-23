@@ -67,6 +67,15 @@ describe("Eva", function() {
     expect(evalFromString("f")).toEqual("<closure>");
   });
   
+  it("can evaluate of let-tuple expressions", function() {
+    expect(evalFromString("let (a, b) = (1, 2)")).toEqual("(1, 2)");
+    expect(evalFromString("a")).toEqual("1");
+    expect(evalFromString("b")).toEqual("2");
+    expect(evalFromString("let (a, b) = (b, a)")).toEqual("(2, 1)");
+    expect(evalFromString("a")).toEqual("2");
+    expect(evalFromString("b")).toEqual("1");
+  });
+  
   it("can evaluate if expressions", function() {
     expect(evalFromString("if true then 1 else 0")).toEqual("1");
     expect(evalFromString("if false then 1 else 0")).toEqual("0");
