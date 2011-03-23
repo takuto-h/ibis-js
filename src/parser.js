@@ -89,6 +89,9 @@ Ibis.Parser = (function () {
            parser.headToken == "IDENT" ||
            parser.headToken == "fun" ||
            parser.headToken == "let" ||
+           parser.headToken == "true" ||
+           parser.headToken == "false" ||
+           parser.headToken == "if" ||
            parser.headToken == "(") {
       expr = Expr.createApp(expr, parseAtom(parser));
     }
