@@ -7,6 +7,7 @@ Ibis.Expr = (function () {
       createApp: createApp,
       createLet: createLet,
       createLetRec: createLetRec,
+      createLetTuple: createLetTuple,
       createIf: createIf,
       createTuple: createTuple
     };
@@ -80,6 +81,18 @@ Ibis.Expr = (function () {
   }
   function createLetRec(varName, valueExpr) {
     return new LetRec(varName, valueExpr);
+  }
+  
+  function LetTuple(varNames, valueExpr) {
+    this.tag = "LetTuple";
+    this.varNames = varNames;
+    this.valueExpr = valueExpr;
+  }
+  LetTuple.prototype.toString = function () {
+    return "(LetTuple (" + this.varNames.join(", ") + ") " + this.valueExpr + ")";
+  }
+  function createLetTuple(varNames, valueExpr) {
+    return new LetTuple(varNames, valueExpr);
   }
   
   function If(condExpr, thenExpr, elseExpr) {
