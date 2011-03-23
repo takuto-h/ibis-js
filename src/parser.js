@@ -222,11 +222,27 @@ Ibis.Parser = (function () {
   function parseParen(parser) {
     lookAhead(parser);
     var expr = parseExpr(parser);
+    if (parser.headToken == ",") {
+      return parseTuple(parser, [expr]);
+    }
     if (parser.headToken != ")") {
       throw new IbisError(expected(parser, ")"));
     }
     lookAhead(parser);
     return expr;
+  }
+  
+  function parseTuple(parser, exprArray) {
+    lookAhead(parser);
+    exprArray.push(parseExpr(parser));
+    if (parser.headToken == ",") {
+      return parseTuple(parser, exprArray);
+    }
+    if (parser.headToken != ")") {
+      throw new IbisError(expected(parser, ")"));
+    }
+    lookAhead(parser);
+    return Expr.createTuple(exprArray);
   }
   
   function createBinExpr(op, lhs, rhs) {

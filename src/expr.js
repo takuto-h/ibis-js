@@ -7,7 +7,8 @@ Ibis.Expr = (function () {
       createApp: createApp,
       createLet: createLet,
       createLetRec: createLetRec,
-      createIf: createIf
+      createIf: createIf,
+      createTuple: createTuple
     };
   };
   
@@ -92,6 +93,17 @@ Ibis.Expr = (function () {
   }
   function createIf(condExpr, thenExpr, elseExpr) {
     return new If(condExpr, thenExpr, elseExpr);
+  }
+  
+  function Tuple(exprArray) {
+    this.tag = "Tuple";
+    this.exprArray = exprArray;
+  }
+  Tuple.prototype.toString = function () {
+    return "(Tuple " + this.exprArray.join(" ") + ")";
+  }
+  function createTuple(exprArray) {
+    return new Tuple(exprArray);
   }
   
   return exports();

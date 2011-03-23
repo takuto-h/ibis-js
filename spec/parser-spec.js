@@ -46,6 +46,17 @@ describe("Parser", function() {
     );
   });
   
+  it("can parse tuples", function() {
+    var parser = Parser.ofString("(1, true)");
+    expect(Parser.parse(parser).toString()).toEqual(
+      "(Tuple (Const 1) (Const true))"
+    );
+    var parser = Parser.ofString("(x, false, 3)");
+    expect(Parser.parse(parser).toString()).toEqual(
+      "(Tuple (Var x) (Const false) (Const 3))"
+    );
+  });
+  
   it("can parse function applications", function() {
     var parser = Parser.ofString("f x y");
     expect(Parser.parse(parser).toString()).toEqual(
