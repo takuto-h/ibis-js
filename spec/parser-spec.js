@@ -90,4 +90,11 @@ describe("Parser", function() {
       "(App (App (Var =) (Var x)) (Const 1))"
     );
   });
+  
+  it("can parse variant definitions", function() {
+    var parser = Parser.ofString("type num = Zero of unit | Pos of int | Neg of int");
+    expect(Parser.parse(parser).toString()).toEqual(
+      "(VariantDef num (Zero (TypeVar unit)) (Pos (TypeVar int)) (Neg (TypeVar int)))"
+    );
+  });
 });

@@ -9,7 +9,9 @@ Ibis.Expr = (function () {
       createLetRec: createLetRec,
       createLetTuple: createLetTuple,
       createIf: createIf,
-      createTuple: createTuple
+      createTuple: createTuple,
+      createTypeVar: createTypeVar,
+      createVariantDef: createVariantDef
     };
   };
   
@@ -117,6 +119,37 @@ Ibis.Expr = (function () {
   }
   function createTuple(exprArray) {
     return new Tuple(exprArray);
+  }
+  
+  function TypeVar(varName) {
+    this.tag = "TypeVar";
+    this.varName = varName;
+  }
+  TypeVar.prototype.toString = function () {
+    return "(TypeVar " + this.varName + ")";
+  }
+  function createTypeVar(varName) {
+    return new TypeVar(varName);
+  }
+  
+  function VariantDef(typeName, typeCtors) {
+    this.tag = "VariantDef";
+    this.typeName = typeName;
+    this.typeCtors = typeCtors;
+  }
+  VariantDef.prototype.toString = function () {
+    return "(VariantDef " + this.typeName + " " + showTypeCtors(this.typeCtors) + ")";
+  }
+  function createVariantDef(typeName, typeCtors) {
+    return new VariantDef(typeName, typeCtors);
+  }
+  
+  function showTypeCtors(typeCtors) {
+    var array = [];
+    for (var ctorName in typeCtors) {
+      array.push("(" + ctorName + " " + typeCtors[ctorName] + ")");
+    }
+    return array.join(" ");
   }
   
   return exports();

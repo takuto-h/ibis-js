@@ -51,6 +51,9 @@ Ibis.Parser = (function () {
     case "let":
       expr = parseLet(parser);
       break;
+    case "type":
+      expr = parseTypeDef(parser);
+      break;
     default:
       expr = parseExpr(parser);
       break;
@@ -218,7 +221,7 @@ Ibis.Parser = (function () {
   function parseLetTuple(parser, varNames) {
     lookAhead(parser);
     if (parser.headToken != "IDENT") {
-      throw new IbisError(unexpected(parser, "IDENT"));
+      throw new IbisError(expected(parser, "IDENT"));
     }
     varNames.push(Lexer.value(parser.lexer));
     lookAhead(parser);
@@ -302,6 +305,71 @@ Ibis.Parser = (function () {
   
   function createBinExpr(op, lhs, rhs) {
     return Expr.createApp(Expr.createApp(Expr.createVar(op), lhs), rhs);
+  }
+  
+  function parseTypeDef(parser) {
+    lookAhead(parser);
+    if (parser.headToken != "IDENT") {
+      throw new IbisError(expected(parser, "IDENT"));
+    }
+    var typeName = Lexer.value(parser.lexer);
+    lookAhead(parser);
+    if (parser.headToken != "=") {
+      throw new IbisError(expected(parser, "("));
+    }
+    var typeCtors = {};
+    parseTypeCtors(parser, typeCtors);
+    return Expr.createVariantDef(typeName, typeCtors);
+  }
+  
+  function parseTypeCtors(parser, map) {
+    lookAhead(parser);
+    if (parser.headToken != "IDENT") {
+      throw new IbisError(expected(parser, "IDENT"));
+    }
+    var ctorName = Lexer.value(parser.lexer);
+    lookAhead(parser);
+    if (parser.headToken != "of") {
+      throw new IbisError(expected(parser, "of"));
+    }
+    lookAhead(parser);
+    var typeExpr = parseTypeExpr(parser);
+    map[ctorName] = typeExpr;
+    if (parser.headToken == "|") {
+      parseTypeCtors(parser, map);
+      return;
+    }
+  }
+  
+  function parseTypeExpr(parser) {
+    var typeExpr = parseTypeAtom(parser);
+    var typeExprArray = [typeExpr];
+    while (parser.headToken == "*") {
+      lookAhead(parser);
+      typeExprArray.push(parseTypeAtom(parser));
+    }
+    if (typeExprArray.length != 1) {
+      return Expr.createTypeMul(typeExprArray);
+    }
+    return typeExpr;
+  }
+  
+  function parseTypeAtom(parser) {
+    var typeExpr = null;
+    switch (parser.headToken) {
+    case "IDENT":
+      typeExpr = parseTypeVar(parser);
+      break;
+    default:
+      throw new IbisError(unexpected(parser));
+    }
+    return typeExpr;
+  }
+  
+  function parseTypeVar(parser) {
+    var typeExpr = Expr.createTypeVar(Lexer.value(parser.lexer));
+    lookAhead(parser);
+    return typeExpr;
   }
   
   function expected(parser, expectedToken) {
