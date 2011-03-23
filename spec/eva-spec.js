@@ -14,9 +14,23 @@ describe("Eva", function() {
         return Value.createInt(lhs.intValue + rhs.intValue);
       });
     }),
+    "-": Value.createSubr(function (lhs) {
+      return Value.createSubr(function (rhs) {
+        return Value.createInt(lhs.intValue - rhs.intValue);
+      });
+    }),
     "*": Value.createSubr(function (lhs) {
       return Value.createSubr(function (rhs) {
         return Value.createInt(lhs.intValue * rhs.intValue);
+      });
+    }),
+    "=": Value.createSubr(function (lhs) {
+      return Value.createSubr(function (rhs) {
+        if (lhs.intValue == rhs.intValue) {
+          return Value.True;
+        } else {
+          return Value.False;
+        }
       });
     })
   });
@@ -56,6 +70,12 @@ describe("Eva", function() {
   it("can evaluate if expressions", function() {
     expect(evalFromString("if true then 1 else 0")).toEqual("1");
     expect(evalFromString("if false then 1 else 0")).toEqual("0");
+  });
+  
+  it("can calculate factorials", function () {
+    var fac = "let rec fac = fun n -> if n = 0 then 1 else n * fac (n - 1)";
+    expect(evalFromString(fac)).toEqual("<closure>");
+    expect(evalFromString("fac 10")).toEqual("3628800");
   });
   
   function evalFromString(string) {
