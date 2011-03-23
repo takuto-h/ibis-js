@@ -46,6 +46,11 @@ describe("Eva", function() {
     expect(evalFromString("x")).toEqual("1");
   });
   
+  it("can evaluate let-rec expressions", function() {
+    expect(evalFromString("let rec f = fun x -> f x")).toEqual("<closure>");
+    expect(evalFromString("f")).toEqual("<closure>");
+  });
+  
   function evalFromString(string) {
     var parser = Parser.ofString(string);
     var expr = Parser.parse(parser);

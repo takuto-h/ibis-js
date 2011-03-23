@@ -26,6 +26,7 @@ Ibis.Eva = (function () {
       var arg = eval(env, expr.argExpr);
       return apply(fun, arg);
     case "Let":
+    case "LetRec":
       var value = eval(env, expr.valueExpr);
       Env.add(env, expr.varName, value);
       return value;
