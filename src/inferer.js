@@ -46,9 +46,7 @@ Ibis.Inferer = (function () {
       return retType;
     case "Let":
       var inferredType = infer(env, expr.valueExpr);
-      var freeVars = [];
-      var unwrappedType = unwrapVar(inferredType, freeVars);
-      var typeSchema = Type.createTypeSchema(freeVars, unwrappedType);
+      var typeSchema = createPolyType(inferredType);
       Env.add(env, expr.varName, typeSchema);
       return createAlphaEquivalent(typeSchema).bodyType;
     case "LetRec":
@@ -56,11 +54,26 @@ Ibis.Inferer = (function () {
       var newEnv = Env.createLocal({}, env);
       Env.add(newEnv, expr.varName, Type.createTypeSchema([], varType));
       var inferredType = infer(newEnv, expr.valueExpr);
-      var freeVars = [];
-      var unwrappedType = unwrapVar(inferredType, freeVars);
-      var typeSchema = Type.createTypeSchema(freeVars, unwrappedType);
+      var typeSchema = createPolyType(inferredType);
       Env.add(env, expr.varName, typeSchema);
       return createAlphaEquivalent(typeSchema).bodyType;
+    case "LetTuple":
+      var inferredType = infer(env, expr.valueExpr);
+      if (inferredType.tag != "Tuple") {
+        throw new IbisError("tuple required, but got: " + inferredType);
+      }
+      var varNames = expr.varNames;
+      var inferredTypeArray = inferredType.typeArray;
+      if (inferredTypeArray.length != varNames.length) {
+        throw new IbisError(varNames.length + "-tuple required, but got: " + inferredType);
+      }
+      var newTypeArray = [];
+      for (var i = 0; i < varNames.length; i++) {
+        var typeSchema = createPolyType(inferredTypeArray[i]);
+        Env.add(env, varNames[i], typeSchema);
+        newTypeArray.push(createAlphaEquivalent(typeSchema).bodyType);
+      }
+      return Type.createTuple(newTypeArray);
     case "If":
       unify(infer(env, expr.condExpr), Type.Bool);
       var thenType = infer(env, expr.thenExpr);
@@ -173,6 +186,12 @@ Ibis.Inferer = (function () {
     }
     var newBodyType = Type.subst(typeSchema.bodyType, map);
     return Type.createTypeSchema(newTypeVars, newBodyType);
+  }
+  
+  function createPolyType(type) {
+    var freeVars = [];
+    var unwrappedType = unwrapVar(type, freeVars);
+    return Type.createTypeSchema(freeVars, unwrappedType);
   }
   
   return exports();
