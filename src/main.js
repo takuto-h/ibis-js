@@ -97,4 +97,15 @@
       return Value.createInt(lhs.intValue / rhs.intValue);
     });
   }));
+  
+  Env.add(typeEnv, "=", binOpType(Type.Int, Type.Int, Type.Bool));
+  Env.add(valueEnv, "=", Value.createSubr(function (lhs) {
+    return Value.createSubr(function (rhs) {
+      if (lhs.intValue == rhs.intValue) {
+        return Value.True;
+      } else {
+        return Value.False;
+      }
+    });
+  }));
 })();

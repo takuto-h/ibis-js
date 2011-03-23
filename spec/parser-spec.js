@@ -62,5 +62,9 @@ describe("Parser", function() {
     expect(Parser.parse(parser).toString()).toEqual(
       "(App (App (Var *) (App (App (Var +) (Const 1)) (Const 2))) (Const 3))"
     );
+    var parser = Parser.ofString("x = 1");
+    expect(Parser.parse(parser).toString()).toEqual(
+      "(App (App (Var =) (Var x)) (Const 1))"
+    );
   });
 });

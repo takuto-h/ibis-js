@@ -46,10 +46,20 @@ Ibis.Parser = (function () {
   }
   
   function parseExpr(parser) {
-    return parseSimpleExpr(parser);
+    return parseEqExpr(parser);
   }
   
-  function parseSimpleExpr(parser) {
+  function parseEqExpr(parser) {
+    var expr = parseRelExpr(parser);
+    while (parser.headToken.match(/=/)) {
+      var op = parser.headToken;
+      lookAhead(parser);
+      expr = createBinExpr(op, expr, parseRelExpr(parser));
+    }
+    return expr;
+  }
+  
+  function parseRelExpr(parser) {
     return parseAddExpr(parser);
   }
   
