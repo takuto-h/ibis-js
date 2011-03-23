@@ -53,6 +53,11 @@ describe("Eva", function() {
     expect(evalFromString("f")).toEqual("<closure>");
   });
   
+  it("can evaluate if expressions", function() {
+    expect(evalFromString("if true then 1 else 0")).toEqual("1");
+    expect(evalFromString("if false then 1 else 0")).toEqual("0");
+  });
+  
   function evalFromString(string) {
     var parser = Parser.ofString(string);
     var expr = Parser.parse(parser);

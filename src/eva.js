@@ -30,6 +30,13 @@ Ibis.Eva = (function () {
       var value = eval(env, expr.valueExpr);
       Env.add(env, expr.varName, value);
       return value;
+    case "If":
+      var cond = eval(env, expr.condExpr);
+      if (cond == Value.True) {
+        return eval(env, expr.thenExpr);
+      } else {
+        return eval(env, expr.elseExpr);
+      }
     }
   }
   
