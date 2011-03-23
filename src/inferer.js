@@ -19,7 +19,13 @@ Ibis.Inferer = (function () {
   function infer(env, expr) {
     switch (expr.tag) {
     case "Const":
-      return Type.Int;
+      switch (expr.value.tag) {
+      case "Int":
+        return Type.Int;
+      case "True":
+      case "False":
+        return Type.Bool;
+      }
     case "Var":
       var typeSchema = Env.find(env, expr.varName);
       if (!typeSchema) {
@@ -91,6 +97,7 @@ Ibis.Inferer = (function () {
   function occurIn(type, typeVar) {
     switch (type) {
     case "Int":
+    case "Bool":
       return false;
     case "Fun":
       return occurIn(type.paramType, typeVar) || occurIn(type.retType, typeVar);
@@ -108,6 +115,7 @@ Ibis.Inferer = (function () {
   function unwrapVar(type, freeVars) {
     switch (type.tag) {
     case "Int":
+    case "Bool":
       return type;
     case "Fun":
       return Type.createFun(

@@ -2,6 +2,7 @@ Ibis.Type = (function () {
   var exports = function () {
     return {
       Int: Int,
+      Bool: Bool,
       createFun: createFun,
       createVar: createVar,
       subst: subst,
@@ -13,6 +14,13 @@ Ibis.Type = (function () {
     tag: "Int",
     toString: function () {
       return "int";
+    }
+  }
+  
+  var Bool = {
+    tag: "Bool",
+    toString: function () {
+      return "bool";
     }
   }
   
@@ -44,6 +52,7 @@ Ibis.Type = (function () {
   function subst(type, map) {
     switch (type.tag) {
     case "Int":
+    case "Bool":
       return type;
     case "Fun":
       return createFun(subst(type.paramType, map), subst(type.retType, map));

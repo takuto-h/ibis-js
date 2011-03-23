@@ -23,6 +23,8 @@ describe("Eva", function() {
   
   it("can evaluate constants", function() {
     expect(evalFromString("123")).toEqual("123");
+    expect(evalFromString("true")).toEqual("true");
+    expect(evalFromString("false")).toEqual("false");
   });
   
   it("can evaluate variables", function () {

@@ -21,6 +21,8 @@ describe("Inferer", function() {
   
   it("can infer types of constants", function() {
     expect(inferFromString("123")).toEqual("int");
+    expect(inferFromString("true")).toEqual("bool");
+    expect(inferFromString("false")).toEqual("bool");
   });
   
   it("can infer types of variables", function () {
