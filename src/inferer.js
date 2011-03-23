@@ -20,6 +20,8 @@ Ibis.Inferer = (function () {
     switch (expr.tag) {
     case "Const":
       switch (expr.value.tag) {
+      case "Unit":
+        return Type.Unit;
       case "Int":
         return Type.Int;
       case "True":
@@ -133,6 +135,7 @@ Ibis.Inferer = (function () {
     switch (type) {
     case "Int":
     case "Bool":
+    case "Unit":
       return false;
     case "Fun":
       return occurIn(type.paramType, typeVar) || occurIn(type.retType, typeVar);
@@ -153,6 +156,7 @@ Ibis.Inferer = (function () {
     switch (type.tag) {
     case "Int":
     case "Bool":
+    case "Unit":
       return type;
     case "Fun":
       return Type.createFun(

@@ -3,6 +3,7 @@ Ibis.Type = (function () {
     return {
       Int: Int,
       Bool: Bool,
+      Unit: Unit,
       createFun: createFun,
       createVar: createVar,
       createTuple: createTuple,
@@ -22,6 +23,13 @@ Ibis.Type = (function () {
     tag: "Bool",
     toString: function () {
       return "bool";
+    }
+  }
+  
+  var Unit = {
+    tag: "Unit",
+    toString: function () {
+      return "unit";
     }
   }
   
@@ -82,6 +90,7 @@ Ibis.Type = (function () {
     switch (type.tag) {
     case "Int":
     case "Bool":
+    case "Unit":
       return type;
     case "Fun":
       return createFun(subst(type.paramType, map), subst(type.retType, map));

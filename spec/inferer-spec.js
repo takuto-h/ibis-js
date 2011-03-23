@@ -23,6 +23,7 @@ describe("Inferer", function() {
     expect(inferFromString("123")).toEqual("int");
     expect(inferFromString("true")).toEqual("bool");
     expect(inferFromString("false")).toEqual("bool");
+    expect(inferFromString("()")).toEqual("unit");
   });
   
   it("can infer types of variables", function () {
