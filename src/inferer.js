@@ -9,14 +9,14 @@ Ibis.Inferer = (function () {
     };
   };
   
-  function polyInfer(env, expr) {
+  function polyInfer(ctxt, expr) {
     var freeVars = [];
-    var inferredType = infer(env, expr);
+    var inferredType = infer(ctxt, expr);
     var unwrappedType = unwrapVar(inferredType, freeVars);
     return Type.createTypeSchema(freeVars, unwrappedType);
   }
   
-  function infer(env, expr) {
+  function infer(ctxt, expr) {
     switch (expr.tag) {
     case "Const":
       switch (expr.value.tag) {
@@ -29,38 +29,38 @@ Ibis.Inferer = (function () {
         return Type.Bool;
       }
     case "Var":
-      var typeSchema = Env.find(env, expr.varName);
+      var typeSchema = Env.find(ctxt, expr.varName);
       if (!typeSchema) {
         throw new IbisError("undefined variable: " + expr.varName);
       }
       return createAlphaEquivalent(typeSchema).bodyType;
     case "Abs":
       var paramType = Type.createVar(null);
-      var newEnv = Env.createLocal({}, env);
-      Env.add(newEnv, expr.varName, Type.createTypeSchema([], paramType));
-      var retType = infer(newEnv, expr.bodyExpr);
+      var newCtxt = Env.createLocal({}, ctxt);
+      Env.add(newCtxt, expr.varName, Type.createTypeSchema([], paramType));
+      var retType = infer(newCtxt, expr.bodyExpr);
       return Type.createFun(paramType, retType);
     case "App":
-      var funType = infer(env, expr.funExpr);
-      var argType = infer(env, expr.argExpr);
+      var funType = infer(ctxt, expr.funExpr);
+      var argType = infer(ctxt, expr.argExpr);
       var retType = Type.createVar(null);
       unify(funType, Type.createFun(argType, retType));
       return retType;
     case "Let":
-      var inferredType = infer(env, expr.valueExpr);
+      var inferredType = infer(ctxt, expr.valueExpr);
       var typeSchema = createPolyType(inferredType);
-      Env.add(env, expr.varName, typeSchema);
+      Env.add(ctxt, expr.varName, typeSchema);
       return createAlphaEquivalent(typeSchema).bodyType;
     case "LetRec":
       var varType = Type.createVar(null);
-      var newEnv = Env.createLocal({}, env);
-      Env.add(newEnv, expr.varName, Type.createTypeSchema([], varType));
-      var inferredType = infer(newEnv, expr.valueExpr);
+      var newCtxt = Env.createLocal({}, ctxt);
+      Env.add(newCtxt, expr.varName, Type.createTypeSchema([], varType));
+      var inferredType = infer(newCtxt, expr.valueExpr);
       var typeSchema = createPolyType(inferredType);
-      Env.add(env, expr.varName, typeSchema);
+      Env.add(ctxt, expr.varName, typeSchema);
       return createAlphaEquivalent(typeSchema).bodyType;
     case "LetTuple":
-      var inferredType = infer(env, expr.valueExpr);
+      var inferredType = infer(ctxt, expr.valueExpr);
       if (inferredType.tag != "Tuple") {
         throw new IbisError("tuple required, but got: " + inferredType);
       }
@@ -72,21 +72,21 @@ Ibis.Inferer = (function () {
       var newTypeArray = [];
       for (var i in varNames) {
         var typeSchema = createPolyType(inferredTypeArray[i]);
-        Env.add(env, varNames[i], typeSchema);
+        Env.add(ctxt, varNames[i], typeSchema);
         newTypeArray.push(createAlphaEquivalent(typeSchema).bodyType);
       }
       return Type.createTuple(newTypeArray);
     case "If":
-      unify(infer(env, expr.condExpr), Type.Bool);
-      var thenType = infer(env, expr.thenExpr);
-      var elseType = infer(env, expr.elseExpr);
+      unify(infer(ctxt, expr.condExpr), Type.Bool);
+      var thenType = infer(ctxt, expr.thenExpr);
+      var elseType = infer(ctxt, expr.elseExpr);
       unify(thenType, elseType);
       return thenType;
     case "Tuple":
       var exprArray = expr.exprArray;
       var typeArray = [];
       for (var i in exprArray) {
-        typeArray.push(infer(env, exprArray[i]));
+        typeArray.push(infer(ctxt, exprArray[i]));
       }
       return Type.createTuple(typeArray);
     }

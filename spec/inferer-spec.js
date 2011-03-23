@@ -4,7 +4,7 @@ describe("Inferer", function() {
   var Type = Ibis.Type;
   var Env = Ibis.Env;
   
-  var env = Env.createGlobal({
+  var ctxt = Env.createGlobal({
     "answer": Type.createTypeSchema(
       [], Type.Int
     ),
@@ -80,6 +80,6 @@ describe("Inferer", function() {
   function inferFromString(string) {
     var parser = Parser.ofString(string);
     var expr = Parser.parse(parser);
-    return Inferer.infer(env, expr).toString();
+    return Inferer.infer(ctxt, expr).toString();
   }
 });

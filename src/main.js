@@ -9,7 +9,7 @@
   var IbisError = Ibis.IbisError;
   
   var valueEnv = Env.createGlobal({});
-  var typeEnv = Env.createGlobal({});
+  var typeCtxt = Env.createGlobal({});
   
   Compat.catchEvent(window, "load", setup);
   
@@ -50,7 +50,7 @@
         if (!expr) {
           break;
         }
-        var type = Inferer.infer(typeEnv, expr);
+        var type = Inferer.infer(typeCtxt, expr);
         var value = Eva.eval(valueEnv, expr);
         result += "- : " + type + " = " + value + "\n";
       }
@@ -70,35 +70,35 @@
     );
   }
   
-  Env.add(typeEnv, "+", binOpType(Type.Int, Type.Int, Type.Int));
+  Env.add(typeCtxt, "+", binOpType(Type.Int, Type.Int, Type.Int));
   Env.add(valueEnv, "+", Value.createSubr(function (lhs) {
     return Value.createSubr(function (rhs) {
       return Value.createInt(lhs.intValue + rhs.intValue);
     });
   }));
   
-  Env.add(typeEnv, "-", binOpType(Type.Int, Type.Int, Type.Int));
+  Env.add(typeCtxt, "-", binOpType(Type.Int, Type.Int, Type.Int));
   Env.add(valueEnv, "-", Value.createSubr(function (lhs) {
     return Value.createSubr(function (rhs) {
       return Value.createInt(lhs.intValue - rhs.intValue);
     });
   }));
   
-  Env.add(typeEnv, "*", binOpType(Type.Int, Type.Int, Type.Int));
+  Env.add(typeCtxt, "*", binOpType(Type.Int, Type.Int, Type.Int));
   Env.add(valueEnv, "*", Value.createSubr(function (lhs) {
     return Value.createSubr(function (rhs) {
       return Value.createInt(lhs.intValue * rhs.intValue);
     });
   }));
   
-  Env.add(typeEnv, "/", binOpType(Type.Int, Type.Int, Type.Int));
+  Env.add(typeCtxt, "/", binOpType(Type.Int, Type.Int, Type.Int));
   Env.add(valueEnv, "/", Value.createSubr(function (lhs) {
     return Value.createSubr(function (rhs) {
       return Value.createInt(lhs.intValue / rhs.intValue);
     });
   }));
   
-  Env.add(typeEnv, "=", binOpType(Type.Int, Type.Int, Type.Bool));
+  Env.add(typeCtxt, "=", binOpType(Type.Int, Type.Int, Type.Bool));
   Env.add(valueEnv, "=", Value.createSubr(function (lhs) {
     return Value.createSubr(function (rhs) {
       if (lhs.intValue == rhs.intValue) {
