@@ -104,6 +104,33 @@ Ibis.Inferer = (function () {
       }
       Env.add(env, typeName, variantType);
       return Type.Unit;
+    case "Case":
+      var variantType = infer(ctxt, env, expr.variantExpr);
+      if (variantType.tag != "Variant") {
+        throw new IbisError("variant required, but got: " + variantType);
+      }
+      var typeCtors = variantType.typeCtors;
+      var clauseExprs = expr.clauseExprs;
+      var resultType = Type.createVar(null);
+      if (!clauseExprs["else"]) {
+        for (var ctorName in typeCtors) {
+          if (!clauseExprs[ctorName]) {
+            throw new IbisError("pattern not found: " + ctorName);
+          }
+        }
+      }
+      for (var ctorName in clauseExprs) {
+        var clauseType = infer(ctxt, env, clauseExprs[ctorName]);
+        if (ctorName == "else") {
+          unify(clauseType, Type.createFun(variantType, resultType));
+          break;
+        }
+        if (!typeCtors[ctorName]) {
+          throw new IbisError("undefined constructor: " + ctorName);
+        }
+        unify(clauseType, Type.createFun(typeCtors[ctorName], resultType));
+      }
+      return resultType;
     }
   }
   

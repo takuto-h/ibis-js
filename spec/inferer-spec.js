@@ -84,6 +84,19 @@ describe("Inferer", function() {
     expect(inferFromString("Num2")).toEqual("((num * num) -> num2)");
   });
   
+  it("can infer types of case expressions", function () {
+    expect(inferFromString("let n = Zero ()")).toEqual("num");
+    var string = "case n of ";
+    string += "Zero -> fun _ -> 0 | ";
+    string += "Pos -> fun _ -> 1 | ";
+    string += "Neg -> fun _ -> 0 - 1";
+    expect(inferFromString(string)).toEqual("int");
+    var string2 = "case n of ";
+    string2 += "Zero -> fun _ -> false | ";
+    string2 += "else -> fun _ -> true";
+    expect(inferFromString(string2)).toEqual("bool");
+  });
+  
   function inferFromString(string) {
     var parser = Parser.ofString(string);
     var expr = Parser.parse(parser);

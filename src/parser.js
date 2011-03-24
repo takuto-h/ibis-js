@@ -277,12 +277,12 @@ Ibis.Parser = (function () {
     if (parser.headToken != "of") {
       throw new IbisError(expected(parser, "of"));
     }
-    var caseClauses = {};
-    parseCaseClauses(parser, caseClauses);
-    return Expr.createCase(variantExpr, caseClauses);
+    var clauseExprs = {};
+    parseCaseClauses(parser, clauseExprs);
+    return Expr.createCase(variantExpr, clauseExprs);
   }
   
-  function parseCaseClauses(parser, caseClauses) {
+  function parseCaseClauses(parser, clauseExprs) {
     lookAhead(parser);
     var ctorName = "";
     switch (parser.headToken) {
@@ -301,9 +301,9 @@ Ibis.Parser = (function () {
     }
     lookAhead(parser);
     var bodyExpr = parseExpr(parser);
-    caseClauses[ctorName] = bodyExpr;
+    clauseExprs[ctorName] = bodyExpr;
     if (parser.headToken == "|") {
-      parseCaseClauses(parser, caseClauses);
+      parseCaseClauses(parser, clauseExprs);
     }
   }
   

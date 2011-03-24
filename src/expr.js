@@ -113,16 +113,16 @@ Ibis.Expr = (function () {
     return new If(condExpr, thenExpr, elseExpr);
   }
   
-  function Case(variantExpr, caseClauses) {
+  function Case(variantExpr, clauseExprs) {
     this.tag = "Case";
     this.variantExpr = variantExpr;
-    this.caseClauses = caseClauses;
+    this.clauseExprs = clauseExprs;
   }
   Case.prototype.toString = function () {
-    return "(Case " + this.variantExpr + " " + showTypeCtors(this.caseClauses) + ")";
+    return "(Case " + this.variantExpr + " " + showTypeCtors(this.clauseExprs) + ")";
   }
-  function createCase(variantExpr, caseClauses) {
-    return new Case(variantExpr, caseClauses);
+  function createCase(variantExpr, clauseExprs) {
+    return new Case(variantExpr, clauseExprs);
   }
   
   function Tuple(exprArray) {
