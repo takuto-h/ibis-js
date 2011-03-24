@@ -56,6 +56,7 @@ Ibis.Inferer = (function () {
       var newCtxt = Env.createLocal({}, ctxt);
       Env.add(newCtxt, expr.varName, Type.createTypeSchema([], varType));
       var inferredType = infer(newCtxt, env, variants, expr.valueExpr);
+      unify(varType, inferredType);
       var typeSchema = createPolyType(inferredType);
       Env.add(ctxt, expr.varName, typeSchema);
       return createAlphaEquivalent(typeSchema).bodyType;
