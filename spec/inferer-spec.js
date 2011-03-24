@@ -109,6 +109,20 @@ describe("Inferer", function() {
     expect(inferFromString("num_to_int (Neg 123)")).toEqual("int");
   });
   
+  it("can infer recursive types", function () {
+    expect(inferFromString("type nat = Zero of unit | Succ of nat")).toEqual("unit");
+    expect(inferFromString("let zero = Zero ()")).toEqual("nat");
+    expect(inferFromString("let one = Succ zero")).toEqual("nat");
+    expect(inferFromString("let two = Succ one")).toEqual("nat");
+    var string = "let rec add = fun m -> fun n -> ";
+    string += "case m of ";
+    string += "Zero -> fun _ -> n | ";
+    string += "Succ -> fun k -> Succ (add k n)";
+    expect(inferFromString(string)).toEqual("(nat -> (nat -> nat))");
+    expect(inferFromString("add one")).toEqual("(nat -> nat)");
+    expect(inferFromString("add one two")).toEqual("nat");
+  });
+  
   function inferFromString(string) {
     var parser = Parser.ofString(string);
     var expr = Parser.parse(parser);

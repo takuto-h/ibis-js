@@ -91,20 +91,20 @@ Ibis.Inferer = (function () {
       }
       return Type.createTuple(typeArray);
     case "VariantDef":
-      var map = {};
       var typeName = expr.typeName;
       var typeCtors = expr.typeCtors;
+      var map = {};
+      var variantType = Type.createVariant(typeName, map);
+      Env.add(env, typeName, variantType);
       for (var ctorName in typeCtors) {
         var typeExpr = typeCtors[ctorName];
         map[ctorName] = eval(env, typeExpr);
       }
-      var variantType = Type.createVariant(typeName, map);
       for (var ctorName in map) {
         var ctorType = Type.createFun(map[ctorName], variantType);
         Env.add(ctxt, ctorName, Type.createTypeSchema([], ctorType));
         Env.add(variants, ctorName, variantType);
       }
-      Env.add(env, typeName, variantType);
       return Type.Unit;
     case "Case":
       var inferredType = infer(ctxt, env, variants, expr.variantExpr);

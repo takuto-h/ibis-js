@@ -109,6 +109,20 @@ describe("Eva", function() {
     expect(evalFromString("num_to_int (Neg 123)")).toEqual("-123");
   });
   
+  it("can define natural numbers", function () {
+    expect(evalFromString("type nat = Zero of unit | Succ of nat")).toEqual("()");
+    expect(evalFromString("let zero = Zero ()")).toEqual("(Zero ())");
+    expect(evalFromString("let one = Succ zero")).toEqual("(Succ (Zero ()))");
+    expect(evalFromString("let two = Succ one")).toEqual("(Succ (Succ (Zero ())))");
+    var string = "let rec add = fun m -> fun n -> ";
+    string += "case m of ";
+    string += "Zero -> fun _ -> n | ";
+    string += "Succ -> fun k -> Succ (add k n)";
+    expect(evalFromString(string)).toEqual("<closure>");
+    expect(evalFromString("add one")).toEqual("<closure>");
+    expect(evalFromString("add one two")).toEqual("(Succ (Succ (Succ (Zero ()))))");
+  });
+  
   function evalFromString(string) {
     var parser = Parser.ofString(string);
     var expr = Parser.parse(parser);
