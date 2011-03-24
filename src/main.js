@@ -71,6 +71,10 @@
     );
   }
   
+  Env.add(typeEnv, "unit", Type.Unit);
+  Env.add(typeEnv, "int", Type.Int);
+  Env.add(typeEnv, "bool", Type.Bool);
+  
   Env.add(typeCtxt, "+", binOpType(Type.Int, Type.Int, Type.Int));
   Env.add(valueEnv, "+", Value.createSubr(function (lhs) {
     return Value.createSubr(function (rhs) {

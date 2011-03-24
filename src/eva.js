@@ -52,6 +52,12 @@ Ibis.Eva = (function () {
         valueArray.push(eval(env, exprArray[i]));
       }
       return Value.createTuple(valueArray);
+    case "VariantDef":
+      for (var ctorName in expr.typeCtors) {
+        var ctor = createCtor(ctorName);
+        Env.add(env, ctorName, ctor);
+      }
+      return Value.Unit;
     }
   }
   
@@ -66,6 +72,12 @@ Ibis.Eva = (function () {
     /*default:
       throw new IbisError("function required, but got: " + fun);*/
     }
+  }
+  
+  function createCtor(ctorName) {
+    return Value.createSubr(function (value) {
+      return Value.createVariant(ctorName, value);
+    });
   }
   
   return exports();

@@ -92,6 +92,19 @@ describe("Eva", function() {
     expect(evalFromString("fac 10")).toEqual("3628800");
   });
   
+  it("can define variant types", function() {
+    var num = "type num = Zero of unit | Pos of int | Neg of int";
+    expect(evalFromString(num)).toEqual("()");
+    expect(evalFromString("Zero ()")).toEqual("(Zero ())");
+    expect(evalFromString("Pos (1 + 2)")).toEqual("(Pos 3)");
+    expect(evalFromString("Neg (2 * 3)")).toEqual("(Neg 6)");
+    var num2 = "type num2 = Num2 of num * num";
+    expect(evalFromString(num2)).toEqual("()");
+    expect(evalFromString("Num2 (Zero (), Pos 2)")).toEqual(
+      "(Num2 ((Zero ()), (Pos 2)))"
+    );
+  });
+  
   function evalFromString(string) {
     var parser = Parser.ofString(string);
     var expr = Parser.parse(parser);

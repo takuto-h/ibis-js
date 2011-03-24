@@ -7,7 +7,8 @@ Ibis.Value = (function () {
       createInt: createInt,
       createClosure: createClosure,
       createSubr: createSubr,
-      createTuple: createTuple
+      createTuple: createTuple,
+      createVariant: createVariant
     };
   };
   
@@ -76,6 +77,18 @@ Ibis.Value = (function () {
   }
   function createTuple(valueArray) {
     return new Tuple(valueArray);
+  }
+  
+  function Variant(ctorName, value) {
+    this.tag = "Variant";
+    this.ctorName = ctorName;
+    this.value = value;
+  }
+  Variant.prototype.toString = function () {
+    return "(" + this.ctorName + " " + this.value + ")";
+  }
+  function createVariant(ctorName, value) {
+    return new Variant(ctorName, value);
   }
   
   return exports();
