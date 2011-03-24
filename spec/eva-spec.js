@@ -98,6 +98,17 @@ describe("Eva", function() {
     expect(evalFromString(string2)).toEqual("false");
   });
   
+  it("can evaluate case expressions in functions", function () {
+    var string = "let num_to_int = fun n -> case n of ";
+    string += "Zero -> fun _ -> 0 | ";
+    string += "Pos -> fun i -> i | ";
+    string += "Neg -> fun i -> 0 - i";
+    expect(evalFromString(string)).toEqual("<closure>");
+    expect(evalFromString("num_to_int (Zero ())")).toEqual("0");
+    expect(evalFromString("num_to_int (Pos 123)")).toEqual("123");
+    expect(evalFromString("num_to_int (Neg 123)")).toEqual("-123");
+  });
+  
   function evalFromString(string) {
     var parser = Parser.ofString(string);
     var expr = Parser.parse(parser);

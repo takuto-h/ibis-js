@@ -8,6 +8,7 @@ describe("Inferer", function() {
   var env = Default.createEnv();
   var typeCtxt = env.typeCtxt;
   var typeEnv = env.typeEnv;
+  var variants = Env.createGlobal({});
   
   Env.add(typeCtxt, "answer", Type.createTypeSchema([], Type.Int));
   Env.add(typeCtxt, "double", Type.createTypeSchema([], Type.createFun(Type.Int, Type.Int)));
@@ -97,9 +98,20 @@ describe("Inferer", function() {
     expect(inferFromString(string2)).toEqual("bool");
   });
   
+  it("can infer types of case expressions in functions", function () {
+    var string = "let num_to_int = fun n -> case n of ";
+    string += "Zero -> fun _ -> 0 | ";
+    string += "Pos -> fun i -> i | ";
+    string += "Neg -> fun i -> 0 - i";
+    expect(inferFromString(string)).toEqual("(num -> int)");
+    expect(inferFromString("num_to_int (Zero ())")).toEqual("int");
+    expect(inferFromString("num_to_int (Pos 123)")).toEqual("int");
+    expect(inferFromString("num_to_int (Neg 123)")).toEqual("int");
+  });
+  
   function inferFromString(string) {
     var parser = Parser.ofString(string);
     var expr = Parser.parse(parser);
-    return Inferer.infer(typeCtxt, typeEnv, expr).toString();
+    return Inferer.infer(typeCtxt, typeEnv, variants, expr).toString();
   }
 });

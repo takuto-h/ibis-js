@@ -13,6 +13,7 @@
   var valueEnv = env.valueEnv;
   var typeCtxt = env.typeCtxt;
   var typeEnv = env.typeEnv;
+  var variants = Env.createGlobal({});
   
   Compat.catchEvent(window, "load", setup);
   
@@ -53,7 +54,7 @@
         if (!expr) {
           break;
         }
-        var type = Inferer.infer(typeCtxt, typeEnv, expr);
+        var type = Inferer.infer(typeCtxt, typeEnv, variants, expr);
         var value = Eva.eval(valueEnv, expr);
         result += "- : " + type + " = " + value + "\n";
       }
