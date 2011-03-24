@@ -120,7 +120,7 @@ describe("Parser", function() {
     );
     var parser = Parser.ofString("case n of Zero -> f | else -> g");
     expect(Parser.parse(parser).toString()).toEqual(
-      "(Case (Var n) (Zero (Var f)) (else (Var g)))"
+      "(Case (Var n) (Zero (Var f)) Else (Var g))"
     );
   });
 });

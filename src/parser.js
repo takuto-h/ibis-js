@@ -279,7 +279,11 @@ Ibis.Parser = (function () {
     }
     var clauseExprs = {};
     parseCaseClauses(parser, clauseExprs);
-    return Expr.createCase(variantExpr, clauseExprs);
+    var elseClause = null;
+    if (parser.headToken == "else") {
+      elseClause = parseElseClause(parser);
+    }
+    return Expr.createCase(variantExpr, clauseExprs, elseClause);
   }
   
   function parseCaseClauses(parser, clauseExprs) {
@@ -290,8 +294,7 @@ Ibis.Parser = (function () {
       ctorName = Lexer.value(parser.lexer);
       break;
     case "else":
-      ctorName = "else";
-      break;
+      return;
     default:
       throw new IbisError(expected(parser, "IDENT"));
     }
@@ -305,6 +308,15 @@ Ibis.Parser = (function () {
     if (parser.headToken == "|") {
       parseCaseClauses(parser, clauseExprs);
     }
+  }
+  
+  function parseElseClause(parser) {
+    lookAhead(parser);
+    if (parser.headToken != "->") {
+      throw new IbisError(expected(parser, "->"));
+    }
+    lookAhead(parser);
+    return parseExpr(parser);
   }
   
   function parseParen(parser) {

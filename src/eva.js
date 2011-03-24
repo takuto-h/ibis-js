@@ -63,7 +63,7 @@ Ibis.Eva = (function () {
       var clauseExprs = expr.clauseExprs;
       var exactClause = clauseExprs[variant.ctorName];
       if (!exactClause) {
-        var elseClause = clauseExprs["else"];
+        var elseClause = expr.elseClause;
         return apply(eval(env, elseClause), variant);
       }
       return apply(eval(env, exactClause), variant.value);
