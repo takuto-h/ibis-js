@@ -3,37 +3,17 @@ describe("Eva", function() {
   var Parser = Ibis.Parser;
   var Value = Ibis.Value;
   var Env = Ibis.Env;
+  var Default = Ibis.Default;
   
-  var env = Env.createGlobal({
-    "answer": Value.createInt(42),
-    "double": Value.createSubr(function (n) {
+  var env = Default.createEnv();
+  var valueEnv = env.valueEnv;
+  
+  Env.add(valueEnv, "answer", Value.createInt(42));
+  Env.add(valueEnv, "double",
+    Value.createSubr(function (n) {
       return Value.createInt(n.intValue * 2);
-    }),
-    "+": Value.createSubr(function (lhs) {
-      return Value.createSubr(function (rhs) {
-        return Value.createInt(lhs.intValue + rhs.intValue);
-      });
-    }),
-    "-": Value.createSubr(function (lhs) {
-      return Value.createSubr(function (rhs) {
-        return Value.createInt(lhs.intValue - rhs.intValue);
-      });
-    }),
-    "*": Value.createSubr(function (lhs) {
-      return Value.createSubr(function (rhs) {
-        return Value.createInt(lhs.intValue * rhs.intValue);
-      });
-    }),
-    "=": Value.createSubr(function (lhs) {
-      return Value.createSubr(function (rhs) {
-        if (lhs.intValue == rhs.intValue) {
-          return Value.True;
-        } else {
-          return Value.False;
-        }
-      });
     })
-  });
+  );
   
   it("can evaluate constants", function() {
     expect(evalFromString("123")).toEqual("123");
@@ -108,6 +88,6 @@ describe("Eva", function() {
   function evalFromString(string) {
     var parser = Parser.ofString(string);
     var expr = Parser.parse(parser);
-    return Eva.eval(env, expr).toString();
+    return Eva.eval(valueEnv, expr).toString();
   }
 });

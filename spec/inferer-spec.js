@@ -3,26 +3,14 @@ describe("Inferer", function() {
   var Parser = Ibis.Parser;
   var Type = Ibis.Type;
   var Env = Ibis.Env;
+  var Default = Ibis.Default;
   
-  var ctxt = Env.createGlobal({
-    "answer": Type.createTypeSchema(
-      [], Type.Int
-    ),
-    "double": Type.createTypeSchema(
-      [], Type.createFun(Type.Int, Type.Int)
-    ),
-    "+": Type.createTypeSchema(
-      [], Type.createFun(Type.Int, Type.createFun(Type.Int, Type.Int))
-    ),
-    "*": Type.createTypeSchema(
-      [], Type.createFun(Type.Int, Type.createFun(Type.Int, Type.Int))
-    )
-  });
-  var env = Env.createGlobal({
-    "unit": Type.Unit,
-    "int": Type.Int,
-    "bool": Type.Bool
-  });
+  var env = Default.createEnv();
+  var typeCtxt = env.typeCtxt;
+  var typeEnv = env.typeEnv;
+  
+  Env.add(typeCtxt, "answer", Type.createTypeSchema([], Type.Int));
+  Env.add(typeCtxt, "double", Type.createTypeSchema([], Type.createFun(Type.Int, Type.Int)));
   
   it("can infer types of constants", function() {
     expect(inferFromString("123")).toEqual("int");
@@ -99,6 +87,6 @@ describe("Inferer", function() {
   function inferFromString(string) {
     var parser = Parser.ofString(string);
     var expr = Parser.parse(parser);
-    return Inferer.infer(ctxt, env, expr).toString();
+    return Inferer.infer(typeCtxt, typeEnv, expr).toString();
   }
 });
