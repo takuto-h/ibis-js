@@ -98,6 +98,10 @@ Ibis.Inferer = (function () {
         map[ctorName] = eval(env, typeExpr);
       }
       var variantType = Type.createVariant(typeName, map);
+      for (var ctorName in map) {
+        var ctorType = Type.createFun(map[ctorName], variantType);
+        Env.add(ctxt, ctorName, Type.createTypeSchema([], ctorType));
+      }
       Env.add(env, typeName, variantType);
       return Type.Unit;
     }

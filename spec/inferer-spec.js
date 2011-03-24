@@ -89,6 +89,13 @@ describe("Inferer", function() {
     expect(inferFromString(num2)).toEqual("unit");
   });
   
+  it("can infer types of constructors", function() {
+    expect(inferFromString("Zero")).toEqual("(unit -> num)");
+    expect(inferFromString("Pos")).toEqual("(int -> num)");
+    expect(inferFromString("Neg")).toEqual("(int -> num)");
+    expect(inferFromString("Num2")).toEqual("((num * num) -> num2)");
+  });
+  
   function inferFromString(string) {
     var parser = Parser.ofString(string);
     var expr = Parser.parse(parser);
