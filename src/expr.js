@@ -9,6 +9,7 @@ Ibis.Expr = (function () {
       createLetRec: createLetRec,
       createLetTuple: createLetTuple,
       createIf: createIf,
+      createCase: createCase,
       createTuple: createTuple,
       createTypeVar: createTypeVar,
       createTypeMul: createTypeMul,
@@ -110,6 +111,18 @@ Ibis.Expr = (function () {
   }
   function createIf(condExpr, thenExpr, elseExpr) {
     return new If(condExpr, thenExpr, elseExpr);
+  }
+  
+  function Case(variantExpr, caseClauses) {
+    this.tag = "Case";
+    this.variantExpr = variantExpr;
+    this.caseClauses = caseClauses;
+  }
+  Case.prototype.toString = function () {
+    return "(Case " + this.variantExpr + " " + showTypeCtors(this.caseClauses) + ")";
+  }
+  function createCase(variantExpr, caseClauses) {
+    return new Case(variantExpr, caseClauses);
   }
   
   function Tuple(exprArray) {

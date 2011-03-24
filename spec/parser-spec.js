@@ -112,4 +112,15 @@ describe("Parser", function() {
       "(VariantDef bin2 (Bin2 (TypeFun (TypeVar int) (TypeFun (TypeVar int) (TypeVar int)))))"
     );
   });
+  
+  it("can parse case expressions", function () {
+    var parser = Parser.ofString("case n of Zero -> f | Pos -> g | Neg -> h");
+    expect(Parser.parse(parser).toString()).toEqual(
+      "(Case (Var n) (Zero (Var f)) (Pos (Var g)) (Neg (Var h)))"
+    );
+    var parser = Parser.ofString("case n of Zero -> f | else -> g");
+    expect(Parser.parse(parser).toString()).toEqual(
+      "(Case (Var n) (Zero (Var f)) (else (Var g)))"
+    );
+  });
 });

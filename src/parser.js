@@ -108,6 +108,9 @@ Ibis.Parser = (function () {
     case "if":
       expr = parseIf(parser);
       break;
+    case "case":
+      expr = parseCase(parser);
+      break;
     default:
       expr = parsePrimExpr(parser);
       break;
@@ -266,6 +269,42 @@ Ibis.Parser = (function () {
     lookAhead(parser);
     var elseExpr = parseExpr(parser);
     return Expr.createIf(condExpr, thenExpr, elseExpr);
+  }
+  
+  function parseCase(parser) {
+    lookAhead(parser);
+    var variantExpr = parseExpr(parser);
+    if (parser.headToken != "of") {
+      throw new IbisError(expected(parser, "of"));
+    }
+    var caseClauses = {};
+    parseCaseClauses(parser, caseClauses);
+    return Expr.createCase(variantExpr, caseClauses);
+  }
+  
+  function parseCaseClauses(parser, caseClauses) {
+    lookAhead(parser);
+    var ctorName = "";
+    switch (parser.headToken) {
+    case "IDENT":
+      ctorName = Lexer.value(parser.lexer);
+      break;
+    case "else":
+      ctorName = "else";
+      break;
+    default:
+      throw new IbisError(expected(parser, "IDENT"));
+    }
+    lookAhead(parser);
+    if (parser.headToken != "->") {
+      throw new IbisError(expected(parser, "->"));
+    }
+    lookAhead(parser);
+    var bodyExpr = parseExpr(parser);
+    caseClauses[ctorName] = bodyExpr;
+    if (parser.headToken == "|") {
+      parseCaseClauses(parser, caseClauses);
+    }
   }
   
   function parseParen(parser) {
