@@ -101,4 +101,15 @@ describe("Parser", function() {
       "(VariantDef num2 (Num2 (TypeMul (TypeVar num) (TypeVar num))))"
     );
   });
+  
+  it("can parse type expressions", function () {
+    var parser = Parser.ofString("type bin = Bin of int * int -> int");
+    expect(Parser.parse(parser).toString()).toEqual(
+      "(VariantDef bin (Bin (TypeFun (TypeMul (TypeVar int) (TypeVar int)) (TypeVar int))))"
+    );
+    var parser = Parser.ofString("type bin2 = Bin2 of int -> int -> int");
+    expect(Parser.parse(parser).toString()).toEqual(
+      "(VariantDef bin2 (Bin2 (TypeFun (TypeVar int) (TypeFun (TypeVar int) (TypeVar int)))))"
+    );
+  });
 });

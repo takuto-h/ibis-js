@@ -342,6 +342,15 @@ Ibis.Parser = (function () {
   }
   
   function parseTypeExpr(parser) {
+    var typeExpr = parseTypeMulExpr(parser);
+    if (parser.headToken == "->") {
+      lookAhead(parser);
+      return Expr.createTypeFun(typeExpr, parseTypeExpr(parser));
+    }
+    return typeExpr;
+  }
+  
+  function parseTypeMulExpr(parser) {
     var typeExpr = parseTypeAtom(parser);
     var typeExprArray = [typeExpr];
     while (parser.headToken == "*") {
