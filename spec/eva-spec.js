@@ -85,6 +85,19 @@ describe("Eva", function() {
     );
   });
   
+  it("can infer types of case expressions", function () {
+    expect(evalFromString("let n = Zero ()")).toEqual("(Zero ())");
+    var string = "case n of ";
+    string += "Zero -> fun _ -> 0 | ";
+    string += "Pos -> fun _ -> 1 | ";
+    string += "Neg -> fun _ -> 0 - 1";
+    expect(evalFromString(string)).toEqual("0");
+    var string2 = "case n of ";
+    string2 += "Zero -> fun _ -> false | ";
+    string2 += "else -> fun _ -> true";
+    expect(evalFromString(string2)).toEqual("false");
+  });
+  
   function evalFromString(string) {
     var parser = Parser.ofString(string);
     var expr = Parser.parse(parser);

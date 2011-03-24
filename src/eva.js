@@ -58,6 +58,15 @@ Ibis.Eva = (function () {
         Env.add(env, ctorName, ctor);
       }
       return Value.Unit;
+    case "Case":
+      var variant = eval(env, expr.variantExpr);
+      var clauseExprs = expr.clauseExprs;
+      var exactClause = clauseExprs[variant.ctorName];
+      if (!exactClause) {
+        var elseClause = clauseExprs["else"];
+        return apply(eval(env, elseClause), variant);
+      }
+      return apply(eval(env, exactClause), variant.value);
     }
   }
   
