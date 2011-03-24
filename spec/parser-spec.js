@@ -96,5 +96,9 @@ describe("Parser", function() {
     expect(Parser.parse(parser).toString()).toEqual(
       "(VariantDef num (Zero (TypeVar unit)) (Pos (TypeVar int)) (Neg (TypeVar int)))"
     );
+    var parser = Parser.ofString("type num2 = Num2 of num * num");
+    expect(Parser.parse(parser).toString()).toEqual(
+      "(VariantDef num2 (Num2 (TypeMul (TypeVar num) (TypeVar num))))"
+    );
   });
 });

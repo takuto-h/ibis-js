@@ -11,6 +11,7 @@ Ibis.Expr = (function () {
       createIf: createIf,
       createTuple: createTuple,
       createTypeVar: createTypeVar,
+      createTypeMul: createTypeMul,
       createVariantDef: createVariantDef
     };
   };
@@ -130,6 +131,17 @@ Ibis.Expr = (function () {
   }
   function createTypeVar(varName) {
     return new TypeVar(varName);
+  }
+  
+  function TypeMul(exprArray) {
+    this.tag = "TypeMul";
+    this.exprArray = exprArray;
+  }
+  TypeMul.prototype.toString = function () {
+    return "(TypeMul " + this.exprArray.join(" ") + ")";
+  }
+  function createTypeMul(exprArray) {
+    return new TypeMul(exprArray);
   }
   
   function VariantDef(typeName, typeCtors) {

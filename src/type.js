@@ -7,6 +7,7 @@ Ibis.Type = (function () {
       createFun: createFun,
       createVar: createVar,
       createTuple: createTuple,
+      createVariant: createVariant,
       subst: subst,
       createTypeSchema: createTypeSchema
     };
@@ -86,11 +87,24 @@ Ibis.Type = (function () {
     return new Tuple(typeArray);
   }
   
+  function Variant(typeName, typeCtors) {
+    this.tag = "Variant";
+    this.typeName = typeName;
+    this.typeCtors = typeCtors;
+  }
+  Variant.prototype.toString = function () {
+    return this.typeName;
+  }
+  function createVariant(typeName, typeCtors) {
+    return new Variant(typeName, typeCtors);
+  }
+  
   function subst(type, map) {
     switch (type.tag) {
     case "Int":
     case "Bool":
     case "Unit":
+    case "Variant":
       return type;
     case "Fun":
       return createFun(subst(type.paramType, map), subst(type.retType, map));

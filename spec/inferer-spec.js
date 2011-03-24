@@ -18,6 +18,11 @@ describe("Inferer", function() {
       [], Type.createFun(Type.Int, Type.createFun(Type.Int, Type.Int))
     )
   });
+  var env = Env.createGlobal({
+    "unit": Type.Unit,
+    "int": Type.Int,
+    "bool": Type.Bool
+  });
   
   it("can infer types of constants", function() {
     expect(inferFromString("123")).toEqual("int");
@@ -77,9 +82,16 @@ describe("Inferer", function() {
     expect(inferFromString("(x, false, 3)")).toEqual("(int * bool * int)");
   });
   
+  it("can define variant types", function() {
+    var num = "type num = Zero of unit | Pos of int | Neg of int";
+    expect(inferFromString(num)).toEqual("unit");
+    var num2 = "type num2 = Num2 of num * num";
+    expect(inferFromString(num2)).toEqual("unit");
+  });
+  
   function inferFromString(string) {
     var parser = Parser.ofString(string);
     var expr = Parser.parse(parser);
-    return Inferer.infer(ctxt, expr).toString();
+    return Inferer.infer(ctxt, env, expr).toString();
   }
 });
