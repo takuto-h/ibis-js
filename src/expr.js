@@ -122,10 +122,10 @@ Ibis.Expr = (function () {
   Case.prototype.toString = function () {
     if (!this.elseClause) {
       return "(Case " + this.variantExpr + " "
-        + showTypeCtors(this.clauseExprs) + ")";
+        + showObject(this.clauseExprs) + ")";
     }
     return "(Case " + this.variantExpr + " "
-      + showTypeCtors(this.clauseExprs) + " Else " + this.elseClause + ")";
+      + showObject(this.clauseExprs) + " Else " + this.elseClause + ")";
   }
   function createCase(variantExpr, clauseExprs, elseClause) {
     return new Case(variantExpr, clauseExprs, elseClause);
@@ -182,16 +182,16 @@ Ibis.Expr = (function () {
     this.typeCtors = typeCtors;
   }
   VariantDef.prototype.toString = function () {
-    return "(VariantDef " + this.typeName + " " + showTypeCtors(this.typeCtors) + ")";
+    return "(VariantDef " + this.typeName + " " + showObject(this.typeCtors) + ")";
   }
   function createVariantDef(typeName, typeCtors) {
     return new VariantDef(typeName, typeCtors);
   }
   
-  function showTypeCtors(typeCtors) {
+  function showObject(object) {
     var array = [];
-    for (var ctorName in typeCtors) {
-      array.push("(" + ctorName + " " + typeCtors[ctorName] + ")");
+    for (var key in object) {
+      array.push("(" + key + " " + object[key] + ")");
     }
     return array.join(" ");
   }
