@@ -14,11 +14,7 @@ Ibis.Eva = (function () {
     case "Const":
       return expr.value;
     case "Var":
-      var value = Env.find(env, expr.varName);
-      /*if (!value) {
-        throw new IbisError("undefined variable: " + expr.varName);
-      }*/
-      return value;
+      return Env.find(env, expr.varName);
     case "Abs":
       return Value.createClosure(env, expr.varName, expr.bodyExpr);
     case "App":
@@ -78,8 +74,6 @@ Ibis.Eva = (function () {
       return eval(newEnv, fun.bodyExpr);
     case "Subr":
       return fun.subrValue(arg);
-    /*default:
-      throw new IbisError("function required, but got: " + fun);*/
     }
   }
   
