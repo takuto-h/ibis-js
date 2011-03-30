@@ -164,16 +164,16 @@ Ibis.Expr = (function () {
     return new TypeMul(exprArray);
   }
   
-  function TypeFun(paramTypeExpr, argTypeExpr) {
+  function TypeFun(paramTypeExpr, retTypeExpr) {
     this.tag = "TypeFun";
     this.paramTypeExpr = paramTypeExpr;
-    this.argTypeExpr = argTypeExpr;
+    this.retTypeExpr = retTypeExpr;
   }
   TypeFun.prototype.toString = function () {
-    return "(TypeFun " + this.paramTypeExpr + " " + this.argTypeExpr + ")";
+    return "(TypeFun " + this.paramTypeExpr + " " + this.retTypeExpr + ")";
   }
-  function createTypeFun(paramTypeExpr, argTypeExpr) {
-    return new TypeFun(paramTypeExpr, argTypeExpr);
+  function createTypeFun(paramTypeExpr, retTypeExpr) {
+    return new TypeFun(paramTypeExpr, retTypeExpr);
   }
   
   function VariantDef(typeName, typeCtors) {

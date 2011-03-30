@@ -154,6 +154,10 @@ Ibis.Inferer = (function () {
         typeArray.push(eval(env, exprArray[i]));
       }
       return Type.createTuple(typeArray);
+    case "TypeFun":
+      var paramType = eval(env, typeExpr.paramTypeExpr);
+      var retType = eval(env, typeExpr.retTypeExpr);
+      return Type.createFun(paramType, retType);
     }
   }
   

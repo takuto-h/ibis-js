@@ -123,6 +123,15 @@ describe("Inferer", function() {
     expect(inferFromString("add one two")).toEqual("nat");
   });
   
+  it("can evaluate type expressions", function() {
+    var t = "type t = T of int -> int";
+    expect(inferFromString(t)).toEqual("unit");
+    var f = "let f = T (fun x -> x)";
+    expect(inferFromString(f)).toEqual("t");
+    var g = "case f of T -> fun g -> g 123";
+    expect(inferFromString(g)).toEqual("int");
+  });
+  
   function inferFromString(string) {
     var parser = Parser.ofString(string);
     var expr = Parser.parse(parser);
