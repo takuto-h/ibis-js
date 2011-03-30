@@ -420,6 +420,9 @@ Ibis.Parser = (function () {
     case "IDENT":
       typeExpr = parseTypeVar(parser);
       break;
+    case "(":
+      typeExpr = parseTypeParen(parser);
+      break;
     default:
       throw new IbisError(unexpected(parser));
     }
@@ -430,6 +433,16 @@ Ibis.Parser = (function () {
     var typeExpr = Expr.createTypeVar(Lexer.value(parser.lexer));
     lookAhead(parser);
     return typeExpr;
+  }
+  
+  function parseTypeParen(parser) {
+    lookAhead(parser);
+    var expr = parseTypeExpr(parser);
+    if (parser.headToken != ")") {
+      throw new IbisError(expected(parser, ")"));
+    }
+    lookAhead(parser);
+    return expr;
   }
   
   function expected(parser, expectedToken) {

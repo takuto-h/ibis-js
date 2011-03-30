@@ -113,6 +113,13 @@ describe("Parser", function() {
     );
   });
   
+  it("can parse parentheses in type expressions", function () {
+    var parser = Parser.ofString("type paren = Paren of (int -> int) -> int");
+    expect(Parser.parse(parser).toString()).toEqual(
+      "(VariantDef paren (Paren (TypeFun (TypeFun (TypeVar int) (TypeVar int)) (TypeVar int))))"
+    );
+  });
+  
   it("can parse case expressions", function () {
     var parser = Parser.ofString("case n of Zero -> f | Pos -> g | Neg -> h");
     expect(Parser.parse(parser).toString()).toEqual(
