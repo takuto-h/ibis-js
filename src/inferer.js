@@ -10,10 +10,8 @@ Ibis.Inferer = (function () {
   };
   
   function polyInfer(ctxt, env, variants, expr) {
-    var freeVars = [];
     var inferredType = infer(ctxt, env, variants, expr);
-    var unwrappedType = unwrapVar(inferredType, freeVars);
-    return Type.createTypeSchema(freeVars, unwrappedType);
+    return createPolyType(inferredType);
   }
   
   function infer(ctxt, env, variants, expr) {
