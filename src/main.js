@@ -1,4 +1,4 @@
-(function () {
+jQuery(document).ready(function ($) {
   var Env = Ibis.Env;
   var Parser = Ibis.Parser;
   var Inferer = Ibis.Inferer;
@@ -15,39 +15,8 @@
   var typeEnv = env.typeEnv;
   var variants = Env.createGlobal({});
   
-  Compat.catchEvent(window, "load", setup);
-  
-  function setup(event) {
-    var inputForm = document.getElementById("inputForm");
-    var outputArea = document.getElementById("outputArea");
-    Compat.catchEvent(inputForm, "submit", interpretForm);
-    Compat.catchEvent(inputForm, "submit", scrollToBottom);
-    outputArea.value = "> ";
-  }
-  
-  function scrollToBottom(event) {
-    var outputArea = document.getElementById("outputArea");
-    setTimeout(function () {  // for IE8
-      outputArea.scrollTop = outputArea.scrollHeight - outputArea.clientHeight;
-    }, 0);
-  }
-  
-  function interpretForm(event) {
-    var theEvent = event ? event : window.event;
-    
-    var inputArea = document.getElementById("inputArea");
-    var outputArea = document.getElementById("outputArea");
-    
-    var inputStr = inputArea.value;
-    outputArea.value += inputStr + "\n" + interpret(inputStr) + "> ";
-    inputArea.value = "";
-    
-    Compat.cancelEvent(theEvent);
-  }
-  
-  function interpret(string) {
-    var result = "";
-    var parser = Parser.ofString(string);
+  $("#term").terminal(function (command, term) {
+    var parser = Parser.ofString(command);
     try {
       while (true) {
         var expr = Parser.parse(parser);
@@ -56,15 +25,21 @@
         }
         var type = Inferer.infer(typeCtxt, typeEnv, variants, expr);
         var value = Eva.eval(valueEnv, expr);
-        result += "- : " + type + " = " + value + "\n";
+        term.echo("- : " + type + " = " + value);
       }
     } catch (e) {
       if (e instanceof IbisError) {
-        result += "ERROR: " + e.message + "\n";
+        term.error("ERROR: " + e.message);
       } else {
         throw e;
       }
     }
-    return result;
-  }
-})();
+  }, {
+    greetings: "Ibis Interpreter",
+    prompt: ">",
+    name: "ibis",
+    width: 500,
+    height: 250,
+    exit: false
+  });
+});
