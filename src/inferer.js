@@ -69,7 +69,7 @@ Ibis.Inferer = (function () {
         throw new IbisError(varNames.length + "-tuple required, but got: " + inferredType);
       }
       var newTypeArray = [];
-      for (var i in varNames) {
+      for (var i = 0; i < varNames.length; i++) {
         var typeSchema = createPolyType(inferredTypeArray[i]);
         Env.add(ctxt, varNames[i], typeSchema);
         newTypeArray.push(createAlphaEquivalent(typeSchema).bodyType);
@@ -84,7 +84,7 @@ Ibis.Inferer = (function () {
     case "Tuple":
       var exprArray = expr.exprArray;
       var typeArray = [];
-      for (var i in exprArray) {
+      for (var i = 0; i < exprArray.length; i++) {
         typeArray.push(infer(ctxt, env, variants, exprArray[i]));
       }
       return Type.createTuple(typeArray);
@@ -150,7 +150,7 @@ Ibis.Inferer = (function () {
     case "TypeMul":
       var exprArray = typeExpr.exprArray;
       var typeArray = [];
-      for (var i in exprArray) {
+      for (var i = 0; i < exprArray.length; i++) {
         typeArray.push(eval(env, exprArray[i]));
       }
       return Type.createTuple(typeArray);
@@ -192,7 +192,7 @@ Ibis.Inferer = (function () {
       if (typeArray1.length != typeArray2.length) {
         throw new IbisError("unification error: " + type1 + " and " + type2);
       }
-      for (var i in typeArray1) {
+      for (var i = 0; i < typeArray1.length; i++) {
         unify(typeArray1[i], typeArray2[i]);
       }
     } else {
@@ -238,7 +238,7 @@ Ibis.Inferer = (function () {
       return type.collect(function (elem) { return unwrapVar(elem, freeVars) });
     case "Var":
       if (!type.value) {
-        for (var i in freeVars) {
+        for (var i = 0; i < freeVars.length; i++) {
           if (freeVars[i] == type) {
             return type;
           }
@@ -254,7 +254,7 @@ Ibis.Inferer = (function () {
     var map = {};
     var oldTypeVars = typeSchema.typeVars;
     var newTypeVars = []
-    for (var i in oldTypeVars) {
+    for (var i = 0; i < oldTypeVars.length; i++) {
       var freshVar = Type.createVar(null);
       map[oldTypeVars[i]] = freshVar;
       newTypeVars.push(freshVar);

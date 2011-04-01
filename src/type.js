@@ -69,14 +69,14 @@ Ibis.Type = (function () {
   Tuple.prototype.collect = function (func) {
     var oldTypeArray = this.typeArray;
     var newTypeArray = [];
-    for (var i in oldTypeArray) {
+    for (var i = 0; i < oldTypeArray.length; i++) {
       newTypeArray.push(func(oldTypeArray[i]));
     }
     return createTuple(newTypeArray);
   }
   Tuple.prototype.any = function (pred) {
     var typeArray = this.typeArray;
-    for (var i in typeArray) {
+    for (var i = 0; i < typeArray.length; i++) {
       if (pred(typeArray[i])) {
         return true;
       }
@@ -133,7 +133,7 @@ Ibis.Type = (function () {
     var map = {};
     var typeVars = this.typeVars;
     var charCode = "a".charCodeAt(0);
-    for (var i in typeVars) {
+    for (var i = 0; i < typeVars.length; i++) {
       var varName = "'" + String.fromCharCode(charCode++);
       map[typeVars[i]] = varName;
     }

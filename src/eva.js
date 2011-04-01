@@ -30,7 +30,7 @@ Ibis.Eva = (function () {
       var value = eval(env, expr.valueExpr);
       var varNames = expr.varNames;
       var valueArray = value.valueArray;
-      for (var i in varNames) {
+      for (var i = 0; i < varNames.length; i++) {
          Env.add(env, varNames[i], valueArray[i]);
       }
       return value;
@@ -44,7 +44,7 @@ Ibis.Eva = (function () {
     case "Tuple":
       var exprArray = expr.exprArray;
       var valueArray = [];
-      for (var i in exprArray) {
+      for (var i = 0; i < exprArray.length; i++) {
         valueArray.push(eval(env, exprArray[i]));
       }
       return Value.createTuple(valueArray);
