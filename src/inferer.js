@@ -165,23 +165,31 @@ Ibis.Inferer = (function () {
     if (type1 == type2) {
       return;
     }
-    if (type1.tag == "Var") {
-      if (!type1.value) {
+    if (type1.tag == "Var" && type2.tag == "Var") {
+      if (type1.value) {
+        unify(type1.value, type2);
+      } else if (type2.value) {
+        unify(type1, type2.value);
+      } else {
+        type1.value = type2;
+      }
+    } else if (type1.tag == "Var") {
+      if (type1.value) {
+        unify(type1.value, type2);
+      } else {
         if (occurIn(type2, type1)) {
           throw new IbisError("unification error: " + type1 + " and " + type2);
         }
         type1.value = type2;
-      } else {
-        unify(type1.value, type2);
       }
     } else if (type2.tag == "Var") {
-      if (!type2.value) {
+      if (type2.value) {
+        unify(type2.value, type1);
+      } else {
         if (occurIn(type1, type2)) {
           throw new IbisError("unification error: " + type1 + " and " + type2);
         }
         type2.value = type1;
-      } else {
-        unify(type2.value, type1);
       }
     } else if (type1.tag == "Fun" && type2.tag == "Fun") {
       unify(type1.paramType, type2.paramType);

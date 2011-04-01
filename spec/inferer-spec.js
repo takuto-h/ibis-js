@@ -132,6 +132,11 @@ describe("Inferer", function() {
     expect(inferFromString(g)).toEqual("int");
   });
   
+  it("can apply function n-times", function() {
+    var repeat = "let rec repeat=fun n->fun f->fun x->if n=0 then x else repeat (n-1) f (f x)";
+    expect(inferFromString(repeat)).toEqual("(int -> (('a -> 'a) -> ('a -> 'a)))");
+  });
+  
   function inferFromString(string) {
     var parser = Parser.ofString(string);
     var expr = Parser.parse(parser);
