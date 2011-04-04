@@ -23,7 +23,8 @@ jQuery(document).ready(function ($) {
         if (!expr) {
           break;
         }
-        var type = Inferer.infer(typeCtxt, typeEnv, variants, expr);
+        var visual = { root: expr, slides: [] }
+        var type = Inferer.infer(typeCtxt, typeEnv, variants, visual, expr);
         var value = Eva.eval(valueEnv, expr);
         term.echo("- : " + type + " = " + value);
       }

@@ -140,6 +140,7 @@ describe("Inferer", function() {
   function inferFromString(string) {
     var parser = Parser.ofString(string);
     var expr = Parser.parse(parser);
-    return Inferer.infer(typeCtxt, typeEnv, variants, expr).toString();
+    var visual = { root: expr, slides: [] }
+    return Inferer.infer(typeCtxt, typeEnv, variants, visual, expr).toString();
   }
 });
