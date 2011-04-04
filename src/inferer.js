@@ -322,8 +322,8 @@ Ibis.Inferer = (function () {
       break;
     case "Tuple":
       result += "Tuple" + showType(expr) + "\n";
-      for (var elem in expr.exprArray) {
-        result += indent(elem);
+      for (var i = 0; i < expr.exprArray.length; i++) {
+        result += indent(expr.exprArray[i]);
       }
       break;
     case "Case":
