@@ -3,6 +3,8 @@ Ibis.Inferer = (function () {
   var Env = Ibis.Env;
   var IbisError = Ibis.IbisError;
   
+  var root = null;
+  
   var exports = function () {
     return {
       infer: polyInfer
@@ -10,11 +12,20 @@ Ibis.Inferer = (function () {
   };
   
   function polyInfer(ctxt, env, variants, expr) {
+    root = expr;
+    alert(show(root));
     var inferredType = infer(ctxt, env, variants, expr);
     return createPolyType(inferredType);
   }
   
   function infer(ctxt, env, variants, expr) {
+    var type = infer2(ctxt, env, variants, expr);
+    expr.type = type;
+    alert(show(root));
+    return type;
+  }
+  
+  function infer2(ctxt, env, variants, expr) {
     switch (expr.tag) {
     case "Const":
       switch (expr.value.tag) {
@@ -275,6 +286,78 @@ Ibis.Inferer = (function () {
     var freeVars = [];
     var unwrappedType = unwrapVar(type, freeVars);
     return Type.createTypeSchema(freeVars, unwrappedType);
+  }
+  
+  function show(expr) {
+    var result = "";
+    switch (expr.tag) {
+    case "Const":
+    case "Var":
+    case "VariantDef":
+      result += expr + showType(expr) + "\n";
+      break;
+    case "Abs":
+      result += "Abs " + expr.varName + showType(expr) + "\n";
+      result += indent(expr.bodyExpr);
+      break;
+    case "App":
+      result += "App" + showType(expr) + "\n";
+      result += indent(expr.funExpr);
+      result += indent(expr.argExpr);
+      break;
+    case "Let":
+      result += "Let " + expr.varName + showType(expr) + "\n";
+      result += indent(expr.valueExpr);
+      break;
+    case "LetRec":
+      result += "LetRec " + expr.varName + showType(expr) + "\n"
+      result += indent(expr.valueExpr);
+      break;
+    case "LetTuple":
+      result += "LetTuple (" + expr.varNames.join(", ") + ")" + showType(expr) + "\n"
+      result += indent(expr.valueExpr);
+      break;
+    case "If":
+      result += "If" + showType(expr) + "\n"
+      result += indent(expr.condExpr);
+      result += indent(expr.thenExpr);
+      result += indent(expr.elseExpr);
+      break;
+    case "Tuple":
+      result += "Tuple" + showType(expr) + "\n";
+      for (var elem in expr.exprArray) {
+        result += indent(elem);
+      }
+      break;
+    case "Case":
+      result += "Case" + showType(expr) + "\n";
+      result += indent(expr.variantExpr);
+      for (var ctorName in expr.clauseExprs) {
+        result += indent(expr.clauseExprs[ctorName]);
+      }
+      if (expr.elseClause) {
+        result += indent(expr.elseClause);
+      }
+      break;
+    }
+    return result;
+  }
+  
+  function showType(expr) {
+    var type = expr.type;
+    if (!type) {
+      return "";
+    }
+    if (type.tag == "Var") {
+      return " : " + type + " = " + type.value;
+    }
+    return " : " + type;
+  }
+  
+  function indent(expr) {
+    var result = show(expr);
+    result = result.replace(/^/mg, "  ").replace(/  $/, "");
+    return result;
   }
   
   return exports();
