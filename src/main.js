@@ -14,6 +14,8 @@ jQuery(document).ready(function ($) {
   var typeCtxt = env.typeCtxt;
   var typeEnv = env.typeEnv;
   var variants = Env.createGlobal({});
+  var slideArray = [""];
+  var currentSlide = 0;
   
   $("#term").terminal(function (command, term) {
     var parser = Parser.ofString(command);
@@ -27,6 +29,7 @@ jQuery(document).ready(function ($) {
         var type = Inferer.infer(typeCtxt, typeEnv, variants, visual, expr);
         var value = Eva.eval(valueEnv, expr);
         term.echo("- : " + type + " = " + value);
+        setSlide(visual.slides);
       }
     } catch (e) {
       if (e instanceof IbisError) {
@@ -43,4 +46,32 @@ jQuery(document).ready(function ($) {
     height: 250,
     exit: false
   });
+  
+  function setSlide(slides) {
+    slideArray = slides;
+    currentSlide = 0;
+    updateScreen();
+  }
+  
+  $("#prev").click(function () {
+    if (currentSlide != 0) {
+      currentSlide--;
+      updateScreen();
+    }
+  });
+  
+  $("#next").click(function () {
+    if (currentSlide != slideArray.length - 1) {
+      currentSlide++;
+      updateScreen();
+    }
+  });
+  
+  function updateScreen() {
+    $("#screen").val(slideArray[currentSlide]);
+  }
+  
+  $("#term").css("float", "left");
+  $("#slide").css("width", "500px");
+  $("#slide").css("float", "left");
 });
