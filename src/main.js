@@ -45,8 +45,6 @@ jQuery(document).ready(function ($) {
     greetings: "Ibis Interpreter",
     prompt: ">",
     name: "ibis",
-    width: 500,
-    height: 250,
     exit: false
   });
   
@@ -95,8 +93,4 @@ jQuery(document).ready(function ($) {
     }
     $("#screen").val(slideArray[currentSlide]);
   }
-  
-  $("#term").css("float", "left");
-  $("#slide").css("width", "500px");
-  $("#slide").css("float", "left");
 });
