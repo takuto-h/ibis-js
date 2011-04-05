@@ -16,6 +16,7 @@ jQuery(document).ready(function ($) {
   var variants = Env.createGlobal({});
   var slideArray = [""];
   var currentSlide = 0;
+  updateScreen();
   
   $("#term").terminal(function (command, term) {
     var parser = Parser.ofString(command);
@@ -79,8 +80,19 @@ jQuery(document).ready(function ($) {
     updateScreen();
   });
   
-  
   function updateScreen() {
+    $("#first").attr("disabled", false);
+    $("#prev").attr("disabled", false);
+    $("#next").attr("disabled", false);
+    $("#last").attr("disabled", false);
+    if (currentSlide == 0) {
+      $("#first").attr("disabled", true);
+      $("#prev").attr("disabled", true);
+    }
+    if (currentSlide == slideArray.length - 1) {
+      $("#next").attr("disabled", true);
+      $("#last").attr("disabled", true);
+    }
     $("#screen").val(slideArray[currentSlide]);
   }
   
