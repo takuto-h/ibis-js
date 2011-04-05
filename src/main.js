@@ -55,6 +55,11 @@ jQuery(document).ready(function ($) {
     updateScreen();
   }
   
+  $("#first").click(function () {
+    currentSlide = 0;
+    updateScreen();
+  });
+  
   $("#prev").click(function () {
     if (currentSlide != 0) {
       currentSlide--;
@@ -68,6 +73,12 @@ jQuery(document).ready(function ($) {
       updateScreen();
     }
   });
+  
+  $("#last").click(function () {
+    currentSlide = slideArray.length - 1
+    updateScreen();
+  });
+  
   
   function updateScreen() {
     $("#screen").val(slideArray[currentSlide]);
