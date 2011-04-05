@@ -53,7 +53,7 @@ Ibis.Type = (function () {
     this.value = value;
   }
   Var.prototype.toString = function () {
-    return "<" + this.id + ">";
+    return "<" + this.id + (this.value ? ":" + this.value : "") + ">";
   }
   function createVar(value) {
     return new Var(currentId++, value);

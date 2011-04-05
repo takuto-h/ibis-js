@@ -345,9 +345,6 @@ Ibis.Inferer = (function () {
     if (!type) {
       return "";
     }
-    if (type.tag == "Var") {
-      return " : " + type + " = " + type.value;
-    }
     return " : " + type;
   }
   
