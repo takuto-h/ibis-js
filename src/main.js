@@ -52,7 +52,7 @@ jQuery(document).ready(function ($) {
   
   function setSlide(slides) {
     slideArray = slides;
-    currentSlide = 0;
+    currentSlide = slides.length - 1;
     updateScreen();
   }
   
