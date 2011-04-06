@@ -1,58 +1,33 @@
-* {
-  margin:0px;
-  padding:0px;
-  border:0px;
-}
-
-html {
-  height:100%;
-}
-
 body {
-  height:100%;
   text-align:center;
 }
 
 #container {
   width:96%;
-  height:100%;
   margin-left:auto;
   margin-right:auto;
   text-align:left;
 }
 
 .terminal {
-  margin:0px;
   padding:0px;
-  border:0px;
 }
 
 #term {
   width:49%;
-  height:100%;
+  height:200px;
   float:left;
 }
 
 #slide {
   width:49%;
-  height:100%;
   float:right;
-  font-size:0px;
-  line-height:0px;
 }
 
 #screen {
   width:100%;
-  height:100%;
-  margin-bottom:-50px;
-}
-
-#screen > * {
-  margin-bottom:50px;
+  height:500px;
 }
 
 input[type="button"] {
-  width:7%;
-  width:50px;
-  height:50px;
 }
