@@ -65,6 +65,8 @@ Ibis.Inferer = (function () {
       return createAlphaEquivalent(typeSchema).bodyType;
     case "LetRec":
       var varType = Type.createVar(null);
+      expr.varName.type = varType;
+      visual.slides.push(show(visual.root));
       var newCtxt = Env.createLocal({}, ctxt);
       Env.add(newCtxt, expr.varName.varName, Type.createTypeSchema([], varType));
       var inferredType = infer(newCtxt, env, variants, visual, expr.valueExpr);
@@ -319,7 +321,8 @@ Ibis.Inferer = (function () {
       result += indent(expr.valueExpr);
       break;
     case "LetRec":
-      result += "LetRec " + expr.varName + showType(expr) + "\n"
+      result += "LetRec" + showType(expr) + "\n";
+      result += indent(expr.varName);
       result += indent(expr.valueExpr);
       break;
     case "LetTuple":
