@@ -31,7 +31,7 @@ describe("Parser", function() {
   it("can parse let-rec expressions", function() {
     var parser = Parser.ofString("let rec f = fun x -> f x");
     expect(Parser.parse(parser).toString()).toEqual(
-      "(LetRec f (Abs (Var x) (App (Var f) (Var x))))"
+      "(LetRec (Var f) (Abs (Var x) (App (Var f) (Var x))))"
     );
   });
   

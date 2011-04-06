@@ -209,7 +209,7 @@ Ibis.Parser = (function () {
     if (parser.headToken != "IDENT") {
       throw new IbisError(expected(parser, "IDENT"));
     }
-    var varName = Lexer.value(parser.lexer);
+    var varName = Expr.createVar(Lexer.value(parser.lexer));
     lookAhead(parser);
     if (parser.headToken != "=") {
       throw new IbisError(expected(parser, "="));
