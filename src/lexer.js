@@ -64,6 +64,15 @@ Ibis.Lexer = (function () {
       } else {
         lexer.token = "-";
       }
+    } else if (c == ";") {
+      Stream.junk(lexer.stream);
+      c = Stream.peek(lexer.stream);
+      if (c == ";") {
+        lexer.token = ";;";
+        Stream.junk(lexer.stream);
+      } else {
+        lexer.token = ";";
+      }
     } else if (c.match(/\d/)) {
       lexInt(lexer);
     } else if (c.match(/\w/)) {

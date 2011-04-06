@@ -130,4 +130,11 @@ describe("Parser", function() {
       "(Case (Var n) (Zero (Var f)) Else (Var g))"
     );
   });
+  
+  it("can parse multiple expressions", function () {
+    var parser = Parser.ofString("1;; 2;; 3");
+    expect(Parser.parse(parser).toString()).toEqual("(Const 1)");
+    expect(Parser.parse(parser).toString()).toEqual("(Const 2)");
+    expect(Parser.parse(parser).toString()).toEqual("(Const 3)");
+  });
 });

@@ -38,9 +38,10 @@ Ibis.Parser = (function () {
     var expr = parseDef(parser);
     switch (parser.headToken) {
     case "EOF":
+    case ";;":
       break;
     default:
-      throw new IbisError(expected(parser, "EOF"));
+      throw new IbisError(expected(parser, ";;"));
     }
     return expr;
   }
