@@ -43,7 +43,7 @@ Ibis.Inferer = (function () {
     case "Abs":
       var paramType = Type.createVar(null);
       var newCtxt = Env.createLocal({}, ctxt);
-      Env.add(newCtxt, expr.varName, Type.createTypeSchema([], paramType));
+      Env.add(newCtxt, expr.varName.varName, Type.createTypeSchema([], paramType));
       var retType = infer(newCtxt, env, variants, visual, expr.bodyExpr);
       return Type.createFun(paramType, retType);
     case "App":

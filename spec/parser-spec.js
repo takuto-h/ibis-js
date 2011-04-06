@@ -13,7 +13,7 @@ describe("Parser", function() {
   
   it("can parse function abstractions", function() {
     var parser = Parser.ofString("fun x -> x");
-    expect(Parser.parse(parser).toString()).toEqual("(Abs x (Var x))");
+    expect(Parser.parse(parser).toString()).toEqual("(Abs (Var x) (Var x))");
   });
   
   it("can parse let expressions", function() {
@@ -31,7 +31,7 @@ describe("Parser", function() {
   it("can parse let-rec expressions", function() {
     var parser = Parser.ofString("let rec f = fun x -> f x");
     expect(Parser.parse(parser).toString()).toEqual(
-      "(LetRec f (Abs x (App (Var f) (Var x))))"
+      "(LetRec f (Abs (Var x) (App (Var f) (Var x))))"
     );
   });
   

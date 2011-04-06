@@ -16,7 +16,7 @@ Ibis.Eva = (function () {
     case "Var":
       return Env.find(env, expr.varName);
     case "Abs":
-      return Value.createClosure(env, expr.varName, expr.bodyExpr);
+      return Value.createClosure(env, expr.varName.varName, expr.bodyExpr);
     case "App":
       var fun = eval(env, expr.funExpr);
       var arg = eval(env, expr.argExpr);
