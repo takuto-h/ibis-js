@@ -17,7 +17,7 @@ Ibis.Inferer = (function () {
   
   function infer(ctxt, env, variants, visual, expr) {
     var type = infer2(ctxt, env, variants, visual, expr);
-    if (expr.tag != "App") {
+    if (expr.tag != "App" && expr.tag != "Case") {
       expr.type = type;
       visual.slides.push(show(visual.root));
     }
@@ -132,6 +132,8 @@ Ibis.Inferer = (function () {
       unify(visual, inferredType, variantType);
       var typeCtors = variantType.typeCtors;
       var resultType = Type.createVar(null);
+      expr.type = resultType;
+      visual.slides.push(show(visual.root));
       if (!elseClause) {
         for (var ctorName in typeCtors) {
           if (!clauseExprs[ctorName]) {
