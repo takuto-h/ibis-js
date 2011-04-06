@@ -42,6 +42,8 @@ Ibis.Inferer = (function () {
       return createAlphaEquivalent(typeSchema).bodyType;
     case "Abs":
       var paramType = Type.createVar(null);
+      expr.varName.type = paramType;
+      visual.slides.push(show(visual.root));
       var newCtxt = Env.createLocal({}, ctxt);
       Env.add(newCtxt, expr.varName.varName, Type.createTypeSchema([], paramType));
       var retType = infer(newCtxt, env, variants, visual, expr.bodyExpr);
@@ -294,7 +296,8 @@ Ibis.Inferer = (function () {
       result += expr + showType(expr) + "\n";
       break;
     case "Abs":
-      result += "Abs " + expr.varName + showType(expr) + "\n";
+      result += "Abs" + showType(expr) + "\n";
+      result += indent(expr.varName);
       result += indent(expr.bodyExpr);
       break;
     case "App":
