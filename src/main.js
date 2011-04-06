@@ -23,11 +23,12 @@ jQuery(document).ready(function ($) {
     var visual = null;
     try {
       while (true) {
+        visual = { root: null, slides: [] };
         var expr = Parser.parse(parser);
         if (!expr) {
           break;
         }
-        visual = { root: expr, slides: [] };
+        visual.root = expr;
         var type = Inferer.infer(typeCtxt, typeEnv, variants, visual, expr);
         var value = Eva.eval(valueEnv, expr);
         term.echo("- : " + type + " = " + value);
@@ -36,7 +37,9 @@ jQuery(document).ready(function ($) {
     } catch (e) {
       if (e instanceof IbisError) {
         term.error("ERROR: " + e.message);
-        setSlide(visual.slides);
+        if (visual.slides.length != 0) {
+          setSlide(visual.slides);
+        }
       } else {
         throw e;
       }
