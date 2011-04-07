@@ -128,6 +128,8 @@ int_of_nat (add one two);;\n'
       $("#next").attr("disabled", true);
       $("#last").attr("disabled", true);
     }
+    var scrollTop = $("#screen").scrollTop();
     $("#screen").val(slideArray[currentSlide]);
+    $("#screen").scrollTop(scrollTop);
   }
 });
