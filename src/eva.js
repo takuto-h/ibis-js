@@ -51,6 +51,9 @@ Ibis.Eva = (function () {
         valueArray.push(eval(env, exprArray[i]));
       }
       return Value.createTuple(valueArray);
+    case "Seq":
+      eval(env, expr.currentExpr);
+      return eval(env, expr.nextExpr);
     case "VariantDef":
       for (var ctorName in expr.typeCtors) {
         var ctor = createCtor(ctorName);

@@ -129,6 +129,10 @@ describe("Eva", function() {
     expect(evalFromString("5 mod 2")).toEqual("1");
   });
   
+  it("can evaluate compound expressions", function () {
+    expect(evalFromString("1; \"abc\"; true")).toEqual("true");
+  });
+  
   function evalFromString(string) {
     var parser = Parser.ofString(string);
     var expr = Parser.parse(parser);
