@@ -39,6 +39,16 @@ Ibis.Lexer = (function () {
     var c = Stream.peek(lexer.stream);
     if (c == "") {
       return false;
+    } else if (c == "(") {
+      Stream.junk(lexer.stream);
+      c = Stream.peek(lexer.stream);
+      if (c == "*") {
+        skipComment(lexer);
+        return advance(lexer);
+      } else {
+        lexer.token = "(";
+        return true;
+      }
     }
     lexToken(lexer);
     return true;
@@ -153,6 +163,37 @@ Ibis.Lexer = (function () {
     while (c.match(/\s/)) {
       Stream.junk(lexer.stream);
       c = Stream.peek(lexer.stream);
+    }
+  }
+  
+  function skipComment(lexer) {
+    Stream.junk(lexer.stream);
+    var c = Stream.peek(lexer.stream);
+    while (true) {
+      switch (c) {
+      case "":
+        throw new IbisError("EOF inside a comment");
+      case "*":
+        Stream.junk(lexer.stream);
+        c = Stream.peek(lexer.stream);
+        if (c == ")") {
+          Stream.junk(lexer.stream);
+          return;
+        }
+        break;
+      case "(":
+        Stream.junk(lexer.stream);
+        c = Stream.peek(lexer.stream);
+        if (c == "*") {
+          skipComment(lexer);
+          c = Stream.peek(lexer.stream);
+        }
+        break;
+      default:
+        Stream.junk(lexer.stream);
+        c = Stream.peek(lexer.stream);
+        break;
+      }
     }
   }
   

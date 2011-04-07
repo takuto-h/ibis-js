@@ -99,4 +99,9 @@ describe("Lexer", function() {
     expect(Lexer.token(lexer)).toEqual("mod");
     expect(Lexer.advance(lexer)).toBeFalsy();
   });
+  
+  it("can skip comments", function() {
+    var lexer = Lexer.ofString("(* This is a comment. *) (*(*(*nested*)*)*)");
+    expect(Lexer.advance(lexer)).toBeFalsy();
+  });
 });
