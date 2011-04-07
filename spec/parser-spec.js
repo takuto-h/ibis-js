@@ -6,6 +6,11 @@ describe("Parser", function() {
     expect(Parser.parse(parser).toString()).toEqual("(Const 123)");
   });
   
+  it("can parse strings", function() {
+    var parser = Parser.ofString("\"abc\"");
+    expect(Parser.parse(parser).toString()).toEqual("(Const abc)");
+  });
+  
   it("can parse variables", function() {
     var parser = Parser.ofString("abc");
     expect(Parser.parse(parser).toString()).toEqual("(Var abc)");

@@ -5,6 +5,7 @@ Ibis.Value = (function () {
       True: True,
       False: False,
       createInt: createInt,
+      createString: createString,
       createClosure: createClosure,
       createSubr: createSubr,
       createTuple: createTuple,
@@ -42,6 +43,17 @@ Ibis.Value = (function () {
   }
   function createInt(intValue) {
     return new Int(intValue);
+  }
+  
+  function String(stringValue) {
+    this.tag = "String";
+    this.stringValue = stringValue;
+  }
+  String.prototype.toString = function () {
+    return this.stringValue;
+  }
+  function createString(stringValue) {
+    return new String(stringValue);
   }
   
   function Closure(env, varName, bodyExpr) {

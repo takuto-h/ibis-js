@@ -137,6 +137,9 @@ Ibis.Parser = (function () {
     case "INT":
       expr = parseInt(parser);
       break;
+    case "STRING":
+      expr = parseString(parser);
+      break;
     case "IDENT":
       expr = parseIdent(parser);
       break;
@@ -157,6 +160,12 @@ Ibis.Parser = (function () {
   
   function parseInt(parser) {
     var expr = Expr.createConst(Value.createInt(Lexer.value(parser.lexer)));
+    lookAhead(parser);
+    return expr;
+  }
+  
+  function parseString(parser) {
+    var expr = Expr.createConst(Value.createString(Lexer.value(parser.lexer)));
     lookAhead(parser);
     return expr;
   }
