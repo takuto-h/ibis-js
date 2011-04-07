@@ -146,4 +146,11 @@ describe("Parser", function() {
     expect(Parser.parse(parser).toString()).toEqual("(Const 2)");
     expect(Parser.parse(parser).toString()).toEqual("(Const 3)");
   });
+  
+  it("can parse compound expressions", function () {
+    var parser = Parser.ofString("1; 2; 3");
+    expect(Parser.parse(parser).toString()).toEqual(
+      "(Seq (Const 1) (Seq (Const 2) (Const 3)))"
+    );
+  });
 });

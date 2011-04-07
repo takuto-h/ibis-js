@@ -60,7 +60,16 @@ Ibis.Parser = (function () {
   }
   
   function parseExpr(parser) {
-    return parseSimpleExpr(parser);
+    return parseCompExpr(parser);
+  }
+  
+  function parseCompExpr(parser) {
+    var expr = parseSimpleExpr(parser);
+    if (parser.headToken == ";") {
+      lookAhead(parser);
+      expr = Expr.createSeq(expr, parseCompExpr(parser));
+    }
+    return expr;
   }
   
   function parseSimpleExpr(parser) {

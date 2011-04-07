@@ -11,6 +11,7 @@ Ibis.Expr = (function () {
       createIf: createIf,
       createCase: createCase,
       createTuple: createTuple,
+      createSeq: createSeq,
       createTypeVar: createTypeVar,
       createTypeMul: createTypeMul,
       createTypeFun: createTypeFun,
@@ -140,6 +141,18 @@ Ibis.Expr = (function () {
   }
   function createTuple(exprArray) {
     return new Tuple(exprArray);
+  }
+  
+  function Seq(currentExpr, nextExpr) {
+    this.tag = "Seq";
+    this.currentExpr = currentExpr;
+    this.nextExpr = nextExpr;
+  }
+  Seq.prototype.toString = function () {
+    return "(Seq " + this.currentExpr + " " + this.nextExpr + ")";
+  }
+  function createSeq(currentExpr, nextExpr) {
+    return new Seq(currentExpr, nextExpr);
   }
   
   function TypeVar(varName) {
