@@ -63,6 +63,24 @@ fizzbuzz 1 100;;\n'
     $("#edit").val(fizzbuzz);
   });
   
+  var peano = '\
+type nat = Zero of unit | Succ of nat;;\n\
+let zero = Zero ();;\n\
+let one = Succ zero;;\n\
+let two = Succ one;;\n\
+let rec add = fun m -> fun n -> case m of\n\
+  Zero -> fun _ -> n\n\
+| Succ -> fun k -> Succ (add k n)\n\
+;;\n\
+let rec int_of_nat = fun n -> case n of\n\
+  Zero -> fun _ -> 0\n\
+| Succ -> fun k -> 1 + int_of_nat k\n\
+;;\n\
+int_of_nat (add one two);;\n'
+  $("#peano").click(function () {
+    $("#edit").val(peano);
+  });
+  
   $("#clear").click(function () {
     $("#edit").val("");
   });
