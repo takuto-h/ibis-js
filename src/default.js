@@ -64,6 +64,15 @@ Ibis.Default = (function () {
       });
     }));
     
+    var typeVar = Type.createVar(null);
+    Env.add(typeCtxt, "alert", Type.createTypeSchema(
+      [typeVar], Type.createFun(typeVar, typeVar)
+    ));
+    Env.add(valueEnv, "alert", Value.createSubr(function (x) {
+      alert(x);
+      return x;
+    }));
+    
     return {
       typeEnv: typeEnv,
       typeCtxt: typeCtxt,
