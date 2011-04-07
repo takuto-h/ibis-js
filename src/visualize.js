@@ -63,6 +63,10 @@ fizzbuzz 1 100;;\n'
     $("#edit").val(fizzbuzz);
   });
   
+  $("#clear").click(function () {
+    $("#edit").val("");
+  });
+  
   $("#first").click(function () {
     currentSlide = 0;
     updateScreen();
