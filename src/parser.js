@@ -92,7 +92,7 @@ Ibis.Parser = (function () {
   
   function parseMulExpr(parser) {
     var expr = parseSimpleExpr(parser);
-    while (parser.headToken.match(/[*\/]/)) {
+    while (parser.headToken.match(/[*\/]|mod/)) {
       var op = parser.headToken;
       lookAhead(parser);
       expr = createBinExpr(op, expr, parseSimpleExpr(parser));

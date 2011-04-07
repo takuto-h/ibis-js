@@ -53,7 +53,7 @@ describe("Lexer", function() {
   });
   
   it("can lex reserved words", function() {
-    var lexer = Lexer.ofString("fun let rec if then else type of case");
+    var lexer = Lexer.ofString("fun let rec if then else type of case mod");
     expect(Lexer.advance(lexer)).toBeTruthy();
     expect(Lexer.token(lexer)).toEqual("fun");
     expect(Lexer.advance(lexer)).toBeTruthy();
@@ -72,6 +72,8 @@ describe("Lexer", function() {
     expect(Lexer.token(lexer)).toEqual("of");
     expect(Lexer.advance(lexer)).toBeTruthy();
     expect(Lexer.token(lexer)).toEqual("case");
+    expect(Lexer.advance(lexer)).toBeTruthy();
+    expect(Lexer.token(lexer)).toEqual("mod");
     expect(Lexer.advance(lexer)).toBeFalsy();
   });
 });

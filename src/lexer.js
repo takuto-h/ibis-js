@@ -22,7 +22,8 @@ Ibis.Lexer = (function () {
     "false": "false",
     "type": "type",
     "of": "of",
-    "case": "case"
+    "case": "case",
+    "mod": "mod"
   }
   
   function ofString(string) {

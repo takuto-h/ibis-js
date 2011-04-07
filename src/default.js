@@ -42,7 +42,14 @@ Ibis.Default = (function () {
     Env.add(typeCtxt, "/", binOpType(Type.Int, Type.Int, Type.Int));
     Env.add(valueEnv, "/", Value.createSubr(function (lhs) {
       return Value.createSubr(function (rhs) {
-        return Value.createInt(lhs.intValue / rhs.intValue);
+        return Value.createInt(Math.floor(lhs.intValue / rhs.intValue));
+      });
+    }));
+    
+    Env.add(typeCtxt, "mod", binOpType(Type.Int, Type.Int, Type.Int));
+    Env.add(valueEnv, "mod", Value.createSubr(function (lhs) {
+      return Value.createSubr(function (rhs) {
+        return Value.createInt(lhs.intValue % rhs.intValue);
       });
     }));
     

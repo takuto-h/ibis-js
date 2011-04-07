@@ -123,6 +123,11 @@ describe("Eva", function() {
     expect(evalFromString("add one two")).toEqual("(Succ (Succ (Succ (Zero ()))))");
   });
   
+  it("can calculate integer division", function () {
+    expect(evalFromString("5 / 2")).toEqual("2");
+    expect(evalFromString("5 mod 2")).toEqual("1");
+  });
+  
   function evalFromString(string) {
     var parser = Parser.ofString(string);
     var expr = Parser.parse(parser);
