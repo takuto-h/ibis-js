@@ -49,11 +49,19 @@ jQuery(document).ready(function ($) {
     }
   });
   
-  function setSlide(slides) {
-    slideArray = slides;
-    currentSlide = slides.length - 1;
-    updateScreen();
-  }
+  var fizzbuzz = '\
+let rec fizzbuzz = fun from -> fun to ->\n\
+  if from > to then ""\n\
+  else if from mod 15 = 0 then "FizzBuzz " ^ fizzbuzz (from + 1) to\n\
+  else if from mod 3 = 0 then "Fizz " ^ fizzbuzz (from + 1) to\n\
+  else if from mod 5 = 0 then "Buzz " ^ fizzbuzz (from + 1) to\n\
+  else show from ^ " " ^ fizzbuzz (from + 1) to\n\
+;;\n\
+\n\
+fizzbuzz 1 100;;\n'
+  $("#fizzbuzz").click(function () {
+    $("#edit").val(fizzbuzz);
+  });
   
   $("#first").click(function () {
     currentSlide = 0;
@@ -78,6 +86,12 @@ jQuery(document).ready(function ($) {
     currentSlide = slideArray.length - 1
     updateScreen();
   });
+  
+  function setSlide(slides) {
+    slideArray = slides;
+    currentSlide = slides.length - 1;
+    updateScreen();
+  }
   
   function updateScreen() {
     $("#first").attr("disabled", false);
