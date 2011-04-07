@@ -126,6 +126,15 @@ Ibis.Default = (function () {
       });
     }));
     
+    Env.add(typeCtxt, "not", Type.createTypeSchema([], Type.createFun(Type.Bool, Type.Bool)));
+    Env.add(valueEnv, "not", Value.createSubr(function (cond) {
+      if (cond == Value.True) {
+        return Value.False;
+      } else {
+        return Value.True;
+      }
+    }));
+    
     var typeVar = Type.createVar(null);
     Env.add(typeCtxt, "show", Type.createTypeSchema(
       [typeVar], Type.createFun(typeVar, Type.String)
