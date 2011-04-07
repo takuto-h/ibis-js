@@ -49,6 +49,9 @@ Ibis.Parser = (function () {
   function parseDef(parser) {
     var expr = null;
     switch (parser.headToken) {
+    case "let":
+      expr = parseLet(parser);
+      break;
     case "type":
       expr = parseTypeDef(parser);
       break;
@@ -75,9 +78,6 @@ Ibis.Parser = (function () {
   function parseSimpleExpr(parser) {
     var expr = null;
     switch (parser.headToken) {
-    case "let":
-      expr = parseLet(parser);
-      break;
     case "fun":
       expr = parseAbs(parser);
       break;
@@ -156,6 +156,7 @@ Ibis.Parser = (function () {
     var expr = parseAtom(parser);
     while (parser.headToken == "INT" ||
            parser.headToken == "IDENT" ||
+           parser.headToken == "STRING" ||
            parser.headToken == "true" ||
            parser.headToken == "false" ||
            parser.headToken == "(") {
