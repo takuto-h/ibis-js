@@ -135,6 +135,11 @@ Ibis.Default = (function () {
       }
     }));
     
+    Env.add(typeCtxt, "~-", Type.createTypeSchema([], Type.createFun(Type.Int, Type.Int)));
+    Env.add(valueEnv, "~-", Value.createSubr(function (n) {
+      return Value.createInt(- n.intValue);
+    }));
+    
     var typeVar = Type.createVar(null);
     Env.add(typeCtxt, "show", Type.createTypeSchema(
       [typeVar], Type.createFun(typeVar, Type.String)

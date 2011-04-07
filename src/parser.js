@@ -130,7 +130,17 @@ Ibis.Parser = (function () {
   }
   
   function parseUnaryExpr(parser) {
-    return parsePrimExpr(parser);
+    var expr = null;
+    switch (parser.headToken) {
+    case "-":
+      lookAhead(parser);
+      expr = Expr.createApp(Expr.createVar("~-"), parseUnaryExpr(parser));
+      break;
+    default:
+      expr = parsePrimExpr(parser);
+      break;
+    }
+    return expr;
   }
   
   function parsePrimExpr(parser) {
