@@ -52,6 +52,17 @@ describe("Lexer", function() {
     expect(Lexer.advance(lexer)).toBeFalsy();
   });
   
+  it("can lex strings", function() {
+    var lexer = Lexer.ofString("\"abc\" \"def\"");
+    expect(Lexer.advance(lexer)).toBeTruthy();
+    expect(Lexer.token(lexer)).toEqual("STRING");
+    expect(Lexer.value(lexer)).toEqual("abc");
+    expect(Lexer.advance(lexer)).toBeTruthy();
+    expect(Lexer.token(lexer)).toEqual("STRING");
+    expect(Lexer.value(lexer)).toEqual("def");
+    expect(Lexer.advance(lexer)).toBeFalsy();
+  });
+  
   it("can lex reserved words", function() {
     var lexer = Lexer.ofString("fun let rec if then else type of case mod");
     expect(Lexer.advance(lexer)).toBeTruthy();

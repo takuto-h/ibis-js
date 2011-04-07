@@ -74,6 +74,8 @@ Ibis.Lexer = (function () {
       } else {
         lexer.token = ";";
       }
+    } else if (c == "\"") {
+      lexString(lexer);
     } else if (c.match(/\d/)) {
       lexInt(lexer);
     } else if (c.match(/\w/)) {
@@ -107,6 +109,22 @@ Ibis.Lexer = (function () {
     }
     lexer.token = "IDENT";
     lexer.value = ident;
+  }
+  
+  function lexString(lexer) {
+    Stream.junk(lexer.stream);
+    var string = "";
+    var c = Stream.peek(lexer.stream);
+    while (c != "\"") {
+      if (c == "") {
+        throw new IbisError("EOF inside a string");
+      }
+      string += Stream.next(lexer.stream);
+      c = Stream.peek(lexer.stream);
+    }
+    Stream.junk(lexer.stream);
+    lexer.token = "STRING";
+    lexer.value = string;
   }
   
   function skipWhiteSpace(lexer) {
