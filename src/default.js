@@ -64,6 +64,61 @@ Ibis.Default = (function () {
       });
     }));
     
+    Env.add(typeCtxt, "<", binOpType(Type.Int, Type.Int, Type.Bool));
+    Env.add(valueEnv, "<", Value.createSubr(function (lhs) {
+      return Value.createSubr(function (rhs) {
+        if (lhs.intValue < rhs.intValue) {
+          return Value.True;
+        } else {
+          return Value.False;
+        }
+      });
+    }));
+    
+    Env.add(typeCtxt, "<=", binOpType(Type.Int, Type.Int, Type.Bool));
+    Env.add(valueEnv, "<=", Value.createSubr(function (lhs) {
+      return Value.createSubr(function (rhs) {
+        if (lhs.intValue <= rhs.intValue) {
+          return Value.True;
+        } else {
+          return Value.False;
+        }
+      });
+    }));
+    
+    Env.add(typeCtxt, ">", binOpType(Type.Int, Type.Int, Type.Bool));
+    Env.add(valueEnv, ">", Value.createSubr(function (lhs) {
+      return Value.createSubr(function (rhs) {
+        if (lhs.intValue > rhs.intValue) {
+          return Value.True;
+        } else {
+          return Value.False;
+        }
+      });
+    }));
+    
+    Env.add(typeCtxt, ">=", binOpType(Type.Int, Type.Int, Type.Bool));
+    Env.add(valueEnv, ">=", Value.createSubr(function (lhs) {
+      return Value.createSubr(function (rhs) {
+        if (lhs.intValue >= rhs.intValue) {
+          return Value.True;
+        } else {
+          return Value.False;
+        }
+      });
+    }));
+    
+    Env.add(typeCtxt, "<>", binOpType(Type.Int, Type.Int, Type.Bool));
+    Env.add(valueEnv, "<>", Value.createSubr(function (lhs) {
+      return Value.createSubr(function (rhs) {
+        if (lhs.intValue != rhs.intValue) {
+          return Value.True;
+        } else {
+          return Value.False;
+        }
+      });
+    }));
+    
     Env.add(typeCtxt, "^", binOpType(Type.String, Type.String, Type.String));
     Env.add(valueEnv, "^", Value.createSubr(function (lhs) {
       return Value.createSubr(function (rhs) {

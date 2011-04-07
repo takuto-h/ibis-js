@@ -63,21 +63,21 @@ Ibis.Parser = (function () {
   }
   
   function parseExpr(parser) {
+    return parseLogicExpr(parser);
+  }
+  
+  function parseLogicExpr(parser) {
     return parseEqExpr(parser);
   }
   
   function parseEqExpr(parser) {
-    var expr = parseRelExpr(parser);
-    while (parser.headToken.match(/=/)) {
+    var expr = parseConcatExpr(parser);
+    while (parser.headToken.match(/=|<[>=]?|>=?/)) {
       var op = parser.headToken;
       lookAhead(parser);
-      expr = createBinExpr(op, expr, parseRelExpr(parser));
+      expr = createBinExpr(op, expr, parseConcatExpr(parser));
     }
     return expr;
-  }
-  
-  function parseRelExpr(parser) {
-    return parseConcatExpr(parser);
   }
   
   function parseConcatExpr(parser) {
