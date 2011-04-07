@@ -220,7 +220,7 @@ Ibis.Parser = (function () {
       throw new IbisError(expected(parser, "->"));
     }
     lookAhead(parser);
-    var bodyExpr = parseExpr(parser);
+    var bodyExpr = parseSimpleExpr(parser);
     return Expr.createAbs(varName, bodyExpr);
   }
   
@@ -242,7 +242,7 @@ Ibis.Parser = (function () {
       throw new IbisError(expected(parser, "="));
     }
     lookAhead(parser);
-    var valueExpr = parseExpr(parser);
+    var valueExpr = parseSimpleExpr(parser);
     return Expr.createLet(varName, valueExpr);
   }
   
@@ -282,7 +282,7 @@ Ibis.Parser = (function () {
       throw new IbisError(expected(parser, "="));
     }
     lookAhead(parser);
-    var valueExpr = parseExpr(parser);
+    var valueExpr = parseSimpleExpr(parser);
     return Expr.createLetTuple(varNames, valueExpr);
   }
   
@@ -300,23 +300,23 @@ Ibis.Parser = (function () {
   
   function parseIf(parser) {
     lookAhead(parser);
-    var condExpr = parseExpr(parser);
+    var condExpr = parseSimpleExpr(parser);
     if (parser.headToken != "then") {
       throw new IbisError(expected(parser, "then"));
     }
     lookAhead(parser);
-    var thenExpr = parseExpr(parser);
+    var thenExpr = parseSimpleExpr(parser);
     if (parser.headToken != "else") {
       throw new IbisError(expected(parser, "else"));
     }
     lookAhead(parser);
-    var elseExpr = parseExpr(parser);
+    var elseExpr = parseSimpleExpr(parser);
     return Expr.createIf(condExpr, thenExpr, elseExpr);
   }
   
   function parseCase(parser) {
     lookAhead(parser);
-    var variantExpr = parseExpr(parser);
+    var variantExpr = parseSimpleExpr(parser);
     if (parser.headToken != "of") {
       throw new IbisError(expected(parser, "of"));
     }
@@ -346,7 +346,7 @@ Ibis.Parser = (function () {
       throw new IbisError(expected(parser, "->"));
     }
     lookAhead(parser);
-    var bodyExpr = parseExpr(parser);
+    var bodyExpr = parseSimpleExpr(parser);
     clauseExprs[ctorName] = bodyExpr;
     if (parser.headToken == "|") {
       parseCaseClauses(parser, clauseExprs);
@@ -359,7 +359,7 @@ Ibis.Parser = (function () {
       throw new IbisError(expected(parser, "->"));
     }
     lookAhead(parser);
-    return parseExpr(parser);
+    return parseSimpleExpr(parser);
   }
   
   function parseParen(parser) {
