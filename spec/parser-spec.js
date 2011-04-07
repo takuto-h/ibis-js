@@ -84,19 +84,19 @@ describe("Parser", function() {
   it("can parse binary expressions", function() {
     var parser = Parser.ofString("1 + 2 * 3");
     expect(Parser.parse(parser).toString()).toEqual(
-      "(App (App (Var +) (Const 1)) (App (App (Var *) (Const 2)) (Const 3)))"
+      "(App (App (Var (+)) (Const 1)) (App (App (Var (*)) (Const 2)) (Const 3)))"
     );
     var parser = Parser.ofString("(1 + 2) * 3");
     expect(Parser.parse(parser).toString()).toEqual(
-      "(App (App (Var *) (App (App (Var +) (Const 1)) (Const 2))) (Const 3))"
+      "(App (App (Var (*)) (App (App (Var (+)) (Const 1)) (Const 2))) (Const 3))"
     );
     var parser = Parser.ofString("x = 1");
     expect(Parser.parse(parser).toString()).toEqual(
-      "(App (App (Var =) (Var x)) (Const 1))"
+      "(App (App (Var (=)) (Var x)) (Const 1))"
     );
     var parser = Parser.ofString("\"a\" ^ \"b\" ^ \"c\"");
     expect(Parser.parse(parser).toString()).toEqual(
-      "(App (App (Var ^) (Const \"a\")) (App (App (Var ^) (Const \"b\")) (Const \"c\")))"
+      "(App (App (Var (^)) (Const \"a\")) (App (App (Var (^)) (Const \"b\")) (Const \"c\")))"
     );
   });
   

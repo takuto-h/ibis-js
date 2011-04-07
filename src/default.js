@@ -18,43 +18,43 @@ Ibis.Default = (function () {
     Env.add(typeEnv, "int", Type.Int);
     Env.add(typeEnv, "bool", Type.Bool);
     
-    Env.add(typeCtxt, "+", binOpType(Type.Int, Type.Int, Type.Int));
-    Env.add(valueEnv, "+", Value.createSubr(function (lhs) {
+    Env.add(typeCtxt, "(+)", binOpType(Type.Int, Type.Int, Type.Int));
+    Env.add(valueEnv, "(+)", Value.createSubr(function (lhs) {
       return Value.createSubr(function (rhs) {
         return Value.createInt(lhs.intValue + rhs.intValue);
       });
     }));
     
-    Env.add(typeCtxt, "-", binOpType(Type.Int, Type.Int, Type.Int));
-    Env.add(valueEnv, "-", Value.createSubr(function (lhs) {
+    Env.add(typeCtxt, "(-)", binOpType(Type.Int, Type.Int, Type.Int));
+    Env.add(valueEnv, "(-)", Value.createSubr(function (lhs) {
       return Value.createSubr(function (rhs) {
         return Value.createInt(lhs.intValue - rhs.intValue);
       });
     }));
     
-    Env.add(typeCtxt, "*", binOpType(Type.Int, Type.Int, Type.Int));
-    Env.add(valueEnv, "*", Value.createSubr(function (lhs) {
+    Env.add(typeCtxt, "(*)", binOpType(Type.Int, Type.Int, Type.Int));
+    Env.add(valueEnv, "(*)", Value.createSubr(function (lhs) {
       return Value.createSubr(function (rhs) {
         return Value.createInt(lhs.intValue * rhs.intValue);
       });
     }));
     
-    Env.add(typeCtxt, "/", binOpType(Type.Int, Type.Int, Type.Int));
-    Env.add(valueEnv, "/", Value.createSubr(function (lhs) {
+    Env.add(typeCtxt, "(/)", binOpType(Type.Int, Type.Int, Type.Int));
+    Env.add(valueEnv, "(/)", Value.createSubr(function (lhs) {
       return Value.createSubr(function (rhs) {
         return Value.createInt(Math.floor(lhs.intValue / rhs.intValue));
       });
     }));
     
-    Env.add(typeCtxt, "mod", binOpType(Type.Int, Type.Int, Type.Int));
-    Env.add(valueEnv, "mod", Value.createSubr(function (lhs) {
+    Env.add(typeCtxt, "(mod)", binOpType(Type.Int, Type.Int, Type.Int));
+    Env.add(valueEnv, "(mod)", Value.createSubr(function (lhs) {
       return Value.createSubr(function (rhs) {
         return Value.createInt(lhs.intValue % rhs.intValue);
       });
     }));
     
-    Env.add(typeCtxt, "=", binOpType(Type.Int, Type.Int, Type.Bool));
-    Env.add(valueEnv, "=", Value.createSubr(function (lhs) {
+    Env.add(typeCtxt, "(=)", binOpType(Type.Int, Type.Int, Type.Bool));
+    Env.add(valueEnv, "(=)", Value.createSubr(function (lhs) {
       return Value.createSubr(function (rhs) {
         if (lhs.intValue == rhs.intValue) {
           return Value.True;
@@ -64,8 +64,8 @@ Ibis.Default = (function () {
       });
     }));
     
-    Env.add(typeCtxt, "<", binOpType(Type.Int, Type.Int, Type.Bool));
-    Env.add(valueEnv, "<", Value.createSubr(function (lhs) {
+    Env.add(typeCtxt, "(<)", binOpType(Type.Int, Type.Int, Type.Bool));
+    Env.add(valueEnv, "(<)", Value.createSubr(function (lhs) {
       return Value.createSubr(function (rhs) {
         if (lhs.intValue < rhs.intValue) {
           return Value.True;
@@ -75,8 +75,8 @@ Ibis.Default = (function () {
       });
     }));
     
-    Env.add(typeCtxt, "<=", binOpType(Type.Int, Type.Int, Type.Bool));
-    Env.add(valueEnv, "<=", Value.createSubr(function (lhs) {
+    Env.add(typeCtxt, "(<=)", binOpType(Type.Int, Type.Int, Type.Bool));
+    Env.add(valueEnv, "(<=)", Value.createSubr(function (lhs) {
       return Value.createSubr(function (rhs) {
         if (lhs.intValue <= rhs.intValue) {
           return Value.True;
@@ -86,8 +86,8 @@ Ibis.Default = (function () {
       });
     }));
     
-    Env.add(typeCtxt, ">", binOpType(Type.Int, Type.Int, Type.Bool));
-    Env.add(valueEnv, ">", Value.createSubr(function (lhs) {
+    Env.add(typeCtxt, "(>)", binOpType(Type.Int, Type.Int, Type.Bool));
+    Env.add(valueEnv, "(>)", Value.createSubr(function (lhs) {
       return Value.createSubr(function (rhs) {
         if (lhs.intValue > rhs.intValue) {
           return Value.True;
@@ -97,8 +97,8 @@ Ibis.Default = (function () {
       });
     }));
     
-    Env.add(typeCtxt, ">=", binOpType(Type.Int, Type.Int, Type.Bool));
-    Env.add(valueEnv, ">=", Value.createSubr(function (lhs) {
+    Env.add(typeCtxt, "(>=)", binOpType(Type.Int, Type.Int, Type.Bool));
+    Env.add(valueEnv, "(>=)", Value.createSubr(function (lhs) {
       return Value.createSubr(function (rhs) {
         if (lhs.intValue >= rhs.intValue) {
           return Value.True;
@@ -108,8 +108,8 @@ Ibis.Default = (function () {
       });
     }));
     
-    Env.add(typeCtxt, "<>", binOpType(Type.Int, Type.Int, Type.Bool));
-    Env.add(valueEnv, "<>", Value.createSubr(function (lhs) {
+    Env.add(typeCtxt, "(<>)", binOpType(Type.Int, Type.Int, Type.Bool));
+    Env.add(valueEnv, "(<>)", Value.createSubr(function (lhs) {
       return Value.createSubr(function (rhs) {
         if (lhs.intValue != rhs.intValue) {
           return Value.True;
@@ -119,8 +119,8 @@ Ibis.Default = (function () {
       });
     }));
     
-    Env.add(typeCtxt, "^", binOpType(Type.String, Type.String, Type.String));
-    Env.add(valueEnv, "^", Value.createSubr(function (lhs) {
+    Env.add(typeCtxt, "(^)", binOpType(Type.String, Type.String, Type.String));
+    Env.add(valueEnv, "(^)", Value.createSubr(function (lhs) {
       return Value.createSubr(function (rhs) {
         return Value.createString(lhs.stringValue + rhs.stringValue);
       });
@@ -135,8 +135,8 @@ Ibis.Default = (function () {
       }
     }));
     
-    Env.add(typeCtxt, "~-", Type.createTypeSchema([], Type.createFun(Type.Int, Type.Int)));
-    Env.add(valueEnv, "~-", Value.createSubr(function (n) {
+    Env.add(typeCtxt, "(~-)", Type.createTypeSchema([], Type.createFun(Type.Int, Type.Int)));
+    Env.add(valueEnv, "(~-)", Value.createSubr(function (n) {
       return Value.createInt(- n.intValue);
     }));
     

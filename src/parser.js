@@ -134,7 +134,7 @@ Ibis.Parser = (function () {
     switch (parser.headToken) {
     case "-":
       lookAhead(parser);
-      expr = Expr.createApp(Expr.createVar("~-"), parseUnaryExpr(parser));
+      expr = Expr.createApp(Expr.createVar("(~-)"), parseUnaryExpr(parser));
       break;
     default:
       expr = parsePrimExpr(parser);
@@ -389,7 +389,7 @@ Ibis.Parser = (function () {
   }
   
   function createBinExpr(op, lhs, rhs) {
-    return Expr.createApp(Expr.createApp(Expr.createVar(op), lhs), rhs);
+    return Expr.createApp(Expr.createApp(Expr.createVar("(" + op + ")"), lhs), rhs);
   }
   
   function parseTypeDef(parser) {
