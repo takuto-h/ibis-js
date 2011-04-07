@@ -49,6 +49,17 @@ jQuery(document).ready(function ($) {
     }
   });
   
+  var factorial = '\
+let rec factorial = fun n ->\n\
+  if n = 0 then\n\
+    1\n\
+  else\n\
+    n * factorial (n - 1)\n\
+;;\n'
+  $("#factorial").click(function () {
+    $("#edit").val(factorial);
+  });
+  
   var fizzbuzz = '\
 let rec fizzbuzz = fun from -> fun to ->\n\
   if from > to then ""\n\
