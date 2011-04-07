@@ -32,6 +32,8 @@ Ibis.Inferer = (function () {
         return Type.Unit;
       case "Int":
         return Type.Int;
+      case "String":
+        return Type.String;
       case "True":
       case "False":
         return Type.Bool;
@@ -234,6 +236,7 @@ Ibis.Inferer = (function () {
     case "Int":
     case "Bool":
     case "Unit":
+    case "String":
     case "Variant":
       return false;
     case "Fun":
@@ -256,6 +259,7 @@ Ibis.Inferer = (function () {
     case "Int":
     case "Bool":
     case "Unit":
+    case "String":
     case "Variant":
       return type;
     case "Fun":

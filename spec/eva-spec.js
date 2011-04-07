@@ -19,6 +19,7 @@ describe("Eva", function() {
     expect(evalFromString("123")).toEqual("123");
     expect(evalFromString("true")).toEqual("true");
     expect(evalFromString("false")).toEqual("false");
+    expect(evalFromString("\"abc\"")).toEqual("\"abc\"");
   });
   
   it("can evaluate variables", function () {

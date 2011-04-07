@@ -18,6 +18,7 @@ describe("Inferer", function() {
     expect(inferFromString("true")).toEqual("bool");
     expect(inferFromString("false")).toEqual("bool");
     expect(inferFromString("()")).toEqual("unit");
+    expect(inferFromString("\"abc\"")).toEqual("string");
   });
   
   it("can infer types of variables", function () {

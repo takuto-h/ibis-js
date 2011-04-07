@@ -50,7 +50,7 @@ Ibis.Value = (function () {
     this.stringValue = stringValue;
   }
   String.prototype.toString = function () {
-    return this.stringValue;
+    return "\"" + this.stringValue + "\"";
   }
   function createString(stringValue) {
     return new String(stringValue);

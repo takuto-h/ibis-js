@@ -4,6 +4,7 @@ Ibis.Type = (function () {
       Int: Int,
       Bool: Bool,
       Unit: Unit,
+      String: String_,
       createFun: createFun,
       createVar: createVar,
       createTuple: createTuple,
@@ -31,6 +32,13 @@ Ibis.Type = (function () {
     tag: "Unit",
     toString: function () {
       return "unit";
+    }
+  }
+  
+  var String_ = {
+    tag: "String",
+    toString: function () {
+      return "string";
     }
   }
   
