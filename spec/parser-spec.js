@@ -94,6 +94,10 @@ describe("Parser", function() {
     expect(Parser.parse(parser).toString()).toEqual(
       "(App (App (Var =) (Var x)) (Const 1))"
     );
+    var parser = Parser.ofString("\"a\" ^ \"b\" ^ \"c\"");
+    expect(Parser.parse(parser).toString()).toEqual(
+      "(App (App (Var ^) (Const \"a\")) (App (App (Var ^) (Const \"b\")) (Const \"c\")))"
+    );
   });
   
   it("can parse variant definitions", function() {

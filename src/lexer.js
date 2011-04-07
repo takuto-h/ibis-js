@@ -54,7 +54,7 @@ Ibis.Lexer = (function () {
   
   function lexToken(lexer) {
     var c = Stream.peek(lexer.stream);
-    if (c.match(/[+*\/()=,|]/)) {
+    if (c.match(/[+*\/()=,|^]/)) {
       lexer.token = Stream.next(lexer.stream);
     } else if (c == "-") {
       Stream.junk(lexer.stream);

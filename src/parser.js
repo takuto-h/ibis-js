@@ -77,7 +77,17 @@ Ibis.Parser = (function () {
   }
   
   function parseRelExpr(parser) {
-    return parseAddExpr(parser);
+    return parseConcatExpr(parser);
+  }
+  
+  function parseConcatExpr(parser) {
+    var expr = parseAddExpr(parser);
+    if (parser.headToken.match(/\^/)) {
+      var op = parser.headToken;
+      lookAhead(parser);
+      expr = createBinExpr(op, expr, parseConcatExpr(parser));
+    }
+    return expr;
   }
   
   function parseAddExpr(parser) {

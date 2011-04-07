@@ -112,6 +112,7 @@ Ibis.Type = (function () {
     case "Int":
     case "Bool":
     case "Unit":
+    case "String":
     case "Variant":
       return type;
     case "Fun":

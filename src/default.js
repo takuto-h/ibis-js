@@ -64,6 +64,21 @@ Ibis.Default = (function () {
       });
     }));
     
+    Env.add(typeCtxt, "^", binOpType(Type.String, Type.String, Type.String));
+    Env.add(valueEnv, "^", Value.createSubr(function (lhs) {
+      return Value.createSubr(function (rhs) {
+        return Value.createString(lhs.stringValue + rhs.stringValue);
+      });
+    }));
+    
+    var typeVar = Type.createVar(null);
+    Env.add(typeCtxt, "show", Type.createTypeSchema(
+      [typeVar], Type.createFun(typeVar, Type.String)
+    ));
+    Env.add(valueEnv, "show", Value.createSubr(function (x) {
+      return Value.createString(x.toString());
+    }));
+    
     var typeVar = Type.createVar(null);
     Env.add(typeCtxt, "alert", Type.createTypeSchema(
       [typeVar], Type.createFun(typeVar, typeVar)
