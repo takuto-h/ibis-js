@@ -49,9 +49,6 @@ Ibis.Parser = (function () {
   function parseDef(parser) {
     var expr = null;
     switch (parser.headToken) {
-    case "let":
-      expr = parseLet(parser);
-      break;
     case "type":
       expr = parseTypeDef(parser);
       break;
@@ -63,7 +60,29 @@ Ibis.Parser = (function () {
   }
   
   function parseExpr(parser) {
-    return parseLogicExpr(parser);
+    return parseSimpleExpr(parser);
+  }
+  
+  function parseSimpleExpr(parser) {
+    var expr = null;
+    switch (parser.headToken) {
+    case "let":
+      expr = parseLet(parser);
+      break;
+    case "fun":
+      expr = parseAbs(parser);
+      break;
+    case "if":
+      expr = parseIf(parser);
+      break;
+    case "case":
+      expr = parseCase(parser);
+      break;
+    default:
+      expr = parseLogicExpr(parser);
+      break;
+    }
+    return expr;
   }
   
   function parseLogicExpr(parser) {
@@ -101,32 +120,17 @@ Ibis.Parser = (function () {
   }
   
   function parseMulExpr(parser) {
-    var expr = parseSimpleExpr(parser);
+    var expr = parseUnaryExpr(parser);
     while (parser.headToken.match(/[*\/]|mod/)) {
       var op = parser.headToken;
       lookAhead(parser);
-      expr = createBinExpr(op, expr, parseSimpleExpr(parser));
+      expr = createBinExpr(op, expr, parseUnaryExpr(parser));
     }
     return expr;
   }
   
-  function parseSimpleExpr(parser) {
-    var expr = null;
-    switch (parser.headToken) {
-    case "fun":
-      expr = parseAbs(parser);
-      break;
-    case "if":
-      expr = parseIf(parser);
-      break;
-    case "case":
-      expr = parseCase(parser);
-      break;
-    default:
-      expr = parsePrimExpr(parser);
-      break;
-    }
-    return expr;
+  function parseUnaryExpr(parser) {
+    return parsePrimExpr(parser);
   }
   
   function parsePrimExpr(parser) {
