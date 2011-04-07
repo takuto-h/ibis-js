@@ -25,12 +25,16 @@
 </head>
 <body>
   <div id="container">
-    <div id="term"></div>
+    <div id="interpreter">
+      <input type="button" id="interpret" name="interpret" value="interpret" />
+      <textarea id="edit" name="edit" cols="70" rows="20"></textarea>
+      <textarea id="result" name="result" cols="70" rows="20" readonly="readonly"></textarea>
+    </div>
     <div id="slide">
-      <input type="button" id="first" name="first" value="first" />
-      <input type="button" id="prev" name="prev" value="prev" />
-      <input type="button" id="next" name="next" value="next" />
-      <input type="button" id="last" name="last" value="last" />
+      <input type="button" id="first" name="first" value="first" disabled="disabled"/>
+      <input type="button" id="prev" name="prev" value="prev" disabled="disabled" />
+      <input type="button" id="next" name="next" value="next" disabled="disabled" />
+      <input type="button" id="last" name="last" value="last" disabled="disabled" />
       <textarea id="screen" name="screen" cols="70" rows="20" readonly="readonly"></textarea>
     </div>
   </div>

@@ -16,11 +16,12 @@ jQuery(document).ready(function ($) {
   var variants = Env.createGlobal({});
   var slideArray = [""];
   var currentSlide = 0;
-  updateScreen();
   
-  $("#term").terminal(function (command, term) {
-    var parser = Parser.ofString(command);
+  $("#interpret").click(function () {
+    var input = $("#edit").val();
+    var parser = Parser.ofString(input);
     var visual = null;
+    var result = "";
     try {
       while (true) {
         visual = { root: null, slides: [] };
@@ -31,24 +32,21 @@ jQuery(document).ready(function ($) {
         visual.root = expr;
         var type = Inferer.infer(typeCtxt, typeEnv, variants, visual, expr);
         var value = Eva.eval(valueEnv, expr);
-        term.echo("- : " + type + " = " + value);
+        result += "- : " + type + " = " + value + "\n";
         setSlide(visual.slides);
       }
     } catch (e) {
       if (e instanceof IbisError) {
-        term.error("ERROR: " + e.message);
+        result += "ERROR: " + e.message + "\n";
         if (visual.slides.length != 0) {
           setSlide(visual.slides);
         }
       } else {
         throw e;
       }
+    } finally {
+      $("#result").val(result);
     }
-  }, {
-    greetings: "Ibis Interpreter",
-    prompt: ">",
-    name: "ibis",
-    exit: false
   });
   
   function setSlide(slides) {
