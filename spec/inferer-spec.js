@@ -138,6 +138,10 @@ describe("Inferer", function() {
     expect(inferFromString(repeat)).toEqual("(int -> (('a -> 'a) -> ('a -> 'a)))");
   });
   
+  it("can infer types of compound expressions", function () {
+    expect(inferFromString("1; \"abc\"; true")).toEqual("bool");
+  });
+  
   function inferFromString(string) {
     var parser = Parser.ofString(string);
     var expr = Parser.parse(parser);

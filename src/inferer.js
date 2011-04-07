@@ -106,6 +106,9 @@ Ibis.Inferer = (function () {
         typeArray.push(infer(ctxt, env, variants, visual, exprArray[i]));
       }
       return Type.createTuple(typeArray);
+    case "Seq":
+      infer(ctxt, env, variants, visual, expr.currentExpr);
+      return infer(ctxt, env, variants, visual, expr.nextExpr);
     case "VariantDef":
       var typeName = expr.typeName;
       var paramTypeExprs = expr.typeCtors;
@@ -344,6 +347,11 @@ Ibis.Inferer = (function () {
       for (var i = 0; i < expr.exprArray.length; i++) {
         result += indent(expr.exprArray[i]);
       }
+      break;
+    case "Seq":
+      result += "Seq" + showType(expr) + "\n";
+      result += indent(expr.currentExpr);
+      result += indent(expr.nextExpr);
       break;
     case "Case":
       result += "Case" + showType(expr) + "\n";
