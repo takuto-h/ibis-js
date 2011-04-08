@@ -14,14 +14,16 @@ jQuery(document).ready(function ($) {
   var typeCtxt = env.typeCtxt;
   var typeEnv = env.typeEnv;
   var variants = Env.createGlobal({});
-  var slideArray = [""];
-  var currentSlide = 0;
+  var slideArray;
+  var currentExpression;
+  var currentInferenceStep;
   
   $("#interpret").click(function () {
     var input = $("#edit").val();
     var parser = Parser.ofString(input);
     var visual = null;
     var result = "";
+    initSlide();
     try {
       while (true) {
         visual = { root: null, slides: [] };
@@ -47,6 +49,66 @@ jQuery(document).ready(function ($) {
     } finally {
       $("#result").val(result);
     }
+  });
+  
+  function initSlide() {
+    slideArray = [];
+    currentExpression = -1;
+    currentInferenceStep = -1;
+    $("#inference .first").attr("disabled", true);
+    $("#inference .prev").attr("disabled", true);
+    $("#inference .next").attr("disabled", true);
+    $("#inference .last").attr("disabled", true);
+    $("#screen").val("");
+  }
+  
+  function setSlide(slides) {
+    slideArray.push(slides);
+    currentExpression++;
+    currentInferenceStep = slides.length - 1;
+    updateScreen();
+  }
+  
+  function updateScreen() {
+    $("#inference .first").attr("disabled", false);
+    $("#inference .prev").attr("disabled", false);
+    $("#inference .next").attr("disabled", false);
+    $("#inference .last").attr("disabled", false);
+    if (currentInferenceStep <= 0) {
+      $("#inference .first").attr("disabled", true);
+      $("#inference .prev").attr("disabled", true);
+    }
+    if (currentInferenceStep >= slideArray[currentExpression].length - 1) {
+      $("#inference .next").attr("disabled", true);
+      $("#inference .last").attr("disabled", true);
+    }
+    var scrollTop = $("#screen").scrollTop();
+    $("#screen").val(slideArray[currentExpression][currentInferenceStep]);
+    $("#screen").scrollTop(scrollTop);
+  }
+  
+  $("#inference .first").click(function () {
+    currentInferenceStep = 0;
+    updateScreen();
+  });
+  
+  $("#inference .prev").click(function () {
+    if (currentInferenceStep != 0) {
+      currentInferenceStep--;
+      updateScreen();
+    }
+  });
+  
+  $("#inference .next").click(function () {
+    if (currentInferenceStep != slideArray[currentExpression].length - 1) {
+      currentInferenceStep++;
+      updateScreen();
+    }
+  });
+  
+  $("#inference .last").click(function () {
+    currentInferenceStep = slideArray[currentExpression].length - 1
+    updateScreen();
   });
   
   var factorial = '\
@@ -95,52 +157,4 @@ int_of_nat (add one two);;\n'
   $("#clear").click(function () {
     $("#edit").val("");
   });
-  
-  $("#inference .first").click(function () {
-    currentSlide = 0;
-    updateScreen();
-  });
-  
-  $("#inference .prev").click(function () {
-    if (currentSlide != 0) {
-      currentSlide--;
-      updateScreen();
-    }
-  });
-  
-  $("#inference .next").click(function () {
-    if (currentSlide != slideArray.length - 1) {
-      currentSlide++;
-      updateScreen();
-    }
-  });
-  
-  $("#inference .last").click(function () {
-    currentSlide = slideArray.length - 1
-    updateScreen();
-  });
-  
-  function setSlide(slides) {
-    slideArray = slides;
-    currentSlide = slides.length - 1;
-    updateScreen();
-  }
-  
-  function updateScreen() {
-    $("#inference .first").attr("disabled", false);
-    $("#inference .prev").attr("disabled", false);
-    $("#inference .next").attr("disabled", false);
-    $("#inference .last").attr("disabled", false);
-    if (currentSlide == 0) {
-      $("#inference .first").attr("disabled", true);
-      $("#inference .prev").attr("disabled", true);
-    }
-    if (currentSlide == slideArray.length - 1) {
-      $("#inference .next").attr("disabled", true);
-      $("#inference .last").attr("disabled", true);
-    }
-    var scrollTop = $("#screen").scrollTop();
-    $("#screen").val(slideArray[currentSlide]);
-    $("#screen").scrollTop(scrollTop);
-  }
 });
