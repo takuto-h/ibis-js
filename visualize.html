@@ -26,22 +26,40 @@
 <body>
   <div id="container">
     <h1>Ibis : Visualized type inferer using slideshow</h1>
-    <div id="interpreter">
-      <input type="button" id="interpret" name="interpret" value="interpret" />
-      <input type="button" id="clear" name="clear" value="clear" />
-      <input type="button" id="factorial" name="factorial" value="factorial" />
-      <input type="button" id="fizzbuzz" name="fizzbuzz" value="fizzbuzz" />
-      <input type="button" id="peano" name="peano" value="peano" />
-      <textarea id="edit" name="edit" cols="70" rows="20"></textarea>
-      <textarea id="result" name="result" cols="70" rows="20" readonly="readonly"></textarea>
-    </div>
-    <div id="slide">
-      <input type="button" id="first" name="first" value="first" disabled="disabled"/>
-      <input type="button" id="prev" name="prev" value="prev" disabled="disabled" />
-      <input type="button" id="next" name="next" value="next" disabled="disabled" />
-      <input type="button" id="last" name="last" value="last" disabled="disabled" />
-      <textarea id="screen" name="screen" cols="70" rows="20" readonly="readonly"></textarea>
-    </div>
+    <fieldset id="interpreter">
+      <legend>Interpreter</legend>
+      <label for="control">Control</label>
+      <div id="control">
+        <input type="button" id="interpret" value="interpret" />
+        <input type="button" id="clear" value="clear" />
+        <input type="button" id="factorial" value="factorial" />
+        <input type="button" id="fizzbuzz" value="fizzbuzz" />
+        <input type="button" id="peano" value="peano" />
+      </div>
+      <label for="edit">Edit</label>
+      <textarea id="edit" cols="70" rows="20"></textarea>
+      <label for="result">Result</label>
+      <textarea id="result" cols="70" rows="20" readonly="readonly"></textarea>
+    </fieldset>
+    <fieldset id="slideshow">
+      <legend>Slideshow</legend>
+      <label for="expression">Expression</label>
+      <div id="expression">
+        <input type="button" class="first" value="first" disabled="disabled"/>
+        <input type="button" class="prev" value="prev" disabled="disabled" />
+        <input type="button" class="next" value="next" disabled="disabled" />
+        <input type="button" class="last" value="last" disabled="disabled" />
+      </div>
+      <label for="inference">Inference</label>
+      <div id="inference">
+        <input type="button" class="first" value="first" disabled="disabled"/>
+        <input type="button" class="prev" value="prev" disabled="disabled" />
+        <input type="button" class="next" value="next" disabled="disabled" />
+        <input type="button" class="last" value="last" disabled="disabled" />
+      </div>
+      <label for="screen">Screen</label>
+      <textarea id="screen" cols="70" rows="20" readonly="readonly"></textarea>
+    </fieldset>
   </div>
 </body>
 </html>

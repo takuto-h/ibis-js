@@ -96,26 +96,26 @@ int_of_nat (add one two);;\n'
     $("#edit").val("");
   });
   
-  $("#first").click(function () {
+  $("#inference .first").click(function () {
     currentSlide = 0;
     updateScreen();
   });
   
-  $("#prev").click(function () {
+  $("#inference .prev").click(function () {
     if (currentSlide != 0) {
       currentSlide--;
       updateScreen();
     }
   });
   
-  $("#next").click(function () {
+  $("#inference .next").click(function () {
     if (currentSlide != slideArray.length - 1) {
       currentSlide++;
       updateScreen();
     }
   });
   
-  $("#last").click(function () {
+  $("#inference .last").click(function () {
     currentSlide = slideArray.length - 1
     updateScreen();
   });
@@ -127,17 +127,17 @@ int_of_nat (add one two);;\n'
   }
   
   function updateScreen() {
-    $("#first").attr("disabled", false);
-    $("#prev").attr("disabled", false);
-    $("#next").attr("disabled", false);
-    $("#last").attr("disabled", false);
+    $("#inference .first").attr("disabled", false);
+    $("#inference .prev").attr("disabled", false);
+    $("#inference .next").attr("disabled", false);
+    $("#inference .last").attr("disabled", false);
     if (currentSlide == 0) {
-      $("#first").attr("disabled", true);
-      $("#prev").attr("disabled", true);
+      $("#inference .first").attr("disabled", true);
+      $("#inference .prev").attr("disabled", true);
     }
     if (currentSlide == slideArray.length - 1) {
-      $("#next").attr("disabled", true);
-      $("#last").attr("disabled", true);
+      $("#inference .next").attr("disabled", true);
+      $("#inference .last").attr("disabled", true);
     }
     var scrollTop = $("#screen").scrollTop();
     $("#screen").val(slideArray[currentSlide]);
