@@ -10,7 +10,7 @@ Ibis.Inferer = (function () {
   };
   
   function polyInfer(ctxt, env, variants, visual, expr) {
-    visual.slides.push(show(visual.root));
+    snapshot(visual);
     var inferredType = infer(ctxt, env, variants, visual, expr);
     return createPolyType(inferredType);
   }
@@ -19,7 +19,7 @@ Ibis.Inferer = (function () {
     var type = infer2(ctxt, env, variants, visual, expr);
     if (expr.tag != "App" && expr.tag != "Case") {
       expr.type = type;
-      visual.slides.push(show(visual.root));
+      snapshot(visual);
     }
     return type;
   }
@@ -47,7 +47,7 @@ Ibis.Inferer = (function () {
     case "Abs":
       var paramType = Type.createVar(null);
       expr.varName.type = paramType;
-      visual.slides.push(show(visual.root));
+      snapshot(visual);
       var newCtxt = Env.createLocal({}, ctxt);
       Env.add(newCtxt, expr.varName.varName, Type.createTypeSchema([], paramType));
       var retType = infer(newCtxt, env, variants, visual, expr.bodyExpr);
@@ -57,7 +57,7 @@ Ibis.Inferer = (function () {
       var argType = infer(ctxt, env, variants, visual, expr.argExpr);
       var retType = Type.createVar(null);
       expr.type = retType;
-      visual.slides.push(show(visual.root));
+      snapshot(visual);
       unify(visual, funType, Type.createFun(argType, retType));
       return retType;
     case "Let":
@@ -68,7 +68,7 @@ Ibis.Inferer = (function () {
     case "LetRec":
       var varType = Type.createVar(null);
       expr.varName.type = varType;
-      visual.slides.push(show(visual.root));
+      snapshot(visual);
       var newCtxt = Env.createLocal({}, ctxt);
       Env.add(newCtxt, expr.varName.varName, Type.createTypeSchema([], varType));
       var inferredType = infer(newCtxt, env, variants, visual, expr.valueExpr);
@@ -140,7 +140,7 @@ Ibis.Inferer = (function () {
       var typeCtors = variantType.typeCtors;
       var resultType = Type.createVar(null);
       expr.type = resultType;
-      visual.slides.push(show(visual.root));
+      snapshot(visual);
       if (!elseClause) {
         for (var ctorName in typeCtors) {
           if (!clauseExprs[ctorName]) {
@@ -195,7 +195,7 @@ Ibis.Inferer = (function () {
         unify(visual, type1, type2.value);
       } else {
         type1.value = type2;
-        visual.slides.push(show(visual.root));
+        snapshot(visual);
       }
     } else if (type1.tag == "Var") {
       if (type1.value) {
@@ -205,7 +205,7 @@ Ibis.Inferer = (function () {
           throw new IbisError("unification error: " + type1 + " and " + type2);
         }
         type1.value = type2;
-        visual.slides.push(show(visual.root));
+        snapshot(visual);
       }
     } else if (type2.tag == "Var") {
       if (type2.value) {
@@ -215,7 +215,7 @@ Ibis.Inferer = (function () {
           throw new IbisError("unification error: " + type1 + " and " + type2);
         }
         type2.value = type1;
-        visual.slides.push(show(visual.root));
+        snapshot(visual);
       }
     } else if (type1.tag == "Fun" && type2.tag == "Fun") {
       unify(visual, type1.paramType, type2.paramType);
@@ -379,6 +379,10 @@ Ibis.Inferer = (function () {
     var result = show(expr);
     result = result.replace(/^/mg, "  ").replace(/  $/, "");
     return result;
+  }
+  
+  function snapshot(visual) {
+    visual.slides.push(show(visual.root));
   }
   
   return exports();
