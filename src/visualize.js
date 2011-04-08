@@ -55,10 +55,8 @@ jQuery(document).ready(function ($) {
     slideArray = [];
     currentExpression = -1;
     currentInferenceStep = -1;
-    $("#inference .first").attr("disabled", true);
-    $("#inference .prev").attr("disabled", true);
-    $("#inference .next").attr("disabled", true);
-    $("#inference .last").attr("disabled", true);
+    $("#expression > *").attr("disabled", true);
+    $("#inference > *").attr("disabled", true);
     $("#screen").val("");
   }
   
@@ -70,10 +68,16 @@ jQuery(document).ready(function ($) {
   }
   
   function updateScreen() {
-    $("#inference .first").attr("disabled", false);
-    $("#inference .prev").attr("disabled", false);
-    $("#inference .next").attr("disabled", false);
-    $("#inference .last").attr("disabled", false);
+    $("#expression > *").attr("disabled", false);
+    $("#inference > *").attr("disabled", false);
+    if (currentExpression <= 0) {
+      $("#expression .first").attr("disabled", true);
+      $("#expression .prev").attr("disabled", true);
+    }
+    if (currentExpression >= slideArray.length - 1) {
+      $("#expression .next").attr("disabled", true);
+      $("#expression .last").attr("disabled", true);
+    }
     if (currentInferenceStep <= 0) {
       $("#inference .first").attr("disabled", true);
       $("#inference .prev").attr("disabled", true);
@@ -86,6 +90,34 @@ jQuery(document).ready(function ($) {
     $("#screen").val(slideArray[currentExpression][currentInferenceStep]);
     $("#screen").scrollTop(scrollTop);
   }
+  
+  $("#expression .first").click(function () {
+    currentExpression = 0;
+    currentInferenceStep = slideArray[currentExpression].length - 1;
+    updateScreen();
+  });
+  
+  $("#expression .prev").click(function () {
+    if (currentExpression != 0) {
+      currentExpression--;
+      currentInferenceStep = slideArray[currentExpression].length - 1;
+      updateScreen();
+    }
+  });
+  
+  $("#expression .next").click(function () {
+    if (currentExpression != slideArray.length - 1) {
+      currentExpression++;
+      currentInferenceStep = slideArray[currentExpression].length - 1;
+      updateScreen();
+    }
+  });
+  
+  $("#expression .last").click(function () {
+    currentExpression = slideArray.length - 1
+    currentInferenceStep = slideArray[currentExpression].length - 1;
+    updateScreen();
+  });
   
   $("#inference .first").click(function () {
     currentInferenceStep = 0;
